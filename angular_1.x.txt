@@ -1,0 +1,1180 @@
+!!!!!!important: since anglar 1.6 the app module is created like this:
+var app = angular.module("ngClassifieds", []);
+
+controllers are declared like this:
+app.controller("classifiedsCtrl", ['$scope', function($scope){ ...//}]);
+
+angular 1.x course
+
+We will need: 
+1) text editor (let it be atom)
+2) cmd
+3) node.js (already installed) //npm - node package manager
+
+set up the project directory:
+the particular example from cmd:
+1) d:
+2) mkdir lang1 (which stands for learn angular 1)
+3) cd lang1
+4) mkdir scripts
+5) mkdir css
+6) echo html > index.html (create a file not a dir)
+7) npm init (start the npm in the dir)
+8) package name: lang1
+9) version, description, entry point, test command are default
+10) git repository: put an url here or leave blank
+11) keywords, author, license - leave blank
+12) after it's all ok we'll install the packages we need: npm install angular
+13) npm install angular-material mdi (design and icons libraries)
+14) installing http server: npm install http-server -g (-g means globally)
+
+making the hello-world app
+1) in index.html we make a dummy:
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    
+  </body>
+</html>
+
+2) include angular.js file:
+  <body>
+
+    <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+  </body>
+  
+3) Create an app.js file within the scripts directory and add it to the index.html.
+    <script src="scripts/app.js"></script>
+	
+4) in app.js:
+angular.module("ngClassifieds", []);
+
+The first argument is the name of the module, the second is an array where we put the references to all other modules that the current module depends on. Now the JS knows we have an Angular application. 
+
+5) boot the angular module inside the body tag:
+<body ng-app="ngClassifieds">
+This means that the module named ngClassifieds is executed between <body></body>
+
+6) Let's make sure our app is working. We'll put inside h1 tags in index.html a template of hello world message:
+    <h1>{{ message }}</h1>
+Everything inside the curvy braces is a variable and its definition will be displayed here.
+
+7) a quick way to assign a value to  a variable via angular is to use the ng-init directive. We'll put it inside the body tag as well since we want it to be true all over the page. the ng-init says everysing inside the quotes is true when the app is initialized:
+<body ng-app="ngClassifieds" ng-init="message = 'Hello World'">
+
+8) now let's turn the server on via cmd inside the project dir:
+http-server
+
+The MVC pattern: model controller view
+
+the pattern divide the code to parts to separate concerns. The point is to break large and difficult to understand single pieces of code to smaller ones, developed to execute particular tasks. This is also helpful if the project is developed by a team not by a single person. The MVC pattern keeps the code DRY (don't repeat yourself). 
+So the model is the is a backend communication (usually it works with the database). The view is what the user sees when running the app, which is usually something from the database. So the view and the model need something to communicate, and that's the controller. Like, if the view has a place for user's input, the controller would grab the input data and pass it off to the model and vice versa. 
+
+Controllers:
+1) go to the lang1 directory and mkdir components
+2) create there a file called classifieds.ctr.js
+3) in this file create an immediately invoked function expressions (IIFE)
+(function() {
+  
+})(); 
+4)add the following:
+(function() {
+    "use strict";
+})();
+
+5) make a reference to the existing module:
+(function() {
+    "use strict";
+
+    angular
+      .module("ngClassifieds")
+})();
+
+to make a reference we only give the name argument to the module, otherwise if we add the array argument that would be declaration of a new module.
+
+6) Let's declare a controller. The second argument is an anonymous function and its' body would be the controller function:
+    angular
+      .module("ngClassifieds")
+      .controller("classifiedsCtrl", function(){
+        
+      });
+	  
+7) To make a reference to the controller inside the view we use the ng-controller directive like this, in index.html:
+
+  <body ng-app="ngClassifieds" ng-controller="classifiedsCtrl">
+  
+$scope:
+An object called $scope is something that allows the controller to interact with the view like glue. It lets the data model be shared between the view and the controller. 
+1) in classifieds.ctr.js inject the $scope object:
+      .controller("classifiedsCtrl", function($scope){
+        
+      }); 
+To inject an object means to give the object as a parameter to the IIFE associated with the controller. For example we will let the scope put out a message that knows our name:
+      .controller("classifiedsCtrl", function($scope){
+        $scope.name = "ryan"
+      });
+In general we can create a property of the $scope object and assign some value to it.
+
+2) in index.html we will display the value of $scope.name and make a link to the ctrller file:
+  <body ng-app="ngClassifieds" ng-controller="classifiedsCtrl">
+    <h1>{{ name }}</h1>
+	//...
+    <script src="node_modules\angular\angular.js"></script>
+    <script src="scripts\app.js"></script>
+    <script src="components\classifieds.ctr.js"></script>
+	
+Two-way data binding:
+1) In index.html add an input tag:
+    <input type="text" placeholder="Enter your name" ng-model="name">
+The way the two-way data binding works is if we use the ng-model directive and then we reference whichever property we want (e.g. name) this will be tied directly to the property where's it's tied onto the page. In this case if we open the page in the browser we'll see the name property is in the iput box. If we put additional data to the input box the value of the property will change and the view will update automatically.
+
+More on templating:
+Inside the curvy brakes we can not only put any scope property to show its value, but also do other stuff, like calculating:
+    <h1>{{ 5+2 }}</h1>
+..or hard-coded strings:    
+	<h1>{{ name + 'how are you today?' }}</h1>
+	<h1>{{ name}}, how are you today?</h1>
+..or objects. Here we're going to assign the name property to an object in the controller:
+        $scope.name = {
+          first: "Ryan",
+          last: "Chenkie"
+        }
+And in index.html we'll write the object's properties using the dot notation:
+	    <h1>{{ name.first + ' ' + name.last}}</h1>
+At the same time the input shows Object object, because the ng-model directive is pointing to the name object. Let's make amendments so it'll refer to the property first of the name object:
+	    <input type="text" placeholder="Enter your name" ng-model="name.first">
+
+Dependency injection:
+On the highest level dependency injection deals with how functions get created and then how they get hold of any pieces of code they need. For example, we can create instances of same object when we need them, but that would eventually make the code bulky and hard to understand. Instead, we can simply inject what we need as a dependency. 
+
+What are the providers:
+Quite often when using Angular along with some libraries you'll see the concept of providers. It allows the developers of Angular libraries to provide configuration methods for those libraries. 
+1) Reference the ng-material library as a module in app.js by passing it to the array of modules:
+	angular.module("ngClassifieds", ["ngMaterial"]);
+2) Let's change the default color provided by this library. In app.js add the .config method:
+	angular
+  .module("ngClassifieds", ["ngMaterial"])
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default') 
+      .primaryPalette('teal')
+      .accentPalette('orange');
+    
+  });
+
+	We pass to the .config method the provider from ngMaterial library called $mdThemingProvider and change the color of default theme this way: the primary palette goes teal, and the accent palette goes orange. In fact we got rid of the default indigo palette provided by the library.
+	
+Crash course on the directives:
+1) We can meet in html custom elements like <md-button> or <md-toolbar>? which are not standard ones. We can get those with the Angular directives. They will be inderstood only by Angular apps and if the defining directives are present. So let's create a <hello-world> directive which will display hello world to the screen. First, in index.html we'll make references to all libraries we've downloaded:
+	<script src="node_modules\angular-aria\angular-aria.js"></script>
+    <script src="node_modules\angular-animate\angular-animate.js"></script>
+    <script src="node_modules\angular-material\angular-material.js"></script>
+	
+2) Usually you put custom directives in their own files, but just for now let's do it in app.js:
+	angular
+  .module("ngClassifieds", ["ngMaterial"])
+  .config(function($mdThemingProvider) {
+    $mdThemingProvider.theme('default')
+      .primaryPalette('teal')
+      .accentPalette('orange');
+
+  })
+  .directive("helloWorld");
+ A note on notation: Angular takes in .directive in js file a parameter written in camelCase and compares it to a directive in cebab-case in html-file. 
+ 
+3) Now let's give the directive an anonymous function which will return an object. Such objects are known as the directive definitional objects:
+  .directive("helloWorld", function(){
+    return {
+      template: "<h1>Hello, world!</h1>"
+    }
+	
+	while in index.html we only write
+	<hello-world></hello-world>
+4)Another way to define the template is the following. In app.js:
+
+	  .directive("helloWorld", function(){
+    return {
+      template: "<h1>{{ message }}</h1>"
+    }
+
+	In classifieds.ctr.js:
+		$scope.message="Hello, world!";
+		
+The Toolbar and Classified Card:
+1) in index.html add links to the angular stylesheets:
+  <head>
+    <meta charset="utf-8">
+    <title>ngClassifieds</title>
+    <link rel="stylesheet" href="node_modules\angular-material\angular-material.css">
+    <link rel="stylesheet" href="node_modules\mdi\css\materialdesignicons.css" media="all" type="text/css">
+  </head>
+ 2) still in index.html add the md-toolbar directive with a div container inside:
+  <body ng-app="ngClassifieds" ng-controller="classifiedsCtrl">
+
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <p><strong>ngClassifieds</strong></p>
+        <md-button>
+          <md-icon class="mdi mdi-plus-circle"></md-icon>
+          New Classified
+        </md-button>
+      </div>
+    </md-toolbar>
+3) in the css folder create a file style.css with the following code:
+	button.material-icons {
+  margin-top: 7px;
+}
+4) in index.html make a link to this file:
+    <link rel="stylesheet" href="css\style.css" type="text/css">
+  </head> 
+5) in index.html after the toolbar let's put the content area in content directive:
+    </md-toolbar>
+
+    <md-content class="md-padding" layout="row" layout-wrap>
+      <md-card flex="33">
+        <img src="img\deep.jpg" alt="neuralpic">
+        <md-card-content>
+          <div class="clasified-info">
+            <h2 class="md-title">First Item</h2>
+            <h3>$1,000,000</h3>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          </div>
+        </md-card-content>
+      </md-card>
+    </md-content>	
+6) Let's put the content to a controller. In class.ctr.js instead of scope.name:
+
+  $scope.classified = {
+    title: "First Item",
+    price: "$1,000,000",
+    description: "Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+  }	
+7) Now replace the corresponing data in index.html with the following:
+    <md-content class="md-padding" layout="row" layout-wrap>
+      <md-card flex="33">
+        <img src="img\deep.jpg" alt="neuralpic">
+        <md-card-content>
+          <div class="clasified-info">
+            <h2 class="md-title">{{classified.title}}</h2>
+            <h3>{{classified.price}}</h3>
+            <p>{{classified.description}}</p>
+          </div>
+        </md-card-content>
+      </md-card>
+    </md-content>
+
+Using ng-repeat:
+1) Add a list of objects into the controller instead of scope.classified and rename it scope.classifieds
+2) To show the list in the view, we'll use the ng-repeat directive in index.html and make all the amendments required    
+	<md-content class="md-padding" layout="row" layout-wrap>
+      <md-card ng-repeat="classified in classifieds" flex="30">
+        <img src="{{classified.image}}" alt="neuralpic">
+        <md-card-content>
+          <div class="clasified-info">
+            <h2 class="md-title">{{classified.title}}</h2>
+            <h3>{{classified.price}}</h3>
+            <p>{{classified.description}}</p>
+          </div>
+        </md-card-content>
+      </md-card>
+    </md-content>:
+Here we've changed the flex of md-card to 30 so it'd fit 3 items in a row. Also we've changed the img src so it would be taken from the classified object.
+
+Implementing filters:
+in index.html let's add currency filter to the price directive so it is formatted correctly:
+            <h3>{{classified.price | currency}}</h3>
+There are lots of filters in angular, like uppercase, lowercase, or json filter, or date filter. Filters can also take arguments via colon:
+			<h2>{{classified.posted | date:'longDate'}}</h2> 
+			
+Hiding and showing parts of the UI:
+1) We can hide and show particular parts of the UI using directives ng-show and ng-hide. Those are boolean directives. For example, in index.html:
+    </md-content>
+
+    <p ng-show="true">ryan chenkie</p>
+Here the content of the p tag is going to be shown because we've assigned true value to the directive. If we assign false, it'll be hidden.
+2)Let's create a property named showName. If it's true, the p element is shown, otherwise it's hidden. In index.html:
+    </md-content>
+
+    <p ng-show="showName">ryan chenkie</p>
+3) Now we'll make a button with the ng-click directive which sets the value of showName to true, and the controversary button:
+    </md-content>
+
+    <button type="button" name="button" ng-click="showName = true">Show Name</button>
+    <button type="button" name="button" ng-click="showName = false">Hide Name</button>
+    <p ng-show="showName">ryan chenkie</p>
+The ng-hide directive is the opposite of ng-show directive.
+4) Now we'll remove all the above and in index.html make another div with the contacts data:
+          <div class="classified-contact" ng-show="showContact">
+            <p><mdi class="mdi mdi-account">{{classified.contact.name}}</mdi></p>
+            <p><mdi class="mdi mdi-phone">{{classified.contact.phone}}</mdi></p>
+            <p><mdi class="mdi mdi-email">{{classified.contact.email}}</mdi></p>
+          </div>
+5) To hide and show the previous div we'll make a certain button to change the showContact value:
+          <div layout="row">
+            <md-button ng-click="showContact=true">Contact</md-button>
+            <md-button ng-click="showContact=false">Details</md-button>
+          </div>
+6) Let's show the details div only in case the contacts div is hidden. In index.html:
+          <div class="clasified-info" ng-show="!showContact">
+7) Now we'll make an admin area. In index.html:
+          <div class="classified-admin" ng-if="showAdmin">
+            <h3>Admin</h3>
+            <div layout="row">
+              <md-button class="md-primary">Edit</md-button>
+              <md-button class="md-warn">Delete</md-button>
+            </div>
+          </div>
+The ng-if directive is somewhat similar to the ng-show directive except that the last one simply hides and shows the objects using css while the ng-if directive takes the content away from the DOM in case the condition is false, and inserts into the DOM otherwise.
+8) We'll add the buttons to show and hide the admin area. Still in index.html in the button area:
+          <div layout="row">
+            <md-button ng-click="showContact=true">Contact</md-button>
+            <md-button ng-click="showContact=false">Details</md-button>
+            <md-button ng-click="showAdmin=true">Admin</md-button>
+            <md-button ng-click="showAdmin=false">Close</md-button>
+          </div>
+9) In certain cases we need the buttons to be hidden, like the contact button when the contact div is shown.
+          <div layout="row">
+            <md-button ng-click="showContact=true" ng-show="!showContact">Contact</md-button>
+            <md-button ng-click="showContact=false" ng-show="showContact">Details</md-button>
+            <md-button ng-click="showAdmin=true" ng-show="!showAdmin">Admin</md-button>
+            <md-button ng-click="showAdmin=false" ng-show="showAdmin">Close</md-button>
+          </div>
+		  
+Working with Remote Data:
+While the round trip apps get data from database via some backend functions, the single page apps load everything on the initial page load. The data is sent and received via data API, i.e some program which manipulates data in json (JavaScript Object Notation) format. This is a mediator between frontend app and backend.  
+
+HTTP Requests and Promises:
+1) Let's move all of the data in the controller into its own file in a new directory data\classifieds.json.
+2) Inject the http into the ctrl function as a parameter:
+	app.controller("classifiedsCtrl", ['$scope', function($scope, $http){
+3) We have several http methods: POST, GET, PUT, DELETE. POST is generally for sending data somewhere, GET is when you want to retrieve data, PUT is used for updating data, DELETE for deleting data. Let's get our data from its file. In classifieds.ctrl.js:
+	app.controller("classifiedsCtrl", ['$scope', function($scope, $http){
+
+		$http.get('data\classifieds.json') 	
+4) Angular http requests return promises. Those are helpful to deal with asynchronous nature of JS. When the promise is resolved we can use .then to tell what we need to do. We use an anonyous function with a data parameter and it gets scope.classifieds equal to the data:
+  $http.get('data\classifieds.json').then(function(data){
+      $scope.classifieds = data;
+  })
+5) Via the console.log we get the scope.classifieds to some array of objects. We'll call the array 'classifieds' and set the classifieds property of scope equal to classifieds.data:
+  $http.get('data\classifieds.json').then(function(classifieds){
+      $scope.classifieds = classifieds.data;
+  })
+
+Switching to Services:
+1) It is very likely that a certain http request would be needed more than once, so it is convenient to put requests to a separate file, named a service. Let's create a factory file in the components directory named classifieds.fac.js.
+2) In this file invoke the anonymous function:
+(function(){
+
+  "use strict"
+
+  angular
+    .module("ngClassifieds")
+    .factory("classifiedsFactory", function($http){
+      function getClassifieds(){
+        return $http.get('data\classifieds.json');
+      }
+      return {
+        getClassifieds: getClassifieds,
+      }
+    });
+})();
+Here we call the ngClassifieds module and call the factory method. We give it a name an anonymous function with the http parameter. It'll return an object which  has a property getClassifieds with the value of getClassifieds function declared above. This function returns the get request from the path given as a parameter.
+3) Now let's make a link to this file in index.html.
+<script src="components\classifieds.fac.js"></script>
+  </body>
+4)Now in classifieds.ctrl.js let's inject the factory:
+app.controller("classifiedsCtrl", ['$scope', function($scope, $http, classifiedsFactory) {
+
+  classifiedsFactory.getClassifieds().then(function(classifieds){
+      $scope.classifieds = classifieds.data;
+  })
+ Here we add another parameter classifiedsFactory to the anonymous function, and change the http get request to our factory where the get request is currently situated.
+
+Putting in the Sidenav:
+1) We'll put a leftside menu to our project. In index.html:
+    </md-toolbar>
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-locked-open="true">
+      <md-toolbar>
+        <h1 class="md-toolbar-tools">Add a classified</h1>
+      </md-toolbar>
+      <md-content layout-padding>
+        <form>
+          <md-input-container>
+            <label for="title">Title</label>
+            <input type="text" id="title" md-autofocus>
+          </md-input-container>
+          <md-input-container>
+            <label for="price">Price</label>
+            <input type="text" id="price">
+          </md-input-container>
+          <md-input-container>
+            <label for="description">Description</label>
+            <textarea type="text" id="description">
+            </textarea>
+          </md-input-container>
+          <md-input-container>
+            <label for="image">Image Link</label>
+            <input type="text" id="image">
+          </md-input-container>
+          <md-input-container>
+            <md-button class="md-primary">Save</md-button>
+            <md-button class="md-primary">Save Edit</md-button>
+            <md-button class="md-primary">Cancel</md-button>
+
+          </md-input-container>
+        </form>
+      </md-content>
+    </md-sidenav>
+2) Now we'll make the sidenav appear when the New Classified button is clicked. In index.html we'll use a directive ng-click to call the openSidebar method:
+        <md-button ng-click="openSidebar()">
+          <md-icon class="mdi mdi-plus-circle"></md-icon>
+          New Classified
+        </md-button> 
+3) Let's create the openSidebar method. In classifieds.ctr.js we'll inject the mdSidenav directive, which is a method provided by AngularMaterial library:
+	app.controller("classifiedsCtrl", ['$scope', '$http', 'classifiedsFactory', '$mdSidenav',
+  function($scope, $http, classifiedsFactory, $mdSidenav) { /// }
+4) Now let's declare the corresponding function:
+	        $scope.classifieds = classifieds.data;
+  });
+
+  $scope.openSidebar = function(){
+    $mdSidenav('left').open();
+  }
+The body of newly declared function calls the built-in method of the mdSidenav directive, which is open(). The given parameter 'left' is the id of particular sidenav we have appointed to it in index.html.
+5) We'll remove the md-is-locked-open="true" directive in index.html since it keeps the sidebar open whatever happens.  
+6) Now we want to remove the sidebar by clicking Cancel button. In index.html:
+	<md-button class="md-warn" ng-click="closeSidebar()">Cancel</md-button>
+7) And declare the function in controller:
+	  $scope.closeSidebar = function(){
+    $mdSidenav('left').close();
+  };
+  
+Adding New Classifieds:
+1) First we need to connect the inputs of the siadebar to the controller, using the ng-model directive. In index.html for every input and textarea add:
+	<input type="text" id="title" ng-model="classified.title" md-autofocus> for title and so on.
+2) To check out if everything is displayed correctly add in index.html a pre tag to see the data as is:
+          <pre>{{classified | json}}</pre>
+	Now every time we type in something we'll see a json object down the sidebar.
+3) To push a new object to the array go to the controller and create a new method called saveClassified given classified as an argument:
+    $scope.saveClassified = function(classified){
+      $scope.classifieds.push(classified);
+    };
+	The method takes a classified object and pushes it to the classifieds array.
+4) And then add the ng-click directive to the Save button inside index.html which refers to that method:
+	<md-button class="md-primary" ng-click="saveClassified(classified)">Save</md-button>
+5) Let's put a check-in to make sure we've got an object not some void or anything else. In the controller we'll make an if statement:
+    $scope.saveClassified = function(classified){
+      if(classified){
+        $scope.classifieds.push(classified);
+      }
+6) To clear the input field after adding an item let's update the same method in controller:
+	    $scope.saveClassified = function(classified){
+      if(classified){
+        $scope.classifieds.push(classified);
+        $scope.classified = {};
+      }
+    };
+7) Let's make the sidebar close when we hit the save button. In the controller in the add item method we'll call the closeSidebar method:
+	    $scope.saveClassified = function(classified){
+      if(classified){
+        $scope.classifieds.push(classified);
+        $scope.classified = {};
+        $scope.closeSidebar();
+      }
+    };
+8) The contacts field is empty since the architecture supposes that the uer adding new item has already been registered and put in their contacts. So the contacts should be taken automatically from the database. Now we'll ry to get an idea of how it works. In controller let's create an imitating object and attach it to any classified object when saved:
+	    var contact = {
+      name: "Ryan",
+      phone: "(555) 555-5555",
+      email: "darkkillerganjubas@mail.ru"
+    }
+
+    $scope.openSidebar = function(){
+	
+	And now attach, inside the saveClassified method:
+	    $scope.saveClassified = function(classified){
+      if(classified){
+        classified.contact = contact;
+        $scope.classifieds.push(classified);
+        $scope.classified = {};
+        $scope.closeSidebar();
+      }
+    };
+9) We need to tell the user that his classified has been saved.  We'll use the Toast from ngMaterial library. First, we'll inject the service in controller:
+	app.controller("classifiedsCtrl", ['$scope', '$http', 'classifiedsFactory', '$mdSidenav', '$mdToast',
+  function($scope, $http, classifiedsFactory, $mdSidenav, $mdToast){
+  And then use its properties in the saveClassified method:
+        $scope.closeSidebar();
+        $mdToast.show(
+          $mdToast.simple()
+            .content("Classified saved!")
+            .position('top, right')
+            .hideDelay(3000)
+        );  
+		
+Editing Existing Classifieds:
+1) In index.html:
+    <md-button ng-click="editClassified(classified)" class="md-primary">Edit</md-button>
+
+2) In controller:
+    $scope.editClassified = function(){
+      $scope.editing = true;
+      
+    }
+	
+3) Now let's make the Save Edit button appear in the sidenav in case we are editing some item and hide the Save button. In index.html:
+            <md-button class="md-primary" ng-click="saveClassified(classified)" ng-if="!editing">Save</md-button>
+            <md-button class="md-primary" ng-if="editing">Save Edit</md-button>
+	So the buttons appear depending on the value of editing property.
+4) In the controller we'll write now the body of the edit function:
+	$scope.editClassified = function(classified){
+      $scope.editing = true;
+      $scope.openSidebar();
+      $scope.classified = classified;
+    }
+	We give the current classified item as a parameter by clicking Edit button on the corresponding classified. Set the editing to true, so the Save Edit button is on and immedately call the openSidebar method. Set the property $scope.classified to given parameter so it'll be shown in the input fields.
+5) Let's make the Save Edit button work. In controller:
+	 $scope.saveEdit = function(){
+      $scope.editing = false;
+      $scope.classified = {};
+      $scope.closeSidebar();
+      showToast("Edit saved!")
+     }
+
+     function showToast(message){
+       $mdToast.show(
+         $mdToast.simple()
+           .content(message)
+           .position('top, right')
+           .hideDelay(3000)
+       );
+	   
+	We've put the Toast to a separate function, so everywhere the Toast has been used we now call the showToast() function and give it a string as a parameter.
+6)In index.html we'll bind the method to the Save Edit button via ng-click directive:
+	  <md-button class="md-primary" ng-click="saveEdit()" ng-if="editing">Save Edit</md-button>
+
+Deleting Classifieds:
+1) In index.html:
+              <md-button ng-click="deleteClassified(classified)" class="md-warn">Delete</md-button>
+2) In controller:
+    $scope.deleteClassified = function(classified){
+      var index = $scope.classifieds.indexOf(classified);
+      $scope.classifieds.splice(index, 1);
+    
+    }
+	
+	We pass the classified parameter to the method. Inside we take the index of particular classified inside the classifieds array and splice it from the array only once since once we've put an elemnt away, another is going to take its place. 
+3) Still in controller, we decided to use ngMaterial element of confirming dialog. First we'll inject it:
+app.controller("classifiedsCtrl", ['$scope', '$http', 'classifiedsFactory', '$mdSidenav', '$mdToast', '$mdDialog',
+  function($scope, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog){ ...}
+4) Write down the function:
+    $scope.deleteClassified = function(event, classified){
+      var confirm = $mdDialog.confirm()
+        .title("Are you sure you want to delete" + classified.title + "?")
+        .ok("Yes")
+        .cancel("No")
+        .targetEvent(event);
+      $mdShow(confirm).then(function(){
+        var index = $scope.classifieds.indexOf(classified);
+        $scope.classifieds.splice(index, 1);
+      }), function(){
+        
+      };
+Inside this function we declare a variable confirm and set it equal to confirm dialog frm the material library. We give values to its properties of title, ok, cancel and tergetEvent which is the passed parameter. Then we show the confirm variable via mdShow directive and when the promise is resolved, call a function which splices the object in te array.	  
+5) in index.html via the ng-click directive we'll also pass an $event parameter:
+     <md-button ng-click="deleteClassified($event, classified)" class="md-warn">Delete</md-button>
+The $event parameter is the object from the ng-repeat, which is current classified.
+
+Filtering Data:
+1) in index.html make another button after the New Classifieds one, called Filters:
+        <md-button ng-click="showFilters = true">
+          <md-icon class="mdi mdi-magnify"></md-icon>
+          Filters
+        </md-button>
+2) Add a div for filters:
+    </md-toolbar>
+
+    <div class="filters" layout= "row" layout-align="center center" ng-show="showFilters">
+      <md-input-container>
+        <label>Enter Search Term</label>
+        <input type="text" ng-model="classifiedsFilter">
+      </md-input-container>
+
+    </div>
+3) Make a filter in ng-repeat:
+
+    <md-content class="md-padding" layout="row" layout-wrap>
+      <md-card ng-repeat="classified in classifieds track by $index" flex="30"  | filter: "classifiedsFilter">
+4) Let's set a dropout selection from ngMaterial library with categories In index.html:
+      </md-input-container>
+      <md-input-container>
+        <label>Category</label>
+        <md-select ng-model="category">
+          <md-option ng-repeat="category in categories" value="{{category}}">{{category}}</md-option>
+        </md-select>
+      </md-input-container>
+      
+    </div>
+5) To make a list of categories we'll need a library called lodash, which would help us with the categories array in the json file:
+Go to cdnjs.com, find the lodash library and click the copy button. Now in index.html let's add the link:
+    <script src="components\classifieds.fac.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+6) In controller we'll make a function which handles the categories:
+     function getCategories(classifieds){
+       var categories = [];
+
+       angular.forEach(classifieds, function(item){
+         angular.forEach(item.categories, function(category){
+           categories.push(category);
+         });
+       });
+
+       return _.uniq(categories);
+     }
+The function takes the classifieds array as a parameter and inside we declare an empty array for categories. Then we make a double loop: going through the classifieds array we pass the category array to inner loop and push them in the categories array. After we're done, we use the lodash library and return an array of unique values.
+7)Set the categories array equal to the result of the getCatergories function giving it the classifieds array as a parameter:     
+    $scope.categories=getCategories($scope.classifieds)
+8)The menu doesn't work properly due to asynchronous run of JS. Assigning some value to the categories variable goes before the factory fetches all the required data. To avoid this we can put the array operation into the body of the function calling the factory. In controller:
+	  function($scope, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog){
+    classifiedsFactory.getClassifieds().then(function(classifieds){
+        $scope.classifieds = classifieds.data;
+        $scope.categories=getCategories($scope.classifieds);
+    });
+9) To use the categories filter, we need to use it in the ng-repeat directive. In index.html:
+    <md-card ng-repeat="classified in classifieds | filter: classifiedsFilter | filter: category track by $index" flex="30"  >
+10) Adding the Clear button. In index.html:
+      <div layout="row">
+        <md-button class="md-warn" nd-click="classifiedsFilter=''; category=''">Clear</md-button>
+      </div>
+      
+    </div>
+	
+Adding Animation:
+1) To make it smoother we will use some animation when we filter the data. We need the animate library which the ngMaterial library relies on. Since we have referred to it via a script tag in index.html we don't need to install it now. Now some css will come in handy, and we'll make some styling based on ng classes. First, we need to declare the classes to elements we need, in index.html:
+      <md-card ng-repeat="classified in classifieds | filter: classifiedsFilter | filter: category track by $index" 
+              flex="30"  class="classified">
+2) Now we'll make styling to that class, in style.css:
+.classified.ng-enter, .classified.ng-move{
+  transition: 0.4s all;
+  opacity: 0;
+}
+
+.classified.ng-enter.ng-enter-active, .classified.ng-move.ng-move-active{
+  opacity: 1;
+}
+3) Make an animation of a keyframe for ng-leave class, in style.css:
+.classified.ng-leave {
+  animation: 0.4s fade_classified; 
+  
+}
+
+@keyframes fade_classified {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+Routing Concepts:
+The idea of ui-router is to make everything happen based on the state of the single page app, while traditional apps use lots of pages. Using the router we should be able to take some particular links which would display stuff we exactly need.
+
+How UI-Router Works:
+1) install to the lang1 directive via cmd: D:\lang1>npm install angular-ui-router
+2) add a script link in index.html:     
+<script src="node_modules\angular-ui-router\release\angular-ui-router.js"></script>
+  </body>
+3)in app.js add another library to the array:
+var app = angular.module("ngClassifieds", ['ngMaterial', 'ui.router'])
+4) add an ui.router provider, still in app.js. The statePtovider lets us state various states for the app:
+  .config(function($mdThemingProvider, $stateProvider) { ///}
+5) We'll define some states in app.js:
+    $stateProvider
+      .state('stateone', {
+        url: '/stateone',
+        template: '<h1>State One</h1>'
+      })
+      .state('statetwo', {
+        url: '/statetwo',
+        template: '<h1>State Two</h1>'
+      })
+Here we call the provider's property of state and pass it two arguments. The first one is its name, the second - an object where the values of url and template are defined.
+6) Now we'll use the ui-view directive in index.html to display those states:
+    </md-toolbar>
+
+    <md-button ui-sref="stateone">go to state one</md-button> 
+    <md-button ui-sref="statetwo">go to state two</md-button>
+    <ui-view></ui-view>
+Inside the ui-view tag the state is displayed, and the buttons let us toggle between those states via the ui-sref attribute. Now with the states included we can take an url of a specific state and share it with somebody. 
+7) To get to substate we use inside the template another ui-view tag, in app.js:
+      .state('statetwo', {
+        url: '/statetwo',
+        template: '<h1>State Two</h1> <md-button ui-sref="two.more">Go to nested state</md-button><ui-view></ui-view>'
+      })
+      .state('two.more', {
+        url:'/more',
+        template: '<p>This is a deeper state</p>'
+      })
+
+Switching to Controller-As:	  
+1) Give a controller to state1 in app.js:
+    $stateProvider
+      .state('stateone', {
+          url: '/stateone',
+          template: '<h1>State One</h1>',
+          controller: 'stateOneController'
+      })
+2) Create a controller in app.js:
+
+  .controller('stateOneController', function($scope) {
+    $scope.message = "Hey from state One";
+  });
+3) Change the template of state one in app.js:
+
+    $stateProvider
+      .state('stateone', {
+          url: '/stateone',
+          template: '{{message}}',
+          controller: 'stateOneController'
+      })
+4) in index.html:
+  <body ng-app="ngClassifieds" ng-controller="classifiedsCtrl">
+
+    <div ng-controller="ctrlOne">{{ctrlOne.message}}</div>
+    <div ng-controller="ctrlTwo">{{ctrlTwo.message}}</div>
+5) Controller As is an alias, that is useful in cases like in #4. Now in app.js we'll give an alias to the stateOneController and change inside the controller $scope.message to this.message:
+    $stateProvider
+      .state('stateone', {
+          url: '/stateone',
+          template: '{{message}}',
+          controller: 'stateOneController as stateone'
+      })
+	  
+	 //...
+	   .controller('stateOneController', function($scope) {
+    this.message = "Hey from state One";
+  });
+6) In app.js in controller let's declare a capture variable which allows to avoid confusing this's:
+  .controller('stateOneController', function($scope) {
+    this.message = "Hey from state One";
+  });
+This is how we get rid of "scope soup".
+
+Refactoring the Classifieds Route:
+1) in app.js remove the demo data leaving only state one.
+2) change the state one this way:
+      .state('classifieds', {
+          url: '/classifieds',
+          templateUrl: 'components/classifieds/classifieds.tpl.html',
+          controller: 'classifiedsCtrl as vm'
+      });
+3) Clean everything inside the body element up to scripts in index.html
+4) Create the file for templateUrl in corresponding directory and put that cut out html here from index.html
+5) In index.html add an element ui-view where all the states will be displayed:
+  <body ng-app="ngClassifieds">
+
+    <ui-view></ui-view>
+6) Clean the classifieds.tpl.html from demo stuff
+7) Inside the classifieds.ctrl.js:
+  function($scope, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog){
+
+    var vm = this;
+    
+    classifiedsFactory.getClassifieds().then(function(classifieds){
+8) Now we can refactor the functions inside the controller this way: 
+    var vm = this;
+
+    vm.openSidebar = openSidebar;
+    vm.closeSidebar = closeSidebar;
+    vm.saveClassified = saveClassified;
+    vm.editClassified = editClassified;
+    vm.saveEdit = saveEdit;
+    vm.deleteClassified = deleteClassified;
+	
+	...
+	
+     function openSidebar(){
+      $mdSidenav('left').open();
+    };
+9) Repeat this for all $scope methods and variables.
+10) To make use of refactoring we should rename all we need in the template from, e.g. openSidebar to vm.openSidebar
+
+Creating the New Classified State:
+1) Look at the files and subdirectories in components via cmd: 
+C:\Users\Equinox>d:
+
+D:\>cd lang1/components
+
+D:\lang1\components>ls
+2) Put the classifieds files to the classifieds directory
+3) Create new folders in the classifieds directory called new and edit:
+D:\lang1\components>mkdir new
+
+D:\lang1\components>mkdir edit
+4) Go to the new directory and create files:
+D:\lang1\components\new>echo html > classifieds.new.tpl.html
+
+D:\lang1\components\new>echo html > classifieds.new.ctr.js
+5) Same for the edit dir:
+D:\lang1\components\new>cd ..
+
+D:\lang1\components>cd edit
+
+D:\lang1\components\edit>echo html > classifieds.edit.tpl.html
+
+D:\lang1\components\edit>echo html > classifieds.edit.ctr.js
+6) in app.js make new state:
+      .state('classifieds.new', {
+          url: '/new',
+          templateUrl: 'components/classifieds/new/classifieds.new.tpl.html',
+          controller: 'newClassifiedsCtrl as vm'
+      });
+7) in classifieds.new.ctr.js: 
+(function() {
+  "use strict";
+
+  angular
+    .module('ngClassifieds')
+    .controller('newClassifiedsCtrl', function($mdSidenav, $mdDialog, classifiedsFactory) {
+
+      var vm = this;
+      $mdSidenav('left').open();
+      
+    })
+})();
+8) in classifieds.tpl.html:
+    </div>
+
+    <ui-view></ui-view>
+
+    <md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left">
+9) cut everithing insode the sidenav tag and paste it into the classifieds.new.tpl.html
+10) fix the scritp sources in index.html:
+    <script src="components\classifieds\classifieds.ctr.js"></script>
+    <script src="components\classifieds\classifieds.fac.js"></script>
+    <script src="components\new\classifieds.new.ctr.js"></script>
+11) in classifieds.ctr.js add $state variable:
+app.controller("classifiedsCtrl", ['$scope', '$state', '$http', 'classifiedsFactory', '$mdSidenav', '$mdToast', '$mdDialog',
+  function($scope, $state, $http, classifiedsFactory, $mdSidenav, $mdToast, $mdDialog){
+12) In classifieds.ctr.js:
+      function openSidebar(){
+      $state.go('classifieds.new')
+    };
+13) Now, while clicking on the "new classified" button leads to the /new state, the sidebar won't open. To fix the issue add a $timeout to the classified.new.ctr.js:
+    .controller('newClassifiedsCtrl', function($mdSidenav, $timeout, $mdDialog, classifiedsFactory) {
+
+      var vm = this;
+
+      $timeout(function () {
+        $mdSidenav('left').open();
+      }, 2000);
+
+Setting Up Watchers:
+1) For now the sidebar does nothing when we click new and cancel buttons. Also if we click somewhwere outside the bar would hide but the route would still be classifieds\new. Let's fix it using some angular features (watchers). A watcher is a feature soming with the $scope variable. It allows us to watch how the value of a var changes and what is to be done when the value changes. In classifieds.new.ctr.js inject a $scope object and set up a watcher:
+    .controller('newClassifiedsCtrl', function($scope, $mdSidenav, $timeout, $mdDialog, classifiedsFactory) {
+
+      var vm = this;
+
+      $timeout(function () {
+        $mdSidenav('left').open();
+      }, 2000);
+
+      $scope.$watch('vm.valueToChange', function(value) {
+        if(value === 2) {
+          console.log('Value changed to 2');
+        }
+      });
+
+      vm.valueToChange = 1;
+
+      //change value to 2 in 2 seconds
+      $timeout(function() {
+        vm.valueToChange = 2;
+      }, 2000);
+2)To watch if the siadebar is open or closed let's use a boolean. In classifieds.new.tpl.html:
+<md-sidenav class="md-sidenav-left md-whiteframe-z2" md-component-id="left" md-is-open="vm.sidenavOpen">
+3) Now back in classifieds.new.ctr.js inject a $state and do the following:
+    .controller('newClassifiedsCtrl', function($scope, $state, $mdSidenav, $timeout, $mdDialog, classifiedsFactory) {
+
+      var vm = this;
+      vm.closeSidebar = closeSidebar;
+
+      $timeout(function () {
+        $mdSidenav('left').open();
+      }, 2000);
+
+      $scope.$watch('vm.sidenavOpen', function(sidenav) {
+        if(sidenav === false) {
+          $mdSidenav('left')
+            .close()
+            .then(function() {
+              $state.go('classifieds');
+            })
+        }
+      });
+
+      function closeSidebar() {
+        vm.sidenavOpen = false;
+      }
+	  
+Emitting Data:
+1) The $scope object allows to communicate data between separate controllers. In classifieds.ctr.js:
+    var vm = this;
+
+    $scope.$on
+
+    $scope.boradcast
+    $scope.emit
+2)The broadcast and emit message the data between scopes. Broadcast sends data to child scopes, while emit does, on the contrary, send data to the parent scope. We'll use emit since the new.ctr.js is a child scope of ctr.js. Now in classifieds.new.ctr.js:
+      function closeSidebar() {
+        vm.sidenavOpen = false;
+      }
+
+      vm.sendMessage = function() {
+        $scope.$emit('myMessage', 'hey how r u'); 
+      }
+3) Now we'll receive the message in classifieds.ctr.js and console.log it:
+    $scope.$on('myMessage', function(event, message) {
+      console.log(message);
+    });
+4)In classifieds.new.tpl.js:
+  <md-content layout-padding>
+    <md-button ng-click="vm.sendMessage()">Send Message</md-button>
+    <form>
+5) Remove the example and in the classifieds.new.ctr.js write down a function whih sends data to the main controller:
+      function saveClassified(classified) {
+        if(classified) {
+
+          classified.contact = {
+            name: "Ryan",
+            phone: "(555) 555-5555",
+            email: "darkkillerganjubas@mail.ru"
+          }
+          
+          $scope.$emit('newClassified', classified);
+          vm.sidenavOpen = false;
+        }
+      }
+6) Get the data in classifieds.ctr.js:
+        vm.categories=getCategories(vm.classifieds);
+    });
+
+    $scope.$on('newClassified', function(event, classified){
+      classified.id = vm.classifieds.length + 1;
+      vm.classifieds.push(classified);
+      showToast('Classified saved!');
+    })
+7)Add the function in classified.new.ctr.js:
+      var vm = this;
+      vm.closeSidebar = closeSidebar;
+      vm.saveClassified = saveClassified;
+	  
+Editing Data with Route Params:
+1) Copy the code from classifieds.new.ctr.js to classifieds.edit.ctr.js
+2) Make some corrections:
+
+    .controller('editClassifiedsCtrl', function($scope, $state, $mdSidenav, $timeout, $mdDialog, classifiedsFactory) {
+3) Same thing about the templates
+4) Link the edit script controller to the index.html
+    <script src="components\new\classifieds.new.ctr.js"></script>
+    <script src="components\edit\classifieds.edit.ctr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+5) Add a new route in app.js:
+      .state('classifieds.edit', {
+          url: '/edit',
+          templateUrl: 'components/classifieds/edit/classifieds.new.tpl.html',
+          controller: 'editClassifiedsCtrl as vm'
+      });
+6) In classified.ctr.js change the editClassified function:
+     function editClassified(classified) {
+       $state.go('classifieds.edit');
+    }
+7) In classifieds.edit.tpl.html change the button value:
+  <md-toolbar>
+    <h1 class="md-toolbar-tools">Edit classified</h1>
+  </md-toolbar>
+8) To exchange data between different routes we'll use certain features of ui-router. In classified.ctr.js we'll pass an object with an id and the classified data:
+     function editClassified(classified) {
+       $state.go('classifieds.edit', {
+         id: classfied.id;
+         classified: classified;
+       });
+    }
+9) In app.js:
+      .state('classifieds.edit', {
+          url: '/edit/:id',
+          templateUrl: 'components/classifieds/edit/classifieds.new.tpl.html',
+          controller: 'editClassifiedsCtrl as vm',
+          params: {
+            classified: null;
+          }
+      });
+10) Make some changes in the edit template by putting a vm. before classified:
+      <md-input-container>
+        <label for="title">Title</label>
+        <input type="text" id="title" ng-model="vm.classified.title" md-autofocus>
+      </md-input-container>
+      <md-input-container>
+        <label for="price">Price</label>
+        <input type="text" id="price" ng-model="vm.classified.price">
+      </md-input-container>
+      <md-input-container>
+        <label for="description">Description</label>
+        <textarea type="text" id="description" ng-model="vm.classified.description">
+        </textarea>
+      </md-input-container>
+      <md-input-container>
+        <label for="image">Image Link</label>
+        <input type="text" id="image" ng-model="vm.classified.image">
+      </md-input-container>
+11) In classifieds.edit.ctr.js set the classified variable equal to the data from the controller object:
+      vm.saveClassified = saveClassified;
+      vm.classified = $state.params.classfied;
+12) Let's take caare about saving the edit. In classified.edit.tpl.js remove the Save button and the ng-if condition from save edit button:
+      <md-input-container>
+        <md-button class="md-primary" ng-click="vm.saveEdit()">Save Edit</md-button>
+        <md-button class="md-warn" ng-click="vm.closeSidebar()">Cancel</md-button>
+
+      </md-input-container>
+13) In the classifieds.edit.ctr.js let's define a saveEdit function instead of just save which is left from newClassified controller:
+      var vm = this;
+      vm.closeSidebar = closeSidebar;
+      vm.saveEdit = saveEdit;
+      vm.classified = $state.params.classfied;
+	  // ...
+      function saveEdit() {
+        $scope.$emit('editSaved', "edit saved");
+        vm.sidenavOpen = false;
+      }
+14) In classifieds.ctr.js get the edited data and say that edit is saved:
+    $scope.$on('editSaved', function(event, message) {
+      showToast(message);
+    })
+
+Isolating Scope:
+1) We're going to make a directive which encapsulates the md-content element to make the code reusable. Make an HTML file:
+	<!DOCTYPE html>
+	<html ng-app="app>
+	<head>
+		<script src= "../angular.min.js></script>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width-device-width">
+		<title>JS Bin</title>
+	</head>
+	<body ng-controller="myController>
+		<hello-message message="myMessage"></hello-message>
+		<hello-message message="myOtherMessage"></hello-message>
+	</body>
+2) JS file:
+	var app = angular.module("app", []);
+	
+	app.controller("myController", function($scope) {
+		$scope.myMessage = "Hello!";
+		$scope.myOtherMessage = "Hey there!";
+	});
+	
+	app.directive("helloMessage, function (){
+		return {
+			scope: {
+				message: '='
+			},
+			template: '<h1>{{message}}</h1>'
+		}
+	})
+3) Here we have created a message directive basing on the template defined in controller. The scope of this directive is an attribute which is defined by the = symbol or by the attribute's name ("message"). The controller gets the directive scope and its value from html and returns corresponding value from the scope (e.g. myMessage or myOtherMessage).
+
+Setting up the Classified Card Directive:
+1) Create files:
+	lang1/components/classifieds/card/classified-card.tpl.html
+	lang1/components/classifieds/card/classified-card.dir.js
+2) Cut the md-card and its inside to the new template
+3)In classified.tpl.html put the directive iside the md-content element:
+    <md-content>
+      <classified-card class="md-padding" layout="row" layout-wrap></classified-card>
+    </md-content>
+4)In classified-card.dir.js declare a directive:
+	(function() {
+  "use strict";
+
+  angular
+    .module("ngClassifieds")
+    .directive("classifiedCard", function() {
+      return {
+        templateUrl: "components/classifieds/card/classified-card.tpl.html",
+        scope: {},
+        controller: classifiedCardController,
+        controllerAs: "vm"
+      }
+
+      function classifiedCardController() {
+
+      }
+
+    })
+})();
+
+5)Add a refernce to the directive in index.html:
+    <script src="components\classifieds\card\classified-card.dir.js"></script>
+
+Finishing the Directive:
+1) Put the editClassified and the deleteClassified functions from classified.ctr.js to classified-card.dir.js and showToast function by copying:
+      function classifiedCardController() {
+        function editClassified(classified) {
+          $state.go('classifieds.edit', {
+            id: classfied.id;
+            classified: classified;
+          });
+
+        function deleteClassified(event, classified){
+           var confirm = $mdDialog.confirm()
+             .title("Are you sure you want to delete" + classified.title + "?")
+             .ok("Yes")
+             .cancel("No")
+             .targetEvent(event);
+           $mdShow(confirm).then(function(){
+             var index = vm.classifieds.indexOf(classified);
+             vm.classifieds.splice(index, 1);
+           }), function(){
+
+           };
+         }
+        function showToast(message){
+           $mdToast.show(
+             $mdToast.simple()
+               .content(message)
+               .position('top, right')
+               .hideDelay(3000)
+           );
+         }
+      }
+
+2) Add to the function this variable:
+      function classifiedCardController() {
+
+        var vm = this;
+        vm.editClassified = editClassified;
+        vm.deleteClassified = deleteClassified;
+3) In classifieds.tpl.html pass the classifieds data to the classified-card directive:
+    <md-content>
+      <classified-card class="md-padding" layout="row" layout-wrap classifieds="vm.classifieds"></classified-card>
+    </md-content>
+4) In classified-card.dir.js define the scope for the clasified data as the attribute:
+        scope: {
+          classifieds: "=classifieds"
+        },
+5) In the clasified-card.tpl.html change vm-classifieds to classifieds:
+<md-card ng-repeat="classified in classifieds | filter: classifiedsFilter | filter: category track by $index"
+        flex="30"  class="classified">
+6) Add dependencies to the classified-card.dir.js:
+    function classifiedCardController($state, $scope, $mdDialog) {
+7) Let's fix the categories and filters by adding that data to our scope in classified-card.dir.js:
+        scope: {
+          classifieds: "=classifieds",
+          classifiedsFilter: "=classifiedsFilter",
+          category: "=category"
+        },
+8) In classifieds.tpl.html add those attributes so everything is going to work correct:
+      <classified-card class="md-padding" layout="row" layout-wrap
+      classifieds="vm.classifieds" classifieds-filter="classifiedsFilter" category="category"></classified-card>
+	  
+Wrapping Up:

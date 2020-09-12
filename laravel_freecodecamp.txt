@@ -1,0 +1,1369 @@
+installation:
+
+1) install composer php package manager
+https://getcomposer.org/download/ - windows installer
+after installation we can call composer via cmd from anywhere.
+
+2)  install node.js. via cmd type node -v to see the version of node.js and the same for npm -v.
+
+3) install laravel. the steps are at laravel.com/docs. After composer installed, download the laravel installer using composer. In cmd, write this command:
+composer global require laravel/installer
+
+begin:
+
+1) Create a project path via cmd:
+D:\learn>laravel new freeCodeGram
+
+2) open the project in the ide (Atom e.g.)
+
+composer.json is the file which keeps all the assets and instructions for composer itself.
+
+via cmd: in freeCodeGram write php artisan. You'll see the set of commands.
+type: php artisan serve, which starts a server accessible from the browser. go to the page. this cmd tab should be opened to run the server.
+
+go to the D:\learn\freeCodeGram>
+
+http file are in the resources\views directory. Default file is welcome.blade.php.
+blade is a rendering template allowing to throw snippets of php in your views.
+
+3) Change the title from Laravel to freeCodeGram at welcome.blade.php:
+                <div class="title m-b-md">
+                    freeCodeGram
+                </div>
+
+4) in cmd: php artisan make:auth doesn't work anymore. instead, use
+composer require laravel/ui --dev
+php artisan ui vue --auth
+npm install && npm run dev
+this command creates auth directory in resources/views of the project folder and some other files. At the localhost page appear "login" and "register".
+
+5) make some views. fireup the JS section of laravel. laravel goes with bootstrap and vue.js.
+6) npm is a package manager for JS. first, get its version number by typing in cmd: npm -vб and do the same for node.js: node -v. one can download it from nodejs.org.
+7) npm install
+8) npm run dev complies laravel from the box with bootstrap and vue.js
+9) go to resources\js\app.js which is not the complied file. it is public\js\app.js which has been compiled. complied files always end up in the public directory.
+10) we are going to work with the app.js file which is situated in resources folder. 
+11) second file we'll work with is resources\sass\app.scss mostly importing css files.
+12) go to resources\views\home.blade.php. home is what gets loaded when logged in. to create users we need a database (DB).
+13) to create a DB go to artisan (php artisan in cmd) and look at migrations. migrations are files that describe ur database. use them instead of making direct changes to db and db server and other heavy stuff. migration is a file containig all instructions to manage the db, to create and edit it. we're going to use those migration files to do cmth with db. one can use sqlite or sql server or whatever to store the db.
+14) in the freecodegram\database folder create a laravel2.sqlite file. 
+15) go to freecodegram\.env file. .env stands for "environment". at the momnet app_env is local. fill in the DB_ strings with proper info. 
+16) make a migration to that db file. In cmd: php artisan migrate.
+17) we can see that a table of users and password_reset (in case a user forgot his p-word) has been created
+18) now go to chrome and create a new user by filling the form. To avoid error you need to stop server first and then do anything about the db. press ctrl+c in the cmd where the server is running and restart it by typing php artisan serve again. after it refresh the page in chrome and you're logged in. 
+ 19) go to resources\views\layouts\app.blade.php file. CHange this                
+ <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+to   
+
+<a class="navbar-brand" href="{{ url('/') }}">
+                    freeCodeGram
+                </a>
+				
+20) In public\svg get the freeCodeCamp svg logo. We write the path as img src="svg/fCC_logo.svg" without typing ../public because the laravel build starts in the public directory and there's no need to point at it. the site has access only to public directory. 
+<a class="navbar-brand d-flex" href="{{ url('/') }}">
+<div><img src="svg/fCC_logo.svg" style="height: 20px; border-right: solid 1px #333" class="pr-3"></div>
+<div class="pl-3 pt-1">freeCodeGram</div>
+
+d-flex means display flex.
+class=pr-3 means padding right 3 cols.
+class=pl-3 means padding left 3 cols.
+pt-1 means padding top 1 col
+
+21) go to resources\views\home.blade.php and remove all but the container div. Write the following:
+<div class="container">
+  <div class="row">
+    <div class="col-3 p-5">
+      <img src="https://instagram.fiev12-1.fna.fbcdn.net/v/t51.2885-19/s150x150/83213956_3360255157381124_5752385570823208960_n.jpg?_nc_ht=instagram.fiev12-1.fna.fbcdn.net&amp;_nc_ohc=htwGo_NFr5MAX9RdvVH&amp;oh=9a251ee0e4f6e5116a9b035c5221846d&amp;oe=5EAA5746" class="rounded-circle">
+    </div>
+    <div class="col-9 pt-5">
+      <div><h1>freecodecamp</h1></div>
+      <div class="d-flex">
+        <div class="pr-5"><strong>153</strong> posts</div>
+        <div class="pr-5"><strong>23k</strong> followers</div>
+        <div class="pr-5"><strong>212</strong> following</div>
+      </div>
+      <div class="pt-4 font-weight-bold">freeCodeCamp.org</div>
+      <div>We're a global community of millions of people learning to code together. We're an open source, donor-supported, 501(c)(3) nonprofit.</div>
+      <div class=""><a href="#">www.freecodecamp.org</a></div>
+    </div>
+  </div>
+  <div class="row pt-5">
+    <div class="col-4">
+      <img src="https://instagram.fiev12-1.fna.fbcdn.net/v/t51.2885-15/e35/c165.0.419.419a/91248204_204409004183010_3671867139000667360_n.jpg?_nc_ht=instagram.fiev12-1.fna.fbcdn.net&amp;_nc_cat=106&amp;_nc_ohc=tawAKIj9GAsAX9P3Hwn&amp;oh=2c5ca9ab36faf8f67a5537d675cf62ee&amp;oe=5EA9557F" class="w-100">
+    </div>
+    <div class="col-4">
+      <img src="https://instagram.fiev12-1.fna.fbcdn.net/v/t51.2885-15/sh0.08/e35/c0.109.925.925a/s640x640/90429603_618090275709978_2696911208620941912_n.jpg?_nc_ht=instagram.fiev12-1.fna.fbcdn.net&amp;_nc_cat=106&amp;_nc_ohc=mNC8FhfKYvkAX-5-tZs&amp;oh=e925f706f7f503ce809bde4b5c8efab1&amp;oe=5EAA5C0D" class="w-100">
+    </div>
+    <div class="col-4">
+      <img src="https://instagram.fiev12-1.fna.fbcdn.net/v/t51.2885-15/sh0.08/e35/c32.0.686.686a/s640x640/90352431_2486922784857686_3315354613427944691_n.jpg?_nc_ht=instagram.fiev12-1.fna.fbcdn.net&amp;_nc_cat=102&amp;_nc_ohc=fz5m-4mzoQAAX8Oc_Ko&amp;oh=bb2fe6676663971da8809f1c4040133b&amp;oe=5EA9B1EC" class="w-100">
+    </div>
+  </div>
+</div>
+
+22) laravel imports fonts from googleapis and stores import in resources\sass\app.scss. to import a font go to fints.google.com. let's choose the OpenSans. Click the "select this font" button then "Customize" and for example choose bold 700. Click Embed=>@import, grab the link and add it to this file.  Remove the Nunito font for now. 
+
+23)Now to reference the OpenSans font we need to go to variables part. Those are found at resources\sass\_variables.scss. Change the according string with Nunito to 
+$font-family-sans-serif: 'Open Sans', sans-serif;
+Every time when making changes to front-end (like changing fonts) we need to restart the npm file. Go to cmd and type "npm run dev".
+
+24) To make the background white go the the IDE and the same file _variables.scss change the value of $body-bg to white at the body part. Recompile the code with npm run dev.
+
+25) Having the frontend done, let's start wit functionality. We have a Test user, let's think freecodecamp is his account. If we log out and try to register, there's no username, only email, password and comfirm password. We need a column for a user name. Go to resources\views\auth\register.blade.php file. Consider the line
+<div class="form-group row">
+    <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>  
+	
+and same for email, password etc. Duplicate the Email div:
+
+<div class="form-group row">
+    label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+
+    <div class="col-md-6">
+        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+        @error('email')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+        @enderror
+    </div>
+</div>
+
+and change all the email elements to username:
+
+<div class="form-group row">
+    <label for="username" class="col-md-4 col-form-label text-md-right">Username</label>
+
+    <div class="col-md-6">
+        <input id="username" type="username" class="form-control @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username">
+
+        @error('username')
+            <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+         @enderror
+    </div>
+</div>
+
+26) There can be errors when capturing the form input like empty input (these fields are marked as required). We $_POST the data from the form, the server captures it and validates data and then returns it back. Even is we remove the required attribute laravel will still require Name, Email and Password. Yet the newly created Username field is not required. 
+
+27) Go to the controller. Controllers are to fetch some data, manipulate or change it. Views should never contain any php logic, it should be left for controller. The needed one is situated at app\http\controllers\auth\registercontroller.php. See the validator function. We are going to add a 'username' element to the array. The keywords for every element are: required which means the field is required, string - type of data entered, email - checks is email is valid, max:255 - size limit, unique:users - checks if the data is unique in the database (in the users table). Here's the result:
+        return Validator::make($data, [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ]);
+		
+28) Migrations which manage the database should know that the username field should be but in the users table. Go to IDE, database\migrations\create_users_table.php
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+	
+We create a schema of users in $table which describes the structure of the DB. Its blueprint creates incrementing id, a string name, a string email which is unique, the timestamp verifying the email (which could be null, e.g. not required), also the string password, token and timestamps. At the moment we have to add a new attribute to the blueprint which is our username:
+    public function up()
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('email')->unique();
+            $table->string('username')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+This unique option makes data unique at the db level not just php level at the controller. 
+
+29) Go back to the registercontroller.php. The following create function is actually the way a user gets created.
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+    }
+
+Once we pass validation (validation function at regictercontroller.db) we are creating a user instance.  Add the username for the instance:
+    protected function create(array $data)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'username' => $data['username'],
+            'password' => Hash::make($data['password']),
+        ]);
+    }
+	
+30) If we try to register a new user now it will seem like it worked, but it's not true. We can see it using tinker. 
+in cmd type php artisan and find the tinker command. Run php artisan tinker. The terminal represents the app, while we're logged in and try to interact with the app. Write User::all(), see the number of users and type exit to leave tinker. 
+
+31) Whenever you create a migration or make changes to a db you need to remake the DB. Now run php artisan migrate:fresh to recreate everything. 
+
+32) Go to app\user.php. This is a model of a row in the DB. We can see that the attributes that are mass assignable do not contain the username attr. Add it. 
+
+33) Since we have erased the DB and made a new one. let's create a new user and check if it worked at tinkerL php artisan tinker -> User::all(). We can see everything is correct.
+
+34) We can see that when logged in the Name is displayed while we need Username to be diplayed. Let us fix it. Go to resources\views\layouts\app.blade.php. Check out this li element:
+    <li class="nav-item dropdown">
+        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+            {{ Auth::user()->name }} <span class="caret"></span>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+                 onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+             </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                 @csrf
+            </form>
+        </div>
+    </li>
+We can see that user->name is displayed here. Change it to 
+        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+            {{ Auth::user()->username }} <span class="caret"></span>
+        </a>
+		
+35) We pretend that "freecodecamp" is the user that loged in so instead of hard-coded freecodecamp in the view one should see his actual username. Go to resources\views\home.blade.php and here's the line we need:
+<div><h1>freecodecamp</h1></div>
+In this case we need to refer to the data from the model and everything about data is the work of the controller. Until now we have used only laravel provided controller files. But if we go to routes\web.php we'll see the file where all the routes are registered. At the moment we only have this one:
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+a route to /home page called HomeController. The @index is a laravel notation meaning we're calling the index method inside the HomeController. Go to app\http\controllers\auth\HomeController.php and look for the index method. It returns the view called 'home' which is the resources\views\home.blade.php file.   
+This is one of the controllers made with make:auth (see actual command at the beginning) command. Though to get us to the view it requires to be logged in but in actual instagram one can see the homepage of a user being not even signed in. This is why we are going to make our own controller instead of provided one.
+
+36) To make a controller type in cmd php artisan make:controller. To get more info about a particular command type php artisan help %commandname%.
+Type php artisan make:controller ProfilesController (its name is arranged according to the naming convention). Now in the app\http\controllers\auth\ we can see ProfilesController.php. Copy the index function from HomeController since our new controller is going to show the same view:
+class ProfilesController extends Controller
+{
+  public function index()
+  {
+      return view('home');
+  }
+}
+
+37) To direct laravel to this controller instead of HomeController return to the routes\web.php file and change the line
+Route::get('/home', 'HomeController@index')->name('home');
+to 
+Route::get('/home', 'ProfilesController@index')->name('home');
+
+
+38)Laravel follows the convention of a restful controller which is described at the laravel documentation and we must follow it very strictly. In this case we'll use the show action to show the profile of a single user, while grabbing all of them would be the index action (like index page of a book). The path then should look like this: /profile/{profile}, the route name: profile.show, the verb - GET. The curly brackets means that it is a variable which can be changed. For example, we'd like to make a path of localhost:8000/profile/1, and 1 is the user ID. Instagram is just using the username and we'll do the same, but later.
+
+39) Fo back to the routes\web.php file and change the route path name. Change the line
+Route::get('/home', 'ProfilesController@index')->name('home');  
+to
+Route::get('/profile/{user}', 'ProfilesController@index')->name('profile.show');
+
+{user} is the variable of a user id, and the name of the route is changed accotfing to the convention.
+
+40) Now let's get access to the user variable. Go to the ProfilesController.php and pass the argument to the index function. 
+  public function index($user)
+  {
+      dd($user);
+      return view('home');
+  }
+The dd function shows everything up to the parameter given and stops after the parameter has been displayed. We can write smth in the broweser command line after profile/ and it'll be shown. e.g http://localhost:8000/profile/1
+ 
+41) Now we see that it works as expected. To get an actual user, go to app/providers/User.php. This file models a single row in the DB, e.g. one user at a time. Back at the ProfilesController type:
+  public function index($user)
+  {
+      User::find($user);
+      return view('home');
+  }
+But User is not in the namespace of this controller so we need to add it to the actual namespace:
+
+namespace App\Http\Controllers;
+
+use App\User; (this line added)
+use Illuminate\Http\Request;
+
+Now if we dd() the User line, we'll see that we've fetched the user of id 1. Remove the dd() and set it to a variable and pass it to the view. 
+  public function index($user)
+  {
+      $user = User::find($user);
+      return view('home', ['user'=>$user]);
+  }
+We've passed to the view an array user which is equal to the User line of users DB. 'user' is going to be the name of the variable inside the home view. 
+
+42) 'user' is going to be the name of the variable inside the home view.  Go to that view and change the line 
+      <div><h1>freecodecamp</h1></div>
+to
+      <div><h1>{{$user->username}}</h1></div>
+In laravel the variable is placed instead of echo in 2 curly brace (moustache syntax), and since we need the username from the array, we point to the username array key.
+
+43) Let's create a profile model which contains data referring to a particular user profile, and then display this data in the profile. A model represents a table of a database, an object of a model is a row of that table. Making a new model means we need to describe something new in the DB so we need a new migration file. 
+Eloquent means a database layer of the framework. It allows to write the same code for every DB type, be it sqlite, mysql, mariadb etc.  
+In cmd type: php artisan make:model Profile -m. A new file Profile.php appeared in the app directory and also a new profiles migration at app\database\migrations.
+
+44) Open the create_profiles_table.php file and add attributes of the profile table:
+    public function up()
+    {
+        Schema::create('profiles', function (Blueprint $table) {
+            $table->id();
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
+            $table->string('url')->nullable();
+            $table->timestamps();
+        });
+    }
+Since a profile can be empty we'll make our attributes nullable.
+
+45) We need to connect the profile table to the user. Since every user has a profile and every profile belongs to a user, it is a 1:1 relationship. This means we need a foreign key of user_id added to this new table. 
+    public function up()
+    {
+        Schema::create('profiles', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('title')->nullable();
+            $table->text('description')->nullable();
+            $table->string('url')->nullable();
+            $table->timestamps();
+
+            $table->index('user_id');
+        });
+    }
+	
+46) We need to implement this new description. The up method has been set. but there also is the down method. Migrations can go backwards and forwards. The Backwards means that reversing what you did (using the down method). Laravel generates the down method which deletes the newly created table since we Create a table with the up method. Now let's add this migration to our database. Type in cmd: 
+php artisan migrate
+ 
+ 47) Go to the Profile model and type in the following:
+ 
+ class Profile extends Model
+{
+    public function user() {
+      return $this->belongsTo(User::class);
+    }
+}
+
+This is how we make a dependency that a Profile belongs to a User. Let's make a dependency on the User end. In the User.php file:
+    public function profile() {
+      return $this->hasOne(Profile::class);
+    }
+ 
+ In both cases we don't need to type on all the way to the file since the namespace App is already added by laravel.
+ 
+ 48) To checkout if everything works as expected, go to tinker:
+ php artisan tinker
+ and type
+ $profile = new \App\Profile();
+ $profile->title = 'Cool Title';
+ $profile->description = 'Description';
+ $profile->user_id = 1;
+ $profile->save();
+
+Now we can call the user connected to the profile:
+$profile->user;
+
+and vice versa:
+$user = App\User::find(1);
+$user->profile;
+
+Now the relationship of DB tables has been established.
+ 
+49) Go to home.blde.php file and instead of
+     <div class="pt-4 font-weight-bold">freeCodeCamp.org</div>
+     <div>We're a global community of millions of people learning to code together. We're an open source, donor-supported, 501(c)(3) nonprofit.</div>
+     <div class=""><a href="#">www.freecodecamp.org</a></div>
+	 
+do this:
+	      <div class="pt-4 font-weight-bold">{{$user->profile->title}}</div>
+      <div>{{$user->profile->description}}</div>
+      <div class=""><a href="#">{{$user->profile->url ?? 'N/A'}}</a></div>
+
+where the ?? symbols mean OR.
+
+50) We can assign value to the url via tinker 
+$user->profile->url = "freecodecamp.org";
+$user->push();
+the push() command saves all the changes made during the session, while hitting just $user->save() will affect only the $user table. 
+
+51) Let us make Error 404 appear if we're going to a page which doesn't exist, like profile/2. Go to ProfileController.php. At the moment our code assumes that there's always an exsting user passed to the index function. Change this line
+      $user = User::find($user);
+to
+      $user = User::findOrFail($user);
+Now the idex function will either find the user or return a proper response (Error 404) if there's none.
+
+52) Having the profile created we must pay attention to posts made by a user. We're going to have another model for that. It'll have a one-to-many relation to the user model. In cmd, type:
+php artisan make:model Post -m 
+Open the create_posts_table.php file and add attributes for this model:
+
+    public function up()
+    {
+        Schema::create('posts', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('caption');
+            $table->string('image');
+            $table->timestamps();
+
+            $table->index('user_id');
+        });
+    }
+
+After we have created attributes, make a migration:
+php artisan migrate
+
+53) Make a connection of User and Post tables at the User side. Open User.php and add this:
+
+    public function posts() {
+      return $this->hasMany(Post::class);
+    }
+
+We name this function posts in plural since a user has many posts, while profile was named in singular because one user has one and only pofile. Accordingly, we use the hasMany keyword for the same reason.
+
+54)	Write the inverse in the Post model. Open Post.php and type this:
+
+class Post extends Model
+{
+    public function user() {
+      return $this->belongsTo(User::class);
+    }
+}
+
+55) Let's create some address to adding a new post to the profile. Open the home.blade.php file and add this:
+      <div class="d-flex justify-content-between align-items-baseline">
+        <h1>{{$user->username}}</h1>
+        <a href="#">Add new post</a>
+      </div>
+
+We'll make the actual url in accordance with the RESTful notation. Since we are going to create a new post, we use verb GET, path /p/create, action create, route name p.create.	  
+
+56) First, let's create the route. Open Web.php and add a new route (without name):
+
+Route::get('p/', 'PostsController@create');
+
+57) Let's create the PostsController, via cmd, type:
+php artisan make:controller PostsController
+
+58) Open the newly created PostsController and add a method returning a brand new view create in a new posts directory:
+
+class PostsController extends Controller
+{
+    public function create() {
+      return view('posts.create');
+    }
+}
+Create that path at resources\views. Naming views we follow the same RESTful convention of naming (literally the view name repeats the method's name), and the directory repeats the first part of the controller's name, which is obviously posts in our case. 
+
+59) In blade we create views by stacking views into each other, like layers. We have the bottom layer, the upper layer, and so on. The home.blade.php file has a line of 
+@extends('layouts.app')
+which means it extends the basic layer of layouts\app.blade.php.  
+We also have the 
+			@section('content') 
+line. 
+
+Somehow it is alike the 
+            @yield('content')
+line at app.blade.php. It means that whatever you yeild, this is where the content is going to end up. 
+
+60) Right now we'll make some refactoring, bringing the home.blade.php to the same naming convention. Since it is returned by a ProfilesController's method of index, it should be called index.blade.php at the profiles directory in views folder. We also should fix the returning view at the ProfilesController. 
+class ProfilesController extends Controller
+{
+  public function index($user)
+  {
+      $user = User::findOrFail($user);
+      return view('profiles.index', ['user'=>$user]);
+  }
+}
+
+61) Having the naimg refactoring done, return to our main task: making a create post page. Cope the index.blade.php file to the posts folder and rename it to create.blade.php. Remove everything nside the container div. Now if we go to localhost:8000/p, we'll see the posts.create view. Following the convention, edit the route at Web.php:
+Route::get('/p/create', 'PostsController@create');
+
+62) Making the view we'll use some code from register.blade.php and put it to the create.blade.php:
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  <div class="form-group row">
+      <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
+
+      <div class="col-md-6">
+          <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" autocomplete="name" autofocus>
+
+          @error('name')
+              <span class="invalid-feedback" role="alert">
+                  <strong>{{ $message }}</strong>
+              </span>
+          @enderror
+      </div>
+  </div>
+</div>
+@endsection
+
+63) Make corrections and get this:
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  <form action="">
+    <div class="row">
+      <div class="col-8 offset-2">
+          <div class="row">
+            <h1>Add New Post</h1>
+          </div>
+
+          <div class="form-group row">
+              <label for="caption" class="col-md-4 col-form-label">Post Caption</label>
+                  <input id="caption" type="text" class="form-control @error('caption') is-invalid @enderror" name="caption" value="{{ old('caption') }}" autocomplete="caption" autofocus>
+
+                  @error('caption')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+          </div>
+
+          <div class="row">
+            <label for="image" class="col-md-4 col-form-label">Post Image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+
+            @error('image')
+                <span class="invalid-feedback" role="alert">
+                    <strong>{{ $message }}</strong>
+                </span>
+            @enderror
+          </div>
+
+          <div class="row pt-4">
+            <button class="btn btn-primary">Add New Post</button>
+          </div>
+
+      </div>
+    </div>
+  </form>
+</div>
+@endsection
+
+64) Laravel has a store method which we use to upload the post. The convention is this:
+verb POST, path /posts, action store, route name posts.store
+
+65) Since we pass in a file, the enctype of form should be multipart/form-data:
+  <form action="/p" enctype="multipart/form-data" method="post">
+
+66) Add a new route at web.php:
+Route::post('/p', 'PostsController@store');
+
+67) Create a new store method at PostsController.php:
+    public function store() {
+      dd(request()->all());
+    }
+We'll use at the moment a dd method to check out if all the data is passed correctly. We got a 419 error which is actually a CSRF error. CSRF allows Laravel to limit who can post to our forms. Otherwise one could just go to the /p page and create a new post without using the form proposed or without authorization. Laravel  creates a large key to every form and then validates it. If it comes from the server, it's ok, otherwise it'll give the 419 error page. To fix it, open the create.blade.php file and add a method:
+
+  <form action="/p" enctype="multipart/form-data" method="post">
+    {{ csrf_field() }}
+	
+This method adds a hidden token to the form which contains the key so everything works as expected. 
+
+68) The dd method shows that an uploaded image is a class. We have tools to deal with the file: store it, rename, etc. 
+
+69) At the moment the upload form has no validation. It means a user can upload a post without an image, for example, which is not greeted. Validate the request at store method of PostsController.php:
+    public function store() {
+      $data = request()->validate([
+        'caption' => 'required',
+        'image' => 'required'
+      ]);
+      dd(request()->all());
+    }
+	
+and remove span element from the image div at create.blade.php:
+            @error('image')
+              <strong>{{ $message }}</strong>
+            @enderror
+			
+Another problem is that there's no file type validation, we can upload a txt or an html file. Check the available validation rules at laravel documentation. Back to the PostsController add a laravel image validation:
+
+    public function store() {
+      $data = request()->validate([
+        'caption' => 'required',
+        'image' => 'required|image'
+      ]);
+      dd(request()->all());
+    }
+			
+70) Now we are up to creating the very post. In PostsController.php add:
+      \App\Posts\create::($data);
+If we have some field which need no validation it will be ignored when we pass a value to the $data array. To fix it, you can just take that field and assign an empty string as a value. 
+
+71) At the moment if we try to make a post we'll get an error. The reason is that laravel is cautious about the data passing in to prevent the man in the middle attack. For now we can turn the guardian off. At Post.php type the line:
+protected $guarded = []; 
+which says to laravel that it's ok to pass all the data.
+
+72) Next error is the Integrity constraint violation, which means that we ahve not passed the foreign key of user_id for the Post table. But now we are not even loged in. So the solution is to create through relationship. At PostsController.php:
+
+auth()->user()->posts()->create($data);  
+
+This line means that when logged in open the logged user's posts model and create a new one with data passed.
+
+73) Next error "call to a member function posts() on null" means we are not logged in, so there's no user() and no posts() related. Let's log in and create a new post, and the dd method shows the post has been added to database. Let's check it via tinker:
+
+php artisan tinker
+Post::all(); 
+
+We can see that a post has been added to the model.
+
+74) Even not logged in, we've been able to see the create post view. This is incorrect, so we need to fix it. We are going to use auth Middleware. In PostsController.php:
+public function __construct() {
+	$this->middleware('auth');
+}
+
+It means that when we construct the postscontroller instance and all its methods require authorisation. Now if we log out and try to make a post, we'll be redirected to the authorisation page which is exactly what we need.  
+
+75) There's a problem with the image. It is not uploaded correctly and not resized or fit into square. After we've validated our data, we'll have an image which is a n instance of an uploaded file - a more common laravel class for all files uploaded. We can use a store method on it.  Type in PossController.php:
+
+      dd(request('image')->store('uploads', 'public'));
+
+We store the image at the uploads folder on server public at the storage diectory of project folder. If we upload a file, we can find it at storage\app\public\uploads directory. But this public directory is not accessible (error 404). To fix it, type 
+
+php artisan storage:link 
+
+so the path is created. 
+
+76) Remove the dd method and set the request as a value to $imagePath:
+$imagePath = request('image')->store('uploads', 'public');
+
+77) Now the chain of auth->user->posts->create($data) can't have just the $data array passed in, since the image is at a certain path. The line will look like this:
+
+      auth()->user()->posts()->create([
+        'caption'=>$data['caption'],
+        'image' => $imagePath
+      ]);
+
+
+78) Instead of dd(all) the function should redirect to the user's profile after the post has been created. In PostsController.php:
+	      return redirect("/profile/" . auth()->user()->id);
+
+79) We'll fix the view so it would display the newly created posts. Open the index.blade.php file and instead of hard-coded images add this:
+
+  <div class="row pt-5">
+    @foreach($user->posts as $post)
+      <div class="col-4">
+        <img src="/storage/{{$post->image}}" class="w-100">
+      </div>
+    @endforeach
+  </div>
+
+80) To erase everything from the Post model, go to tinker 
+	php artisan tinker
+and type this:
+	Post::truncate()
+
+81) Add the link to the create method at our profile. In index.blade.php:
+        <a href="/p/create">Add new post</a>
+	
+82) We need to display images descending, going from the latest at the top to the earliest at the bottom. Go to User model (User.php) and add this inside the posts method after we've established relation between user and post:
+
+    public function posts() {
+      return $this->hasMany(Post::class)->orderBy('created_at', 'DESC');
+    }
+
+83) Next problen is the hard-coded amount of posts, followers and followings. Since now we have an actual number of posts, we can fix that. At index.blade.php:
+	        <div class="pr-5"><strong>{{$user->posts->count()}}</strong> posts</div>
+
+84) Add a padding-bottom so that the picures get some space between them:
+
+<div class="col-4 pb-4">
+
+85) We need all the images to be square and we'll use a special PHP library for that. To pull in a library, do this in cmd:
+composer require intervention/image
+
+Since composer is the package manager, we call it and require the intervention/image library. Documentation says the library has a special Laravel integration. 
+
+86) Go to PostsController.php. Check if the library has been used automatically, and otherwise add it manually:
+
+use Intervention\Image\Facades\Image;
+
+87) Now in PostsController.php get into the store method and add this after assigning value to $ImagePath:
+	$image = Image::make(public_path("storage/{$imagePath}"))->fit(1200, 1200);
+	$image->save();
+This means that we wrap around the Image class from the intervention library, the current image, which is found at storage/$ImagePath and make it fit to a size of certain height and width. And then we save it.
+
+88) When we click on the image we need to see the caption of the image. Let's do it. Open the index.blade.php file and wrap the image into the a tag. RESTful notation says we need the show method now: Verb - GET, path - /photo/{photo}, action - show, route name - photo.show. So the resulting utl will be:
+<a href="/p/{{$post->id}}"><img src="/storage/{{$post->image}}" class="w-100"></a>
+
+
+89) Again, go to web.php and add this new route:
+
+Route::get('/p/{post}', 'PostsController@show');
+
+90) Now go to PostsController.php and add the show method.
+
+    public function show($post) {
+      dd($post);
+    }
+
+The method takes in a $post parameter and, for now, just displays it until the view is made.
+
+91) Create a show.blade.php file at resources\views\posts folder:
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  Show
+</div>
+@endsection
+
+92) We'll use a route-model binding so we don't need to manually turn to the model. If we have the route variable (comes in {}) and the argument passed to corresponding method having the same name, we can just add the path to our model which is App\Post and laravel will fetch it:
+
+    public function show(\App\Post $post) {
+      return view('posts.show', compact('post'));
+    }
+	
+Compact is a function equal to the array of parameters passed by the top method (show in this case).
+
+93) Now return to the view (show.view.php) and add the image:
+
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+        <img src="/storage/{{$post->image}}" class="w-100">
+    </div>
+  </div>
+</div>
+@endsection
+
+94) The show page on the right has also a comment section which we don't have just yet. Let's fix it. Add a new div to the show.blade.php page:
+    <div class="col-4">
+      <h3>{{$post->user->username}}</h3>
+      <p>{{$post->caption}}</p>
+    </div>
+
+
+95) Now we will make the profile pic and title and description changeable. This means we'll make an edit view for the user. Open index.blade.php and create a new link:
+      </div>
+      <a href="#">Edit Profile</a>
+      <div class="d-flex">
+
+96) We can only see the Edit Profile link if we are the user whose profile it is. RESTful suggests we need the edit method:
+verb - GET, path - photo/{photo}/edit, action - edit, route name - photo.edit. We'll change the link accordingly:
+      <a href="/profile/{{$user->id}}/edit">Edit Profile</a>
+
+
+97) Create a route ar web.php:
+Route::get('/profile/{user}/edit', 'ProfilesController@edit')->name('profile.edit');
+
+
+98) Go to Profiles Controller and create the edit method (also a little refactoting on the index method):
+	class ProfilesController extends Controller
+{
+  public function index(User $user)
+  {
+      return view('profiles.index', compact('user'));
+  }
+
+  public function edit(User $user) 
+  {
+    return view('profiles.edit', compact('user'));
+  }
+}
+
+Since we have the namespace App\User (at the top) we can make the path to the model shorter.
+
+99) Now we need to create the edit.blade.php view at resources\views\profiles. In the edit case we need the PUT/PATCH request leading to the /profile/{user} path, action - update, route name - profile.update. We'll choose the PATCH method. Since the browser only knows POST and GET, there will be some magic happening.
+
+	
+100) Create the update route at web.php:
+	Route::patch('/profile/{user}', 'ProfilesController@update')->name('profile.update');
+	
+101) Create the update method at the ProfilesController.php:
+	  public function update(User $user)
+  {
+    $data = request()->validate([
+      'title' => 'required',
+      'description' => 'required',
+      'url' => 'url',
+      'image' => ''
+    ]);
+
+    $user->profile->update($data);
+
+    return redirect("/profile/{$user->id}")
+  }
+  
+ The function validates the data pased to it, and if everything is ok, it updates the profile data and redirects back to the profile page.
+
+102) Fill in the edit view:
+	@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  <form action="/profile/{{$user->id}}" enctype="multipart/form-data" method="post">
+    {{ csrf_field() }}
+    @method('PATCH')
+
+    <div class="row">
+      <div class="col-8 offset-2">
+          <div class="row">
+            <h1>Edit Profile</h1>
+          </div>
+
+          <div class="form-group row">
+              <label for="title" class="col-md-4 col-form-label">Title</label>
+                  <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') ?? $user->profile->title}}" autocomplete="title" autofocus>
+
+                  @error('title')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+          </div>
+
+          <div class="form-group row">
+              <label for="description" class="col-md-4 col-form-label">Description</label>
+                  <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ old('description') ?? $user->profile->description}}" autocomplete="description" autofocus>
+
+                  @error('description')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+          </div>
+
+          <div class="form-group row">
+              <label for="url" class="col-md-4 col-form-label">URL</label>
+                  <input id="url" type="url" class="form-control @error('url') is-invalid @enderror" name="url" value="{{ old('url') ?? $user->profile->url }}" autocomplete="url" autofocus>
+
+                  @error('url')
+                      <span class="invalid-feedback" role="alert">
+                          <strong>{{ $message }}</strong>
+                      </span>
+                  @enderror
+          </div>
+
+          <div class="row">
+            <label for="image" class="col-md-4 col-form-label">Profile Image</label>
+            <input type="file" class="form-control-file" id="image" name="image">
+
+            @error('image')
+              <strong>{{ $message }}</strong>
+            @enderror
+          </div>
+
+          <div class="row pt-4">
+            <button class="btn btn-primary">Save Profile</button>
+          </div>
+
+      </div>
+    </div>
+
+103) Go to Profile.php and let the profile be updated by taking off the $guarded var. 
+
+class Profile extends Model
+{
+    protected $guarded = [];
+
+    public function user() {
+      return $this->belongsTo(User::class);
+    }
+}
+
+104) In case we're not logged in we're still able to edit the profile, which is not appropriate. An extra layer of protection is to add auth() at the data upadte:
+    auth()->user()->profile->update($data);
+
+Now to make edits we have to be logged in. Still, we can log in as any user, and be adle to edit anyone's profile. 
+
+105) We will use policies to hide the edit profile link if the user who opened the profile is not logged in or is not in his own profile. We'll do a policy for a profile. In cmd:
+
+php artisan make:policy ProfilePolicy -m Profile
+
+106) Now inside the App directory we have a policies directory. The ProfilePolicy.php has methods which should return true or false, meaning if the passed-in user can view the current profile, we sould return true for view method, etc. Make a policy for update method:
+
+    public function update(User $user, Profile $profile)
+    {
+        return $user->id == $profile->user_id;
+    }
+
+107)Go to ProfilesController.php and make authorisation for profile edit method.
+
+  public function edit(User $user)
+  {
+    $this->authorize('update', $user->profile);
+    return view('profiles.edit', compact('user'));
+  }
+Adding this line we mean that we are authorizing the update on this particular profile. Now if we are logged out and try to edit the profile, we get a 403 error. 
+  
+108) Next problem is that when logged out we still see the edit profile link at our profile. We'll fix it at index.blade.php by adding a directive:
+
+	  @can('update', $user->profile)
+        <a href="/profile/{{$user->id}}/edit">Edit Profile</a>
+      @endcan
+This diirective says that if one can update the user's profile, the link will be shown.
+	  
+109) Same problem is with the Add new post link, and we will deal with it using the same directive:
+		@can('update', $user->profile)
+          <a href="/p/create">Add new post</a>
+        @endcan
+
+110) Now we get a 404 error when clicking the add new post link. The reason is that the route of /p/{post} gets everything as a var after the /p/, like /p/create. So these toures are conflicting. This conflict is resolved by ordering routes in the way that a route with a var in {} will go after roue with no {}.
+
+111) The profile image should not be hard-coded. Go to ProfilesController.php and check the $data request. Add this:
+
+     if(request('image')) {
+      $imagePath = request('image')->store('profile', 'public');
+
+      $image = Image::make(public_path("storage/{$imagePath}"))->fit(1000, 1000);
+      $image->save();
+    }
+
+        auth()->user()->profile->update(array_merge($data, ['image'=> $imagePath]));
+
+	
+It means that if the request has an image, we store the image at the profile folder and save it. We will also merge the array of data with the image path so we don't need to update the data twice. 
+
+112) To make the resize function work, add the intervention namespace at the top of file:
+
+use Intervention\Image\Facades\Image;
+
+113) Open the create_profiles_table. See that we don't have an image attribute and if we add it, nothing works since we need to migrate the DB from the top:
+
+	php artisan migrate:fresh
+
+114) After refreshing the DB and trying to register a user, we run into an issue that there's no profile for that user. So we need to create a blank profile for the newl created user. Go to User.php and use the boot method:
+
+    protected static function boot() {
+      parent::boot();
+
+      static::created (function($user) {
+        $user->profile()->create();
+      });
+    }
+
+We overwrite the boot method so that first we call the original boot method and then when the model is created we call a function which gets this user as an argument, ans creates the parameter connected to it. 
+
+115) Refresh the DB again and try to register again. 
+php artisan migrate:fresh
+
+116) Now that everything is correct, let's remove the hard-coded profile image and take the one we have recently uploaded. Go to index.blade.php:
+
+      <img src="/storage/{{$user->profile->image}}" class="rounded-circle w-100">
+
+117) Now we  can also make the profile image appear at the description section when clicking on a post. Go to show.blade.php:
+@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  <div class="row">
+    <div class="col-8">
+        <img src="/storage/{{$post->image}}" class="w-100">
+    </div>
+    <div class="col-4">
+      <div class="d-flex align-items-center">
+        <div class="pr-3">
+          <img src="/storage/{{$post->user->profile->image}}" class="w-100 rounded-circle" style="max-width:40px;">
+        </div>
+
+        <div>
+          <div class="font-weight-bold">
+            <a href="/profile/{{$post->user->id}}"><span class="text-dark">{{$post->user->username}}</span></a>
+            <a href="#" class="pl-3">Follow</a>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <p>
+        <span class="font-weight-bold">
+          <a href="/profile/{{$post->user->id}}"><span class="text-dark">{{$post->user->username}}</span></a>
+        </span> {{$post->caption}}
+      </p>
+    </div>
+  </div>
+</div>
+@endsection 
+
+118) When a user registers, he has no profile image, so we need some temporary picture meaning there would be an image soon. We'll use a No Image Available picture here as a default. Go to Profile.php and add a new method:
+
+    public function profileImage() {
+      return($this->image) ? '/storage/' . $this->image : '/storage/profile/kofB69IMraPNZ0qwtamdOH7ezBNnFlW6SOopZatd.png';
+    }
+	
+It means that we either show a profile pic uploaded by user, or the deafault picture.
+	
+119) Also in show.blade.php remove the /storage/ amd add the new method:
+        <div class="pr-3">
+          <img src="{{$post->user->profile->profileImage()}}" class="w-100 rounded-circle" style="max-width:40px;">
+        </div>
+
+120) Same for index.blade.php:
+    <div class="col-3 p-5">
+      <img src="{{$user->profile->profileImage()}}" class="rounded-circle w-100">
+    </div>
+
+121) Let's fix the number of followers previously hard-coded. First let's start with the Folloew button in the index.blade.php:
+        <div class="d-flex pb-3 align-items-center">
+          <h1>{{$user->username}}</h1>
+
+          <button class="btn btn-primary ml-4"><h2>Follow</h2></button>
+        </div>
+
+122) We'll jump to some front-end and make the Follow Button a Vue.js Component. Go to resources/js/components/ExampleComponent.vue and rename it to FollowButton.vue. If you don't have Vue.js, install it via cmd:
+
+npm install vue
+
+123) In resources/js/app.js rename the example-component as well:
+
+Vue.component('follow-button', require('./components/FollowButton.vue').default);
+
+124) In Vue.js everything should be in a general div without any classes. So we'll cut the button from index.blade.php and paste it inside a div in FollowBUtton.vue:
+
+<template>
+    <div>
+      <button class="btn btn-primary ml-4"><h2>Follow</h2></button>
+    </div>
+</template>
+
+125) Now in index.blade.php:
+        <div class="d-flex pb-3 align-items-center">
+          <h1>{{$user->username}}</h1>
+          <follow-button></follow-button>
+        </div>
+
+126) If we type in cmd "npm run watch", the server would watch the changes and recompile the code every time a change is registered and saved. 
+
+127) Let's make the button do its job. First, let's check if the method works:
+<template>
+    <div>
+      <button class="btn btn-primary ml-4" @click="followUser"><h2>Follow</h2></button>
+    </div>
+</template>
+
+<script>
+    export default {
+        mounted() {
+            console.log('Component mounted.')
+        },
+
+        methods: {
+
+          followUser() {
+            alert('inside');
+          }
+        }
+    }
+</script>
+
+128) Vue.js is installed with window.axios library which allows the frontend reach the server. 
+          followUser() {
+            axios.post('/follow/1')
+              .then(response => {
+                alert(response.data);
+              });
+
+129)Let's create a route for that post method at web.php:
+Route::post('follow/{user}', 'FollowsController@store');
+
+130) For the new route we need a new controller. In cmd type: 
+php artisan make:controller FollowsController
+and add a store method to it.
+	    public function store(User $user) {
+      
+    }
+	
+131) In index.blade.php pass the user id via the button:
+	          <follow-button user-id="{{user->id}}"></follow-button>
+
+132) Accept this id in the FollowButton.vue:
+	export default {
+
+        props: ['userId'],
+
+133) Still in FollowButton.vue fix the followUser method:
+          followUser() {
+            axios.post('/follow/' + this.userId)
+              .then(response => {
+                alert(response.data);
+              });
+          }
+
+134) Now we can write the store method in FollowsController.php:
+	    public function store(User $user) {
+      return $user->username; 
+    }
+135) We need to make a many-to-many relation DB. The naming convention says the two tables should go in alphabetical order, lowercase and an underscore. In cmd, type:
+php artisan make:migration create_profile_user_pivot_table --create profile_user
+
+136) Go to this migration and add attributes:
+	    public function up()
+    {
+        Schema::create('profile_user', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('profile_id');
+            $table->unsignedBigInteger('user_id');            
+            $table->timestamps();
+        });
+    }
+
+137) Now type:
+	php artisan migrate
+
+138) Start creating the relations with the User.php model:
+	    public function following() {
+      return $this->belongsToMany(Profile::class);
+    }
+	
+139) Same for Profile.php model:
+	    public function followers() {
+      return $this->belongsToMany(User::class);
+    }
+
+140) Now we can write the FollowsController method in a way to create or destroy the relationship. We will use the toggle method for it:
+    public function store(User $user) {
+      return auth()->user()->following()->toggle($user->profile); 
+    }
+	
+141) Now instead of alerting let's console.log the data:
+          followUser() {
+            axios.post('/follow/' + this.userId)
+              .then(response => {
+                console.log(response.data);
+              });
+          }
+	We have a json log of attached and detached profile models. We see that there's one attached model with the id of 2.
+	
+142) Let's use tinker to have a closer look:
+	php artisan tinker
+	  $user=User::find(1);
+	  $user->following
+	  
+	 We see that a relation has been established.
+
+143) We need to tell the user if anything happens when the button is clicked. Go to FollowsController.php and add a data attribute:
+	
+
+144) In index.blade.php:
+	<follow-button user-id="{{$user->id}}" follows="{{$follows}}"></follow-button>
+	
+	We take the value of $follows from ProfilesController.php
+  public function index(User $user)
+  {
+      $follows = (auth()->user()) ? auth()->user()->following->contains($user);
+      return view('profiles.index', compact('user', 'follows')) : false;
+  }
+  
+145) In FollowsController:
+    export default {
+
+        props: ['userId', 'follows'],
+
+        mounted() {
+            console.log('Component mounted.')
+        },
+
+        data: function() {
+          return {
+            status: this.follows,
+          }
+        },
+
+146) Let's create a toggle for the Follow button. In FollowButton.vue:
+	<button class="btn btn-primary ml-4" @click="followUser" v-text="buttonText"><h2></h2></button>
+		
+		//...
+		
+	        computed: {
+          buttonText() {
+            return (this.status) ? 'Unfollow' : 'Follow';
+          }
+        }
+
+147) Now we will update the UI without refreshing the page so the button works absolutely correct. In FollowButton.vue:
+
+          followUser() {
+            axios.post('/follow/' + this.userId)
+              .then(response => {
+                this.status = !this.status;
+                console.log(response.data);
+              });
+          }
+		  
+148) We want the user to be logged in to follow or unfollow smb. In FollowsController, use the auth middleware:
+
+	    public function __construct() {
+      $this->middleware('auth');
+    }
+	
+149) In FollowButton.vue:
+	          followUser() {
+            axios.post('/follow/' + this.userId)
+              .then(response => {
+                this.status = !this.status;
+                console.log(response.data);
+              })
+              .catch(errors => {
+                if(errors.response.status == 401) {
+                  window.location = '/login';
+                }
+              });
+          }
+
+150) Now when the dollow functionality is done, we can show the count of followers instead of hard-code. In index.blade.php:
+	<div class="pr-5"><strong>{{$user->profile->followers->count()}}</strong> followers</div>
+	
+    <div class="pr-5"><strong>{{$user->following->count()}}</strong> following</div>
+	
+151) We are going to install the laravel telescope to look nside our app. In cmd: 
+	>composer require laravel/telescope
+	>php artisan telescope:install
+	>php artisan migrate 
+	
+152)We get can to telescope by going localhost:8000/telescope
+
+153) Now we should get rid of the dead route and when logged in the user should see a sequence of posts of people he follows. First, change the redirect after the successful login. Go to web.php and change the GET route to / this way:
+	Route::get('/', 'PostsController@index');
+
+154) Go to PostsController and create the method:
+	use App\Post;
+	//...
+	      public function index() {
+      $users = auth()->user()->following()->pluck('profiles.user_id');
+      $posts = Post::whereIn('user_id', $users)->latest()->get();
+
+      return view('posts.index', compact('posts'));
+    }
+	
+155) Create the index.blade.php view in the posts folder:
+	@extends('layouts.app')
+
+@section('content')
+<div class="container">
+  @foreach($posts as $post)
+    <div class="row">
+      <div class="col-8">
+          <img src="/storage/{{$post->image}}" class="w-100">
+      </div>
+      <div class="col-4">
+        <div class="d-flex align-items-center">
+          <div class="pr-3">
+            <img src="{{$post->user->profile->profileImage()}}" class="w-100 rounded-circle" style="max-width:40px;">
+          </div>
+
+          <div>
+            <div class="font-weight-bold">
+              <a href="/profile/{{$post->user->id}}"><span class="text-dark">{{$post->user->username}}</span></a>
+              <a href="#" class="pl-3">Follow</a>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <p>
+          <span class="font-weight-bold">
+            <a href="/profile/{{$post->user->id}}"><span class="text-dark">{{$post->user->username}}</span></a>
+          </span> {{$post->caption}}
+        </p>
+      </div>
+    </div>
+  @endforeach
+</div>
+@endsection
+
+156) Now we will make a pagination for our app. We'll paginate by 5. In PostsController.php:
+    public function index() {
+      $users = auth()->user()->following()->pluck('profiles.user_id');
+      $posts = Post::whereIn('user_id', $users)->latest()->paginate(5);
+
+      return view('posts.index', compact('posts'));
+    }
+
+157) Now we'll add the Next button for our pagination. Go to posts/index.blade.php and type:
+  <div class="row d-flex justify-content-center">
+    <div class="col-12">
+      {{$posts->links()}}
+    </div>
+
+  </div>
+  
+ This is used with the pagination method to make links to other posts. 
+  
+158) Using the telescope we see that the query has the limit of 1, which is the n+1 problem. This happens when we're fetching the user relationship, but not loading it. So in every foreach laravel takes one uer at a time. THere's a way to correct this problem. In PostsController.php add:
+	      $posts = Post::whereIn('user_id', $users)->with('user')->latest()->paginate(5);
+The added with('user') part means that we take all the relations with the user of post model.
+
+159) To clear the telescope when it becomes bulky, type in cmd:
+	php artisan telescope:clear
+	
+160) Instead of fetching the data every time the user logs in, we will use cashing. We will choose a step of 30s to cache. It means that we save all the requests inside those 30 seconds to cache. Go to profiles/index.blade.php:
+	      <div class="d-flex">
+        <div class="pr-5"><strong>{{$postCount}}</strong> posts</div>
+        <div class="pr-5"><strong>{{$followersCount}}</strong> followers</div>
+        <div class="pr-5"><strong>{{$followingCount}}</strong> following</div>
+      </div>
+
+161) And add those variables in ProfilesController.php:
+	  public function index(User $user)
+  {
+      $postCount = $user->posts->count();
+      $followersCount = $user->profile->followers->count();
+      $followingCount = $user->following->count();
+
+      $follows = (auth()->user()) ? auth()->user()->following->contains($user) : false;
+      return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));
+  }
+  
+162) Now we will cache those vars, in ProfilesController.php:
+	public function index(User $user)
+  {
+      $postCount = Cache::remember('count.posts.' . $user->id, now()->addSeconds(30), function() use ($user) {
+        return $user->posts->count();
+      })
+
+      $followersCount = Cache::remember('count.followers.' . $user->id, now()->addSeconds(30), function() use ($user) {
+        return $user->profile->followers->count();
+      })
+
+      $followingCount = Cache::remember('count.followings.' . $user->id, now()->addSeconds(30), function() use ($user) {
+        return $user->following->count();;
+      })
+
+      $follows = (auth()->user()) ? auth()->user()->following->contains($user) : false;
+      return view('profiles.index', compact('user', 'follows', 'postCount', 'followersCount', 'followingCount'));
+  }
+  
+163) Let's send a welcome email to anyone who registers n the freeCodeGram. Open the .env file. For these fields:
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+
+Take the data from mailtrap.io after registration and paste it instead of null. 
+ 
+164) In cmd type
+php artisan make:mail NewUserWelcomeMail -m emails.welcome-email
+
+Now we have two new files situated at app\Mail\NewUserWelcomeMail.php and resources\views\emails\welcome-email.blade.php
+
+165) To send the email go to User.php:
+	use Illuminate\Support\Facades\Mail;
+	//...
+	      static::created (function($user) {
+        $user->profile()->create([
+          'title' => $user->username
+        ]);
+        Mail::to($user->email)->send(new NewUserWelcomeMail1());
+      });
+
+166) Now if we try to register a new user we are getting an error "authentification required". The reason is we've changed the .env file and now we have to restart the php server. 
+ 
+167) When we register a new user we are redirected to \home which doesn't exist. Change the Auth\RegisterController.php:
+	    protected $redirectTo = '/';
+
+168) 
+169
+170)	

@@ -1,0 +1,310 @@
+https://github.com/Colt/webpack-demo-app
+
+
+1. order is important. if you include a file depending on three other files, those three should be included first.
+2. webpack require keyword keeps track of what is omported to where it needs to be exported
+3. npm start starts the webpack
+4. npm run build creates the app
+
+Installing and Running Webpack
+1. Initially we have an .html file, a .js file attached in script tag, and an .svg file, anad also bootstrap from CDN in a link tag. And we're going to use webpack (also sass to overwrite some bootstrap data) with this simple app. 
+2. First let's split the code in separate files. We will put every js function to its own file in a new app folder, and change the way in .html file (see commit 2). As expected, after the split is done, we get an execution error since only app.js is included while other .js components are ignored. Let's include them in script tags too, putting them in a correct order. Obviously, managing dependencies manually SUCKS and we need wepack for it.
+3. Let's install webpack. Refer to commit 3 to see the code. In cmd run
+	npm init -y
+to create the package.json file using default settings.
+4. This is unneccesary, but to prevent it from being published on npm you may write "private": true in package.json. Also erase the "script": {}, for we're going to write our own code here.
+5. To install webpack, in cmd run 
+	npm install --save-dev webpack webpack-cli
+6. When all is done, in package.json we can see both webpack and webpack-cli in "devDependencies".
+7. Let's set up a script inside the "scripts" portion of package.json:
+	"scripts": {
+		"start": "webpack" // when we run npm start from cmd it will call webpack
+	}
+For now that's enough, but if we run 
+	npm start 
+using default options of webpack, we'll see an error: can't resolve './src' in source dir. It means webpack can't find index.js inside of the src directory. Index.js is the entry point file by default for webpack. Let's create this index.js file in src folder and write there:
+	alert("HELLO FROM WEBPACK!");   
+8. If we run 
+	npm start
+again, we'll see that webpack has built the code into the main.js file and also we see a warning about we didnt'set the mode option so it falls back to production. We'll talk about it later. In our project folder we see an automatically created dist folder which contains the main.js file. Let's include it in the end of .html file.
+
+Imports, Exports and Webpack Modules.
+1. To include our .js files in index.js we have to declare dependencies first by using ES6 imports and exports. In each file we are going to indicate what will be exported from this file and relevant dependencies imported (see commit 4). If we need to import something to a file, we first have to export it from another file where it is situated. 
+2. Index.js is the entry point where webpack is going to start. We need to run some code from here that will then send webpack sniffing down through all the files to figure out what code needs to be bundled. So we need to have a little window into our application code. The best choice is to import and call the run function from app.js. Since run functions depends on AlertService and ComponentService, we will also import those to index.js before execution starts.  
+3. Now we have some code at the entry point into our application and webpack will look for all we import here. If we run
+	npm start 
+and look into dist/main.js we will see that all code from all files has compiled into this file. So we can remove all scripts from .html file and include only dist/main.js instead. So the idea is that we don't have to write thourughly whih file should be loaded first, we can just point which file depends on which, and webpack does the rest, loading everything in a valid order. 
+
+Configuring Webpack
+1. Refer to commit 5 in this part.
+2. In the project folder create a file named webpack.config.js
+3. In this file we're going to export an object and it's going to have a couple of properties:
+	const path = require("path") //import a default module from node
+	module.exports = {
+		mode: "development", //set mode to dev instead of production so main.js won't be minified and hard to read (people say now webpack minifies everything in prod by default)
+		devtool: "none", // removes eval stuff so the code is shown unchanged
+		entry:"./src/index.js", //explicitly pointing to the default entry file
+		output: { //output file will be an object too
+			filename: "main.js", //naming the output file
+			path: path.resolve(__dirname, "dist") //resolving the absolute path to the directory where which node scripts has automatically been loaded to (project dir). 2nd argument is the folder inside the project dir
+		} 
+	} 
+4. To use this configs pass it all in in package.json:
+	"scripts": {
+		"start": "webpack --config webpack.config.js" // when we run npm start from cmd it will call webpack with configs.
+	}
+5. Now that we have changed the sctructure of main.js we can have a closer look at it. At the top is some webpack stuff that has something to do with defining different functions to make a webpack module. Threr's one called __webpack__require___. If we look at AlertService we can see the "exports provided" comment and the export ielf provided with a single function to create a webpacke module. And instead of import at the top of the file we see the __webpack__require__ pointing to the imported stuff. 
+6. Remove the 
+	devtool: "none" 
+for now.
+
+Webpack Loaders, CSS and SASS
+1. We have no problem with .js files: we have an entry point file and the output file where all the .js files gather together and make dependencies. It's not the same for other file types like images, json, css etc. 
+2. Loaders are the key for webpack to handle different types of files besides JS. These are different packages that we install and they dictate how certain files should be prepocessed as you import them or as they are loaded. So you can transform files and do different things based off of the type of file. The webpack documentation has a list of the most popular loaders. 
+3. Let's add some CSS to our project in src/main.css (see commit 6). We're going to use 2 loaders: style-loader and css-loader. We will begin with the css-loader.
+4. The first step is how to actually set up these loaders. Documentation has it. In webpack.config.js add this:
+	module.exports = {
+		module: { //under a module object
+			rules: [ //put an array of rules where
+			  {
+				test: /\.css$/, // if a file ends with .css
+				use: ['style-loader', 'css-loader'], //use these two loaders
+			  },
+			],
+		},
+	};
+5. Install these loaders via cmd:
+	npm install --save-dev style-loader css-loader
+6. Let's make sure that webpack knows about the main.css file. We should import it into index.js:
+	import "./main.css";
+And after we run
+	npm start
+In the end of main.js there's the main.css file wrapped in some javascript. This is how the CSS loader works: it turns CSS into valid JS. But the css is not applied yet. And here the style loader comes in. It takes the CSS-in-JS and injects it into a DOM by style tag. 
+7. The loaders should be used in a correct order: first the css-loader to interprete the css, second the style-loader to apply it. In webpack.config.js we have to put those in the use array in reversed order, so the last loader is used first and vice versa. Now after we run
+	npm start
+we can see that the css has been applied. If we open the .html file in browser console we'll see that webpack has added a style tag to it with all our css.
+8. Now we're going to incorporate SASS (commit 7) to override some bootstrap color. First, install bootstrap locally:
+	npm install --save-dev bootstrap
+and remove the CDN bootstrap from .html file.
+9. Rename the css file to main.scss and import bootstrap from node_modules. Change the colors needed. Also fix the corresponding import in index.js
+10. To interprete scss files webpack needs another loader, sass-loader. First we turn sass to css, then turn css into js and then apply it to .html file. Sass-loader relies on node-sass, so we have to install both. 
+	npm install --save-dev sass-loader node-sass
+11. Make changes in webpack.config.js:
+	module: {
+		rules: [ 
+		  {
+			test: /\.scss$/,
+			use: ['style-loader', 'css-loader', 'sass-loader'],
+		  },
+		],
+	},	
+
+Cache Busting and Plugins
+1. See commit 8. Cache busting is how we can prevent sertain assets like our main bundle JS or CSS bundle once we actually make a separate CSS bundle whatever those files are. How can we prevent browsers from caching them when we don't want them to be cached? 
+Caching is remembering files to load them from disk so browser won't load them from the server again. The name of the file is called content hash. Hash is generated based on the file content, and if anything changes, hash will change too. Sometimes we need to prevent browser from caching files. A simple way to do it is change the filename (in webpack.config.js) this way:
+	filename: "main.[contentHash].js",
+For example, libraries don't tend to change so we can let them cache, but our own files change very often.
+2. How do we tell the .html file to include a file named like this - main.[contentHash].js? We gonna make webpack build the .html file for us with all files included and dynamically changed. To do this we need plugins. According to the docs plugins give options to customize the webpack build in a variety of ways. A list of plugins can be found there. We will use HTML webpack plugin which will help create our .html file, and the one to clean our dist folder from unnecessary files.We can either let the plugin generate an .html file or use some template. We will do both, and start with the first option.
+3. First of all install the plugin
+	npm install --save-dev html-webpack-plugin
+and add it to the webpack.config.js:
+	var HtmlWebpackPlugin = require('html-webpack-plugin') //require the plugin
+	//...
+	module.exports = {
+		//...
+		plugins: [new HtmlWebpackPlugin()], //add a new instance of html plugin with default options
+		//...
+	}
+Now run 
+	npm start 
+and see what happens. In the dist folder we can see an index.html file with our output .js file included.
+4. Since this file is empty except for the script tag, we need to tell it a template to use, which is going to be our hard-coded original index.html. In src directory, create a template.html file. We'll put in the content of original index.html excluding the CDN bootstrap and script tag since script will be automatically included by webpack. Now in webpack.config.js pass in an object and a property:
+	//...
+	plugins: [new HtmlWebpackPlugin({
+		template: "./src/template.html"
+	})]
+   
+Splitting Dev and Production 
+1. Sometimes we need some different functionality for dev vs prod. while there is still some stuff that is in common between the two. Now we're going to have 3 config files. 1st is for options both mods share, 2nd for dev and 3rd for prod. See commit 9.
+2. Create a webpack.dev.js file and a webpack.prod.js file. First of all let's copy the content of webpack.config.js into both so we can selectively delete or add things and rename the file to webpack.common.js.
+3. To use functionality of common file in both dev and prod files we'll use a package called webpack merge. 
+	npm install --save-dev webpack-merge 
+4. In prod file:
+	//...
+	const common = require("./webpack.common");
+	const {merge} = require("webpack-merge");
+	//remove htmlplugin
+	//...
+	module.exports = merge(common, {
+		mode: "production", //change mode to production
+		//remove entry point since it is in the common file.
+		//remove plugins
+		//remove module
+	});
+5. In dev file:
+	//...
+	const common = require("./webpack.common");
+	const {merge} = require("webpack-merge");
+	//remove htmlplugin
+	//... 
+	module.exports = merge(common, {
+		entry: "./src/index.js",
+		//remove plugins
+		//remove modules
+	});
+6. In common file:
+	//...
+	//remove mode
+	//remove output because in dev version we don't need the content hash while in prod we need it.
+7. In package.json:
+	//...
+	"start": "webpack --config webpack.dev.js",
+	"build": "webpack --config webpack.prod.js"
+	//...
+Now if we run npm start we run dev mode, npm build runs prod mode.
+8. Now let's set up a webpack dev server.
+	npm install --save-dev webpack-dev-server
+In package.json:
+	"start": "webpack-dev-server --config webpack.dev.js --open",
+and now if we run npm start the app runs automatically at the server and rebuilds in real time.
+Also if we remove the dist folder and close the dev server we'll see there's no dist folder while everything run perfect while the server works. In fact it works in memory and makes no dist folder. 
+
+HTML-Loader and File-Loader
+1. See commit 10. Hard-coding images to the template is not a good idea since the application is built inside the dist folder so all the images should also appear in that folder. At the moment webpack.svg is in assets folder so let's put it to the src folder: src/assets/webpack.svg. When assets directory will reference in here webpack will then take those assets, copy them over to dist in a new folder and then we'll link to them. Now if we change the path in pur template accordingly to ./assets/webpack.svg and run npm build, webpack will be looking for the assets folder in dist, but there's none. To deal with the issue we'll need two loaders.
+2. The first one is HTML loader (see documentation on github). Any time it encounters a source for an image it will require that image. Then we'll have to tell webpack how to handle those files (like we did with CSS before) with another loader. Install the HTML loader:
+	npm install --save-dev html-loader
+and now in webpack.common.js:
+	//...
+	rules: [
+	   ...	//css rules here
+	  {
+	    test: /\.html$/,
+	    use: ["html-loader"]
+	  },
+	]   
+Now when we load the template.html, the html-loader takes care of it and when it sees an img, it turns img into js. At this moment we need another loader to process this .js file.
+3. This is where file=loader comes in. Docs say that the file-loader resolves import/require)_ on a file into a url and emit the file into the output dir. We begin with installing it:
+	npm install --save-dev file-loader
+and add a new rule to webpack.common.js:
+	 	//...
+	rules: [
+	   ...	//css and html rules here
+	  {
+	    test: /\.(svg|png|jpg|gif)$/,
+	    use: { //use different syntax here and make use an object
+		loader: "file-loader",
+		options: {
+		  name: "[name].[hash].[ext]", //give a template of naming for files
+		  outputPath: "imgs" //the dir to put files inside default dist
+		}
+	    }
+	  }
+	]
+When we build a project we can see that an image appears in dist/imgs and is linked to in index.html.
+4. Move to the clean webpack plugin. Every time the code changes we get a new output file since we put contentHash to its name. Clean-webpack-plugin deletes the dist folder every time we build and we have a clean slate to add our code into. Let's install it:
+	npm install --save clean-webpack-plugin
+We need the plugin inly in production since the dev files are in memory and when we stop the server they disappear. In prod its actually building the dist folder and making those files. In webpack.prod.js:
+	... //some consts
+	const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+
+	module.exports = ... {
+		//...
+		plugins: [new CleanWebpackPlugin()]
+	}   
+
+Multiple Entrypoints (commit 11)
+1. Let's say we want to separate our main code from vendors. We have our code and also some lobraries like bootstrap, jQuery etc. So we will create two different bundles: vendor.[contentHash].js which is mostly unchanged and main.js which change more frequently. To do this we need to set a different entry point if we want. So in src dir make a file named vendor.js with some code like 
+	alert("HI FROM VENDOR")
+Now in webpack.common.js make changes to entry:
+	//...
+	entry: { //make it an object with curly braces
+		main: "./src/index.js",
+		vendor: "./src/vendor.js"
+	} 
+	//...
+Refactor the webpack.prod.js' output so that there will be not only main.js:
+	//...
+	output: {
+		filename: "[name].[contentHash].bundle.js",
+		//..
+	},
+	//...  
+Anf for webpack.dev.js:
+	//...
+	output: {
+		filename: "[name].bundle.js",
+		//..
+	},
+	//...
+If we run
+	npm start
+and open console we'll see that there are two output files: main.bundle.js and vendor.bundle.js
+2. Now let's config our vendor file. Remove the alert and import some libraries:
+	 import "bootstrap";
+Everythiing seems to work so far, but if we add something liek navbar from bootstrap which relies on jquery, it won't work. Also if we try to start the server it'll throw an error: can't resolve jquery, popper.js. So we need to install those modules:
+	npm install --save-dev jquery popper.js
+Now if we run
+	npm run build 
+and open in dist folder vendor.js file, we will see that bootstrap has been imported as well as jquery and popper.js because of dependencies.
+
+Extract CSS and Minify HTML\CSS\JS (commit 12)
+1. Let's extract CSS into its own file or files. For now everything is being loaded through JS. It means that when a page is loaded, first goes the html tags and then the script file is executed, with all styling in it, so there's a flash of unstyled content before everything is loaded. In production especially we want to avoid that. In dev mode it is not necessary since it takes time to spit out CSS files. So to extract CSS in prod we will need mini CSS extract plugin.
+2. Install it:
+	npm install --save-dev mini-css-extract-plugin
+Now go to webpack.prod.js and import or require that module:
+	//...
+	const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+	
+	//...
+		plugins: [new MiniCssExtractPlugin {filename: "[name].[contentHash].css"}, ...]
+	});	
+3. We have to make sure that CSS is processed by this plugin. First of all go to webpack.common.js and remove the rule for scss and put it into webpack.dev.js since we're not extracting CSS in dev mode. Paste the same in webpack.prod.js and change style-loader to MiniCssExtractPlugin.loader:
+	//...
+	use: [
+	  MiniCssExtractPlugin.loader,
+	  "css-loader",
+	  ...
+	]
+	//...
+4. After running npm run build we see that a main.HASH.css file has been created in dist  folder, a style tag added to index.html and all the css is in this separate file. Yet the file is not minified and for prod mode we'd love to do that. Here another plugin comes of use: optimized CSS assets webpack plugin. Install it:
+	npm install --save-dev optimize-css-assets-webpack-plugin
+and in .prod.js we will add this plugin:
+	//...
+	const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+	//...
+	module.export = ...(
+		..., //some properties
+		optimization: { //new property
+		  minimizer: [ //array of minimizers
+		    new OptimizeCssAssetsPlugin() //css minimizer
+		  ]
+		},
+		...
+5. Now if we run npm build we can see that css file is minified, but the js file is not. This happens because we have overwritten default optimization settings. We have to manually add the js minifier back in. We don't need to install it since it goes from the box, but in webpack.prod.js write:
+	//...
+	const TerserPlugin = require("terser-webpack-plugin"); //js minifier
+	//...
+		module.export = ...(
+		..., //some properties
+		optimization: { //new property
+		  minimizer: [ //array of minimizers
+		    new OptimizeCssAssetsPlugin(), //css minimizer
+		    new TerserPlugin() //js minimizer
+		  ]
+		},
+		...
+6. We can minify HTML file as well, and webpack has a default plugin for that. In webpack.common.js remove the plugins part and put it into webpack.dev.js without any changes (don't forget about the HtmlWebpackPlugin string from the top!), and in webpack.prod.js like this:
+	//...
+	var HtmlWebpackPlugin = require("html-webpack-plugin");
+	//...
+	minimizer: [
+	  ...,
+	  new HtmlWebpackPlugin({
+	   template: "./src/template.html",
+	   minify: {
+		removeAttributeQuotes: true,
+		collapseWhitespace: true,
+		removeComments: true
+	   }
+	  })
+	]
