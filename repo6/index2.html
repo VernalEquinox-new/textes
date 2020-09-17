@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Стена памяти</title>
+
+  <!--Tiny Slider used-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+  <!--[if (lt IE 9)]><script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.helper.ie8.js"></script><![endif]-->
+  <link href="css\style2.css" rel="stylesheet">
+  <link rel="stylesheet" href="css\1800.css"  media="(max-width:1800px)">
+  <link rel="stylesheet" href="css\1200.css"  media="(max-width:1200px)">
+  <link rel="stylesheet" href="css\1024.css"  media="(max-width:1024px)">
+  <link rel="stylesheet" href="css\768.css"  media="(max-width:768px)">
+  <link rel="stylesheet" href="css\375.css"  media="(max-width:375px)">
+</head>
+<body>
+  <header class="site__header">
+    <div class="row container">
+      <div class="row header__logo">
+        <img src="img\star.png" alt="star">
+        <div class="logo__text">
+          <p class="text__wallofmem">СТЕНА ПАМЯТИ</p>
+          <p class="text__tyumen">Тюменская область</p>
+        </div>
+        <div class="logo__text--768">
+          <img src="img\logo_txt.svg" alt="wall-of-memory">
+        </div>
+      </div>
+      <div class="row header__stuff">
+        <div class="row header__inteface" id="topmenuwrap">
+          <div class="row header__menu-wrap" id="headermenublock">
+            <ul class="row menu__list cursor-button">
+              <li class="menu__item">
+                <a href="#">О НАС <div class="underline"></div></a>
+                <ul class="submenu">
+                  <li class="submenu__item"><a href="#">История поискового движения</a></li>
+                  <li class="submenu__item"><a href="#">Поисковые отряды</a></li>
+                  <li class="submenu__item"><a href="#">Проекты</a></li>
+                  <li class="submenu__item"><a href="#">Новости</a></li>
+                  <li class="submenu__item"><a href="#">Контакты</a></li>
+                </ul>
+              </li>
+              <li class="menu__item"><a href="#">НАРОДНЫЙ ФОТОАРХИВ <div class="underline"></div></a></li>
+              <li class="menu__item"><a href="#">КНИГА ПАМЯТИ ТЮМЕНСКОЙ ОБЛАСТИ <div class="underline"></div></a></li>
+              <li class="menu__item"><a href="#">УЗНАТЬ СУДЬБУ СОЛДАТА <div class="underline"></div></a></li>
+              <li class="menu__item"><a href="#">МАТЕРИАЛЫ <div class="underline"></div></a></li>
+            </ul>
+          </div>
+          <div class="menu__button">
+            <button type="button" name="top-search-btn" class="menu__search" id="opensrchbtn"><img src="img\lglass.png" alt=""></button>
+          </div>
+      </div>
+      <div class="header__search-form hidden" id="topsearchform">
+        <form class="search-form" id="searchform">
+          <input type="text" id="searchfield" class="search-field" name="ilookfor" placeholder=" Поиск по сайту...">
+          <button class="menu__search" type="submit"><img src="img\lglass_red.png"></button>
+        </form>
+      </div>
+      </div>
+      <div class="header__hamburger" id="hamburgerdiv">
+        <button type="button" name="button" class="hamburger cursor-button" id="hamburger">
+          <div class="hamburger__line"></div>
+          <div class="hamburger__line hamburger__line--middle"></div>
+          <div class="hamburger__line"></div>
+        </button>
+      </div>
+    </div>
+  </header>
+  <article class="wall">
+    <section class="hero">
+      <div class="container">
+        <div class="hero__smokey">
+          <img src="img\smokey_1024.png" alt="soldiers">
+        </div>
+        <div class="hero__summary">
+          <p class="summary__type">Проект Тюменской региональной <br>общественной организации “Областной поисковый центр”</p>
+          <p class="summary__name">СТЕНА ПАМЯТИ</p>
+          <p class="summary__desc">Архив данных о погибших и пропавших без вести солдат и офицеров Красной Армии в Великой Отечественной Войне. Вы можете добавить информацию о вашем родственнике в архив</p>
+          <button type="button" name="button" class="red-button cursor-button"><a href="#">Добавить человека</a></button>
+        </div>
+        <div class="hero__search">
+          <p class="search__title">Поиск человека</p>
+          <p class="search__desc">Поиск погибших и пропавших без вести солдат и офицеров Красной Армии</p>
+          <form class="search__form">
+            <div class="form__default">
+              <input type="text" name="lastname" value="" class="form__input" placeholder="Фамилия">
+              <input type="text" name="firstname" value="" class="form__input" placeholder="Имя">
+              <input type="text" name="patronim" value="" class="form__input" placeholder="Отчество">
+              <input type="text" name="birth" value="" class="form__input" placeholder="Год рождения">
+              <div class="form__button">
+                <button type="button" class="red-button cursor-button search__button">Найти человека<img src="img\arrow.png" class="add__arrow"></button>
+              </div>
+            </div>
+            <div class="form__detailed hidden" id="details">
+              <div class="form__birthplace">
+                <input type="text" name="birthplace" value="" class="form__input" placeholder="Место рождения">
+              </div>
+              <div class="form__mobilized">
+                <input type="text" name="by" value="" class="form__input" placeholder="Кем призван" id="by">
+                <select class="form__input" name="position" placeholder="Звание, должность" id="position">
+                    <option value="1" class="form__input">Звание, должность</option>
+                    <option value="2" class="form__input">Space Cowboy</option>
+                    <option value="3" class="form__input">Emperor of Humankind</option>
+                </select>
+                <input type="text" name="date" value="" class="form__input" placeholder="Дата призыва" id="when">
+              </div>
+            </div>
+            <div class="form__below" id="below">
+              <div class="form__cheboxes">
+                <input type="checkbox" name="membook" value="membook" id="mem" class="form__checkbox">
+                <label for="mem" class="form__label">
+                  Искать в Книге Памяти
+                </label>
+                <input type="checkbox" name="photo" value="photo" id="photo" class="form__checkbox">
+                <label for="photo" class="form__label">
+                  Искать в Народном фотоархиве
+                </label>
+              </div>
+              <button type="button" class="cursor-button invisible-button" id="details__button">
+                <p class="detailed">Расширенный поиск</p>
+                <p class="detailed hidden">Скрыть дополнительные поля</p>
+              </button>
+            </div>
+            <div class="form__button">
+              <button type="button" class="red-button cursor-button search__button">Найти человека   <img src="img\arrow.png" class="add__arrow"></button>
+            </div>
+          </form>
+        </div>
+        <div class="hero__slider">
+
+        </div>
+
+      </div>
+      <div class="hero__resources">
+        <a href="#"><img src="img\net_vk.png"></a>
+        <a href="#"><img src="img\net_fb.png"></a>
+        <a href="#"><img src="img\net_ok.png"></a>
+        <a href="#"><img src="img\net_insta.png"></a>
+      </div>
+    </section>
+    <section class="about">
+
+    </section>
+    <section class="projects">
+
+    </section>
+    <section class="news">
+
+    </section>
+    <section class="partners">
+
+    </section>
+  </article>
+  <footer class="site__footer"></footer>
+
+  <!--Tiny Slider used-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
+  <script type="text/javascript" src="js\script.js"></script>
+</body>

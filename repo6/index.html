@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta charset="utf-8">
+  <title>Стена памяти</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+  <!--[if (lt IE 9)]><script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.helper.ie8.js"></script><![endif]-->
+  <link href="css\style.css" rel="stylesheet">
+
+</head>
+
+<body>
+  <header class="top">
+    <div class="top-container">
+      <div class="top-logo">
+        <img src="img\star.png" alt="star" class="logo-image">
+        <div class="logo-text">
+          <p class="text-wall">СТЕНА ПАМЯТИ</p>
+          <p class="text-tyumen">Тюменская область</p>
+        </div>
+      </div>
+      <div class="top-interface">
+        <div class="top-menu-wrap" id="topmenuwrap">
+          <div class="top-menu">
+            <a href="#">О НАС</a>
+            <a href="#">НАРОДНЫЙ ФОТОАРХИВ</a>
+            <a href="#">КНИГА ПАМЯТИ ТЮМЕНСКОЙ ОБЛАСТИ</a>
+            <a href="#">УЗНАТЬ СУДЬБУ СОЛДАТА</a>
+            <a href="#">МАТЕРИАЛЫ</a>
+          </div>
+          <div class="top-search-btn">
+            <button class="search-btn" id="opensrchbtn"><img src="img\lglass.png" alt="search"></button>
+          </div>
+        </div>
+        <div class="top-search-form hidden" id="topsearchform">
+          <form class="search-form" id="searchform">
+            <input type="text" id="searchfield" class="search-field" name="ilookfor" placeholder=" Поиск по сайту...">
+            <button class="search-btn" type="submit"><img src="img\lglass_red.png"></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+  <article class="wall">
+    <section class="hero">
+      <div class="hero__container">
+        <div class="row wall__top">
+          <div class="wall__info">
+            <p class="info__project">Проект Тюменской региональной<br> общественной организации "Областной поисковый центр"</p>
+            <p class="info__name">СТЕНА ПАМЯТИ</p>
+            <p class="info__desc">Архив данных о погибших и пропавших без вести солдатах и офицерах Красной Армии в Великой Отечественной Войне. Вы можете добавить информацию о вашем родственнике в архив.</p>
+            <button type="button" class="info__add"><a href="#">Добавить человека</a></button>
+          </div>
+          <div class="wall__resources">
+            <a href="#"><img src="img\net_vk.png"></a>
+            <a href="#"><img src="img\net_fb.png"></a>
+            <a href="#"><img src="img\net_ok.png"></a>
+            <a href="#"><img src="img\net_insta.png"></a>
+          </div>
+        </div>
+        <div class="wall__search">
+          <div class="search__container">
+            <p class="search__name">Поиск человека</p>
+            <p class="search__desc">Поиск погибших и пропавших без вести солдат и офицеров Красной Армии</p>
+            <form class="search__form">
+              <div class="row form__fields">
+                <div class="form__element">
+                  <input type="text" name="lastname" value="" class="form__input" placeholder="Фамилия">
+                </div>
+                <div class="form__element">
+                  <input type="text" name="firstname" value="" class="form__input" placeholder="Имя">
+                </div>
+                <div class="form__element">
+                  <input type="text" name="patronim" value="" class="form__input" placeholder="Отчество">
+                </div>
+                <div class="form__element">
+                  <input type="text" name="birth" value="" class="form__input" placeholder="Год рождения">
+                </div>
+                <div class="form__element">
+                  <button type="button" class="info__add form__find">Найти человека   <img src="img\arrow.png" class="add__arrow"></button>
+                </div>
+
+
+              </div>
+              <div class="row form__lower">
+                <div class="row form__cheboxes">
+                  <input type="checkbox" name="membook" value="membook" id="mem" class="form__checkbox">
+                  <label for="mem" class="form__label">
+                    Искать в Книге Памяти
+                  </label>
+                  <input type="checkbox" name="photo" value="photo" id="photo" class="form__checkbox">
+                  <label for="photo" class="form__label">
+                    Искать в Народном фотоархиве
+                  </label>
+                </div>
+                <a href="#" class="detailed">Расширенный поиск</a>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="wall__heroes">
+          <div class="row heroes__top">
+            <p class="heroes__heading">Наши герои</p>
+            <a href="#" class="heroes__all">ВСЕ СОЛДАТЫ</a>
+          </div>
+          <p class="heroes__text">Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться</p>
+
+          <div class="heroes__slider">
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_danilin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Данилин</p>
+                  <p class="hero__name">Иван Наумович</p>
+                  <p class="hero__lifetime">1902 - 1974</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_negodin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Негодин</p>
+                  <p class="hero__name">Павел Васильевич</p>
+                  <p class="hero__lifetime">12.07.1914 - 04.03.1996</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_fedonenko.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Федоненко</p>
+                  <p class="hero__name">Николай Дмитриевич</p>
+                  <p class="hero__lifetime">1912 года рождения</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_oreshkin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Орешкин</p>
+                  <p class="hero__name">Степан Михайлович</p>
+                  <p class="hero__lifetime">1902 - 1958</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_danilin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Данилин</p>
+                  <p class="hero__name">Иван Наумович</p>
+                  <p class="hero__lifetime">1902 - 1974</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <div class="row slider__arrows">
+            <img src="img\arrow_left.png" alt="" class="slider__left">
+            <img src="img\arrow_right.png" alt="" class="slider__right">
+          </div>
+
+
+
+
+        </div>
+        </div>
+      </div>
+    </section>
+    <section class="about">
+      <div class="container">
+        <div class="test">
+            aaaaaa
+        </div>
+        <div class="test">
+            aaaaaa
+        </div>
+        <div class="test">
+            aaaaaa
+        </div>
+      </div>
+    </section>
+  </article>
+  <footer></footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
+  <script type="text/javascript" src="js\script.js"></script>
+</body>

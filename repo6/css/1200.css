@@ -1,0 +1,9 @@
+@media (max-width: 1200px) {
+  a .underline {
+    bottom: -27px;
+  }
+  .menu__item:last-of-type > a .underline {
+    bottom: -34px;
+  }
+
+}

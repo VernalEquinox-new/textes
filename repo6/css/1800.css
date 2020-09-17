@@ -1,0 +1,40 @@
+@media (max-width: 1800px) {
+
+  .site__header {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .header__logo {
+    width: auto;
+    padding-right: 10px;
+  }
+
+  .text__tyumen {width: 238px;}
+  .text__wallofmem {width: 238px;}
+
+  .header__inteface {
+    flex-grow: 2;
+  }
+
+  .menu__item {
+    flex-grow: 1;
+    text-align: center;
+    line-height: normal;
+  }
+
+  .submenu__item {
+    text-align: left;
+  }
+
+  .menu__button {
+    padding-left: 10px;
+  }
+
+  .hero {
+    background-size: 65%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+}

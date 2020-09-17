@@ -1,0 +1,59 @@
+basic design width: 1920px;
+
+header padding-left 315px 16%
+header padding-right 315px
+header padding-top, bottom 15px
+
+basic container width = 1290px = 68%;
+basic menu width = 968px = 75%;
+
+
+1024 point design width: 1024px;
+padding-left: 47px;
+padding-right: 37px;
+container width: 940px;
+
+768px design
+default height 2004px
+top 30+20+403 = 453px;
+
+453x100/2004 = 
+
+
+FIX MENU HAMBURGER!!!
+CURSOR SIZE!!!
+HERO ADAPT 1024
+PADDING 1800!!!
+fallout menu!!!
+
+
+.submenu {
+  position: absolute;
+  left: 0;
+  top: 26px;
+  transform: scaleY(0);
+  background: #FBF9F7;
+  padding: 15px 48px;
+  width: auto;
+}
+
+.menu__item:hover .submenu {
+  transform: scaleY(1);
+  transform-origin: 0 0;
+  transition: .3s ease-in-out;
+}
+
+.submenu__item {
+  font-family: GothamPro;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 11px;
+  text-transform: capitalize;
+  color: #4B4343;
+  padding-bottom: 29px;
+}
+
+.submenu__item:last-of-type {
+  padding-bottom: 14px;
+}
