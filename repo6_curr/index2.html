@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Стена памяти</title>
+
+  <!--Tiny Slider used-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/tiny-slider.css">
+  <!--[if (lt IE 9)]><script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.3/min/tiny-slider.helper.ie8.js"></script><![endif]-->
+  <link href="css\style2.css" rel="stylesheet">
+  <link rel="stylesheet" href="css\1800.css"  media="(max-width:1800px)">
+  <link rel="stylesheet" href="css\1200.css"  media="(max-width:1045px)">
+  <link rel="stylesheet" href="css\1024.css"  media="(max-width:1024px)">
+  <link rel="stylesheet" href="css\768.css"  media="(max-width:768px)">
+  <link rel="stylesheet" href="css\375.css"  media="(max-width:375px)">
+</head>
+<body>
+  <header class="site__header">
+    <div class="row container">
+
+      <div class="header__logo">
+        <a href="#">
+          <img src="img\logo_all.svg" alt="Стена памяти">
+        </a>
+      </div>
+
+      <div class="row header__stuff">
+        <div class="row header__inteface" id="topmenuwrap">
+          <div class="row header__menu-wrap" id="headermenublock">
+            <ul class="row menu__list cursor-button">
+              <li class="menu__item">
+                <a href="#">О НАС <div class="underline"></div></a>
+                <ul class="submenu">
+                  <li class="submenu__item"><a href="#">История поискового движения</a></li>
+                  <li class="submenu__item"><a href="#">Поисковые отряды</a></li>
+                  <li class="submenu__item"><a href="#">Проекты</a></li>
+                  <li class="submenu__item"><a href="#">Новости</a></li>
+                  <li class="submenu__item"><a href="#">Контакты</a></li>
+                </ul>
+              </li>
+              <li class="menu__item"><a href="#">НАРОДНЫЙ ФОТОАРХИВ <div class="underline"></div></a></li>
+              <li class="menu__item"><a href="#">КНИГА ПАМЯТИ ТЮМЕНСКОЙ ОБЛАСТИ <div class="underline"></div></a></li>
+              <li class="menu__item"><a href="#">УЗНАТЬ СУДЬБУ СОЛДАТА <div class="underline"></div></a></li>
+              <li class="menu__item"><a href="#">МАТЕРИАЛЫ <div class="underline"></div></a></li>
+            </ul>
+          </div>
+          <div class="menu__button">
+            <button type="button" name="top-search-btn" class="menu__search" id="opensrchbtn"><img src="img\lglass.png" alt=""></button>
+          </div>
+      </div>
+      <div class="header__search-form hidden" id="topsearchform">
+        <form class="search-form" id="searchform">
+          <input type="text" id="searchfield" class="search-field" name="ilookfor" placeholder=" Поиск по сайту...">
+          <button class="menu__search" type="submit"><img src="img\lglass_red.png"></button>
+        </form>
+      </div>
+      </div>
+      <div class="header__hamburger" id="hamburgerdiv">
+        <button type="button" name="button" class="hamburger cursor-button" id="hamburger">
+          <div class="hamburger__line"></div>
+          <div class="hamburger__line hamburger__line--middle"></div>
+          <div class="hamburger__line"></div>
+        </button>
+      </div>
+    </div>
+  </header>
+  <article class="wall">
+    <section class="hero">
+      <div class="container">
+        <div class="hero__smokey">
+          <img src="img\smokey_1024.png" alt="soldiers">
+        </div>
+        <div class="hero__summary">
+          <p class="summary__type">Проект Тюменской региональной <br>общественной организации “Областной поисковый центр”</p>
+          <p class="summary__name">СТЕНА ПАМЯТИ</p>
+          <p class="summary__desc">Архив данных о погибших и пропавших без вести солдат и офицеров Красной Армии в Великой Отечественной Войне. Вы можете добавить информацию о вашем родственнике в архив</p>
+          <button type="button" name="button" class="red-button cursor-button"><a href="#">Добавить человека</a></button>
+        </div>
+        <div class="hero__search">
+          <p class="search__title">Поиск человека</p>
+          <p class="search__desc">Поиск погибших и пропавших без вести солдат и офицеров Красной Армии</p>
+          <form class="search__form">
+            <div class="form__default">
+              <input type="text" name="lastname" value="" class="form__input" placeholder="Фамилия">
+              <input type="text" name="firstname" value="" class="form__input" placeholder="Имя">
+              <input type="text" name="patronim" value="" class="form__input" placeholder="Отчество">
+              <input type="text" name="birth" value="" class="form__input" placeholder="Год рождения">
+              <div class="form__button">
+                <button type="button" class="red-button cursor-button search__button">Найти человека<img src="img\arrow.png" class="add__arrow"></button>
+              </div>
+            </div>
+            <div class="form__detailed hidden" id="details">
+              <div class="form__birthplace">
+                <input type="text" name="birthplace" value="" class="form__input" placeholder="Место рождения">
+              </div>
+              <div class="form__mobilized">
+                <input type="text" name="by" value="" class="form__input" placeholder="Кем призван" id="by">
+                <select class="form__input" name="position" placeholder="Звание, должность" id="position">
+                    <option value="1" class="form__input">Звание, должность</option>
+                    <option value="2" class="form__input">Space Cowboy</option>
+                    <option value="3" class="form__input">Emperor of Humankind</option>
+                </select>
+                <input type="text" name="date" value="" class="form__input" placeholder="Дата призыва" id="when">
+              </div>
+            </div>
+            <div class="form__below" id="below">
+              <div class="form__cheboxes">
+                <input type="checkbox" name="membook" value="membook" id="mem" class="form__checkbox">
+                <label for="mem" class="form__label">
+                  Искать в Книге Памяти
+                </label>
+                <input type="checkbox" name="photo" value="photo" id="photo" class="form__checkbox">
+                <label for="photo" class="form__label">
+                  Искать в Народном фотоархиве
+                </label>
+              </div>
+              <button type="button" class="cursor-button invisible-button" id="details__button">
+                <p class="detailed">Расширенный поиск</p>
+                <p class="detailed hidden">Скрыть дополнительные поля</p>
+              </button>
+            </div>
+            <div class="form__button">
+              <button type="button" class="red-button cursor-button search__button">Найти человека   <img src="img\arrow.png" class="add__arrow"></button>
+            </div>
+          </form>
+        </div>
+
+        <div class="hero__slider">
+          <div class="row slider__top">
+            <p class="slider__heading">Наши герои</p>
+            <a href="#">ВСЕ СОЛДАТЫ</a>
+          </div>
+          <p class="slider__text">Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться</p>
+
+          <div class="slider">
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_danilin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Данилин</p>
+                  <p class="hero__name">Иван Наумович</p>
+                  <p class="hero__lifetime">1902 - 1974</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_negodin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Негодин</p>
+                  <p class="hero__name">Павел Васильевич</p>
+                  <p class="hero__lifetime">12.07.1914 - 04.03.1996</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_fedonenko.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Федоненко</p>
+                  <p class="hero__name">Николай Дмитриевич</p>
+                  <p class="hero__lifetime">1912 года рождения</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_oreshkin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Орешкин</p>
+                  <p class="hero__name">Степан Михайлович</p>
+                  <p class="hero__lifetime">1902 - 1958</p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="hero__photo">
+                <img src="img\hero_danilin.jpg" alt="" class="hero__img">
+                <div class="hero__info">
+                  <p class="hero__surname">Данилин</p>
+                  <p class="hero__name">Иван Наумович</p>
+                  <p class="hero__lifetime">1902 - 1974</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row slider__arrows" id="heroes">
+            <img src="img\arrow_left.png" alt="" class="slider__left">
+            <img src="img\arrow_right.png" alt="" class="slider__right">
+          </div>
+        </div>
+
+      </div>
+      <div class="hero__resources">
+        <a href="#"><img src="img\net_vk.png"></a>
+        <a href="#"><img src="img\net_fb.png"></a>
+        <a href="#"><img src="img\net_ok.png"></a>
+        <a href="#"><img src="img\net_insta.png"></a>
+      </div>
+    </section>
+    <section class="about">
+      <div class="container">
+        <p class="about__heading heading">О региональном проекте “Стена памяти”</p>
+        <div class="about__logo">
+          <img src="img\logo_all.svg" alt="Стена памяти">
+        </div>
+        <div class="about__text">
+          <p class="about__desc about__desc--up">«Стена Памяти» – это электронная база с фотографиями и биографическими данными участников Великой Отечественной войны и ветеранов трудового фронта. Жителям Тюменской области предлагается найти в семейных альбомах фотографии, письма, архивные документы родственников: ветеранов войны и тружеников тыла, принести их в пункты сбора личных данных или самостоятельно разместить на интернет-портале через специальную форму.</p>
+          <p class="about__desc">Целью проекта является сохранение памяти об участниках Великой Отечественной войны и тружениках тыла. В уникальном архиве собраны реальные истории героев, которые внесли неоценимый вклад в Великую Победу. Каждая такая история - пример героизма, стойкости, мужественности и преданности Родине.</p>
+        </div>
+        <div class="about__movement">
+          <p class="movement__heading heading">Наше поисковое движение</p>
+          <div class="row movement__desc">
+            <div class="movement__image">
+              <img src="img\movement.jpg" alt="Наше поисковое движение">
+            </div>
+            <div class="movement__text">
+              <p class="movement__text--up">
+                Целью поискового движения является увековечение памяти погибших и пропавших без вести при защите Отечества.
+              </p>
+              <p class="movement__text--up">
+                Участники поисковых отрядов решают задачи по поиску и установлению судеб бойцов и командиров Красной Армии, сохранению и популяризации исторического и культурного военно-исторического наследия Российской Федерации, реализуют молодежную политику по гражданско-патриотическому, духовно-нравственному воспитанию граждан.
+              </p>
+              <p class="movement__text--up">
+                Поисковое движение Тюменской области имеет многолетнюю историю. Первый поисковый отряд в регионе появился в 1987 году. В 1989 году 15 тюменцев приняли участие во Всесоюзной Вахте памяти в районе д. Мясной Бор Новгородской области. В 1991 году в области насчитывалось 4 поисковых отряда, в 2003 году — 10 отрядов, в 2020 году — 18 отрядов.
+              </p>
+              <p>
+                В 2003 году по инициативе совета командиров поисковых отрядов и при поддержке Департамента по спорту и молодежной политике Тюменской области, для координации поисковых отрядов в регионе был создан Областной поисковый центр. В 2013 году на базе Тюменской региональной общественной организации «Областной Поисковый Центр» было создано региональное отделение ООД «Поисковое движение России» в Тюменской области.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="about__work">
+          <p class="movement__heading heading">Направления работы</p>
+          <div class="row work__pictures">
+            <div class="work__picture">
+              <img src="img\work_archive.png" alt="Архивно-мемориальная работа">
+              <p>Архивно-мемориальная работа</p>
+            </div>
+            <div class="work__picture">
+              <img src="img\work_war.png" alt="Военно-мемориальная работа">
+              <p>Военно-мемориальная работа</p>
+            </div>
+            <div class="work__picture">
+              <img src="img\work_social.png" alt="Социально-благотворительная работа">
+              <p>Социально-благотворительная работа</p>
+            </div>
+            <div class="work__picture">
+              <img src="img\work_research.png" alt="Научно-исследовательская работа">
+              <p>Научно-исследовательская работа</p>
+            </div>
+            <div class="work__picture">
+              <img src="img\work_search.png" alt="Поисковая работа">
+              <p>Поисковая работа</p>
+            </div>
+            <div class="work__picture">
+              <img src="img\work_edu.png" alt="Просветительская работа">
+              <p>Просветительская работа</p>
+            </div>
+            <div class="work__picture">
+              <img src="img\work_museum.png" alt="Музейная работа">
+              <p>Музейная работа</p>
+            </div>
+
+
+
+          </div>
+        </div>
+        <div class="about__numbers">
+          <p class="numbers__heading heading">О нашей работе в цифрах</p>
+          <div class="row numbers__achievments">
+            <div class="numbers__achievment">
+              <h1>33</h1>
+              <p>Года поисковой работы</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>18</h1>
+              <p>Поисковых отрядов</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>550</h1>
+              <p>Поисковиков</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>9 872</h1>
+              <p>Бойцов и командиров РККА найдено</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>480</h1>
+              <p>Имен установлено</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>12 000</h1>
+              <p>Участников уроков памяти ежегодно</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>6 800</h1>
+              <p>Биографий размещено на "Стене Памяти"</p>
+            </div>
+            <div class="numbers__achievment">
+              <h1>190</h1>
+              <p>Полевых экспертов</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="projects">
+      <div class="container">
+        <div class="projects__title">
+          <div class="row slider__top">
+            <p class="slider__heading">Наши проекты</p>
+            <a href="#">ВСЕ ПРОЕКТЫ</a>
+          </div>
+          <p class="slider__text">Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться</p>
+        </div>
+        <div class="projects__slider-name">
+          <p>Архивно-мемориальная работа</p>
+        </div>
+        <div class="projects__slider-wrap">
+          <div class="row projects__slider" id="arch_sli">
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row slider__arrows" id="arch_arr">
+            <img src="img\arrow_left.png" alt="" class="slider__left">
+            <img src="img\arrow_right.png" alt="" class="slider__right">
+          </div>
+        </div>
+
+        <div class="projects__slider-name" id="warname">
+          <p>Военно-мемориальная работа</p>
+        </div>
+        <div class="projects__slider-wrap">
+          <div class="row projects__slider" id="war_sli">
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row slider__arrows" id="war_arr">
+            <img src="img\arrow_left.png" alt="" class="slider__left">
+            <img src="img\arrow_right.png" alt="" class="slider__right">
+          </div>
+        </div>
+
+        <div class="projects__slider-name" id="musname">
+          <p>Музейная работа</p>
+        </div>
+        <div class="projects__slider-wrap">
+          <div class="row projects__slider" id="mus_sli">
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="project__item">
+                <img src="img\projects2.jpg" alt="">
+                <div class="item__txt">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row slider__arrows" id="mus_arr">
+            <img src="img\arrow_left.png" alt="" class="slider__left">
+            <img src="img\arrow_right.png" alt="" class="slider__right">
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="news">
+      <div class="container">
+        <div class="projects__title">
+          <div class="row slider__top">
+            <p class="slider__heading">Новости поискового движения</p>
+            <a href="#">ВСЕ НОВОСТИ</a>
+          </div>
+        </div>
+        <div class=" row news__bigger">
+          <div class="project__item news__item--big">
+            <img src="img\projects2.jpg" alt="">
+            <div class="item__txt">
+              <div class="item_summary">
+                <p class="item__name item__txt--big">Выездная школа реставратора</p>
+                <p class="item__name item__date">03 июня 2020</p>
+                <p class="item__name item__desc">Свыше 2500 пользователей стали участниками онлайн-экскурсии «Детство, опаленное войной», организованной Тюменским областным поисковым центром в Международный день защиты детей. Поисковики в онлайн-формате рассказали о жизни и судьбах детей в годы Великой Отечественной войны.</p>
+              </div>
+              <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+            </div>
+          </div>
+          <div class="project__item news__item--big" id="big2">
+            <img src="img\projects2.jpg" alt="">
+            <div class="item__txt">
+              <div class="item_summary">
+                <p class="item__name item__txt--big">Выездная школа реставратора</p>
+                <p class="item__name item__date">03 июня 2020</p>
+                <p class="item__name item__desc">Свыше 2500 пользователей стали участниками онлайн-экскурсии «Детство, опаленное войной», организованной Тюменским областным поисковым центром в Международный день защиты детей. Поисковики в онлайн-формате рассказали о жизни и судьбах детей в годы Великой Отечественной войны.</p>
+              </div>
+              <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+            </div>
+          </div>
+        </div>
+        <div class="row news__slider projects__slider">
+          <div>
+            <div class="project__item">
+              <img src="img\projects2.jpg" alt="">
+              <div class="item__txt">
+                <div class="item_summary">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name item__date">03 июня 2020</p>
+                </div>
+                <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="project__item">
+              <img src="img\projects2.jpg" alt="">
+              <div class="item__txt">
+                <div class="item_summary">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name item__date">03 июня 2020</p>
+                </div>
+                <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="project__item">
+              <img src="img\projects2.jpg" alt="">
+              <div class="item__txt">
+                <div class="item_summary">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name item__date">03 июня 2020</p>
+                </div>
+                <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="project__item">
+              <img src="img\projects2.jpg" alt="">
+              <div class="item__txt">
+                <div class="item_summary">
+                  <p class="item__name">Выездная школа реставратора</p>
+                  <p class="item__name item__date">03 июня 2020</p>
+                </div>
+                <p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="partners">
+      <div class="container">
+        <div class="partners__heading">
+          <p class="heading">Партнёры и организаторы</p>
+        </div>
+        <div class="partners__cards">
+          <div class="partner__card">
+            <div class="card__image">
+              <img src="img\partners_logo.png" alt="">
+            </div>
+            <div class="partner_text">
+              <p>Департамент по спорту и молодежной политике Тюменской области</p>
+              <a href="#">sport.admtyumen.ru</a>
+            </div>
+          </div>
+          <div class="partner__card">
+            <div class="card__image">
+              <img src="img\partners_logo.png" alt="">
+            </div>
+            <div class="partner_text">
+              <p>Департамент по спорту и молодежной политике Тюменской области</p>
+              <a href="#">sport.admtyumen.ru</a>
+            </div>
+          </div>
+          <div class="partner__card">
+            <div class="card__image">
+              <img src="img\partners_logo.png" alt="">
+            </div>
+            <div class="partner_text">
+              <p>Департамент по спорту и молодежной политике Тюменской области</p>
+              <a href="#">sport.admtyumen.ru</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
+  <footer class="site__footer">
+    <div class="container">
+      <div class="footer__data">
+        <div class="footer__copyright">
+          <p>Ⓒ Стена памяти</p>
+        </div>
+        <div class="footer__network">
+          <p>Присоединяйтесь к нам в соцсетях</p>
+          <img src="img\footer_nw.svg" alt="">
+        </div>
+        <div class="footer__policy">
+          <p>Политика конфиденциальности</p>
+        </div>
+        <div class="footer__echo">
+          <img src="img\footer_echo.svg" alt="">
+          <p>Разработка - Компания Echo</p>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!--Tiny Slider used-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tiny-slider/2.9.2/min/tiny-slider.js"></script>
+  <script type="text/javascript" src="js\script.js"></script>
+</body>

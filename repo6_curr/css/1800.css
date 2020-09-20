@@ -1,0 +1,72 @@
+@media (max-width: 1800px) {
+
+  .site__header {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .header__logo {
+    padding-right: 20px;
+  }
+
+  .text__tyumen {width: 238px;}
+  .text__wallofmem {width: 238px;}
+
+  .header__inteface {
+    flex-grow: 2;
+  }
+
+  .menu__item {
+    flex-grow: 1;
+    text-align: center;
+    line-height: normal;
+  }
+
+  .submenu__item {
+    text-align: left;
+  }
+
+  .menu__button {
+    padding-left: 10px;
+  }
+
+  .hero {
+    background-size: 60%;
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .slider__arrows {
+	  display: none !important;
+  }
+
+  .hero__photo > img {
+    width: 100%;
+  }
+
+  .about {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .projects {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .news {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .partners {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+  .site__footer {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+
+}

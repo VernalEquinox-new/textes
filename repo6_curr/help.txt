@@ -1,0 +1,30 @@
+basic design width: 1920px;
+
+header padding-left 315px 16%
+header padding-right 315px
+header padding-top, bottom 15px
+
+basic container width = 1290px = 68%;
+basic menu width = 968px = 75%;
+
+
+1024 point design width: 1024px;
+padding-left: 47px;
+padding-right: 37px;
+container width: 940px;
+
+FIX MENU HAMBURGER!!!
+CURSOR SIZE!!!
+HERO ADAPT 1024
+PADDING 1800!!!
+fallout menu!!!
+ARROWS
+
+
+<div class="item__name">
+  <p>Выездная школа реставратора</p>
+  <p class="item__name--details red">Подробнее <img src="img\projects_arrow.svg" alt=""></p>
+</div>
+
+<p>Выездная школа реставратора</p>
+<p class="item__name--details">Подробнее <img src="img\projects_arrow.svg" alt=""></p>

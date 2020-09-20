@@ -1,0 +1,391 @@
+@media (max-width: 1024px) {
+  .site__header {
+    padding: 15px 140px 15px 47px;
+  }
+
+  .header__inteface {
+    justify-content: flex-end;
+  }
+
+  .text__tyumen {max-width:268px;}
+  .text__wallofmem {max-width: 268px;}
+
+  .header__menu-wrap {
+    display: none;
+  }
+
+  .header__hamburger {
+    display: flex;
+    align-items: center;
+  }
+
+  .header__menu-wrap--open {
+    display: block !important;
+    position: absolute;
+    top: 90px;
+    left: 0px;
+    width: 100%;
+    z-index: 10;
+  }
+
+  .menu__list {
+    display: flex;
+    flex-direction: column !important;
+    align-items: flex-start;
+    box-shadow: 0px 6px 10px rgba(80, 52, 41, 0.15);
+    background: #FBF9F7;
+    cursor: url(../img/cursor.png), pointer;
+  }
+
+  .menu__item {
+    font-family: GothamPro;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 11px;
+    text-transform: uppercase;
+    color: #4B4343;
+    padding-top: 15px;
+    padding-bottom: 14px;
+    background: #F5F1EB;
+    width: 100%;
+    text-align: left;
+}
+
+  .underline {
+    display: none;
+  }
+
+  .menu__item > a {
+    padding-left: 48px;
+  }
+
+  li.menu__item > a:after {
+    content: url(../img/menu_default.png);
+    margin-left: 20px;
+  }
+
+  .submenu {
+    display: none;
+  }
+
+  .menu__item--clicked {
+    color: #DC5A52;
+  }
+
+  .submenu--open {
+    display: block;
+    background: #FBF9F7;
+    position: relative;
+    left: 0;
+    top: 26px;
+    background: #FBF9F7;
+    padding: 15px;
+    width: auto;
+  }
+
+  .submenu__item {
+    font-family: GothamPro;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 11px;
+    color: #4B4343;
+    padding-bottom: 29px;
+    background: #FBF9F7;
+    width: auto;
+  }
+
+  .submenu__item > a {
+    text-transform: capitalize;
+  }
+
+  .submenu__item:last-of-type {
+    padding-bottom: 14px;
+  }
+
+  li.menu__item--clicked > a:after {
+    display: inline-block;
+    transform: rotate(90deg) !important;
+  }
+
+  .hero {
+    padding: 55px 48px 70px 47px;
+    background-image: url(../img/smokey_1024.png);
+    background-size: 45%;
+    background-repeat: no-repeat;
+    background-position-x: right;
+    background-position-y: 30px;
+  }
+
+  .hero__resources {
+    display: none;
+  }
+
+  .hero__summary {
+    max-width: 468px;
+  }
+
+  .summary__type {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .summary__name {
+    font-size: 50px;
+    line-height: 58px;
+  }
+
+  .summary__desc {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .red-button {
+    font-size: 14px;
+    line-height: 13px;
+    height: 60px;
+    width: 330px;
+  }
+
+  .hero__search {
+    padding-bottom: 100px;
+  }
+
+  .search__title {
+    font-size: 24px;
+    line-height: 23px;
+  }
+
+  .search__desc {
+    font-size: 14px;
+    line-height: 13px;
+  }
+
+  .search__form * {
+    font-size: 14px;
+  }
+
+  .form__input {
+    height: 60px;
+  }
+
+  .search__button {
+    width: 100%;
+  }
+
+  .search__button > img {
+    display: none;
+  }
+
+  .slider__heading {
+    font-size: 24px;
+    line-height: 23px;
+    padding-right: 20px;
+  }
+
+  .slider__top > a {
+    font-size: 14px;
+    line-height: 13px;
+  }
+
+  .slider__text {
+    font-size: 13px;
+    line-height: 13px;
+  }
+
+  .hero__info * {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .hero__lifetime {
+    font-size: 12px;
+    line-height: 19px;
+  }
+
+  .about {
+    padding: 70px 47px 8px 47px;
+  }
+
+  .heading {
+    font-size: 24px;
+    line-height: 23px;
+  }
+
+  .about__logo {
+    padding: 20px 0px 40px 0px;
+  }
+
+  .about__movement {
+    padding: 70px 0px;
+  }
+
+  .movement__heading {
+    padding-bottom: 20px;
+  }
+
+  .movement__desc {
+    display: block;
+    text-align: center;
+  }
+
+  .movement__image {
+    padding-right: 0px;
+    padding-bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .work__picture {
+    font-size: 14px;
+    line-height: 17px;
+    padding-bottom: 30px;
+  }
+
+  .work__picture > img {
+    padding-bottom: 10px;
+  }
+
+  .numbers__heading {
+    padding-bottom: 40px;
+  }
+
+  .numbers__achievment {
+    padding-bottom: 62px;
+  }
+
+  .numbers__achievment > h1 {
+    font-size: 48px;
+    line-height: 46px;
+  }
+
+  .numbers__achievment > p {
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .projects {
+    padding: 70px 47px;
+  }
+
+  .projects__title {
+    padding-bottom: 0px;
+  }
+
+  .projects__slider-name{
+    font-size: 24px;
+    line-height: 23px;
+    padding-bottom: 20px;
+  }
+
+  .item__txt {
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .item__name {
+    font-size: 12px;
+    line-height: 17px;
+  }
+
+  .item__name--details {
+    width: 70%;
+  }
+
+  #warname {
+    padding-top: 70px;
+  }
+
+  #musname {
+    padding-top: 70px;
+  }
+
+  .news {
+    padding: 70px 50px 70px 47px;
+  }
+
+  .news__bigger {
+    padding-top: 41px;
+    padding-bottom: 25px;
+  }
+
+  .item__txt--big {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .item__date {
+    font-size: 12px;
+  }
+
+  .item__desc {
+    padding-top: 20px;
+    font-size: 12px;
+    line-height: 18px;
+    padding-right: 20px;
+    display: none;
+  }
+
+  .partners {
+    padding: 70px 50px 70px 47px;
+  }
+
+  .partners__heading {
+    padding-bottom: 30px;
+  }
+
+  .partner__card {
+    padding: 32px 10px;
+    padding-right: 5px;
+  }
+
+  .partner_text > p {
+    font-size: 12px;
+    line-height: 18px;
+  }
+
+  .partner_text > a {
+    font-size: 12px;
+    line-height: 11px;
+  }
+
+  .site__footer {
+    padding: 30px 0px;
+  }
+
+  .footer__data {
+    padding-left: 25%;
+    padding-right: 25%;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .footer__copyright {
+    padding-right: 17px;
+  }
+
+  .footer__network {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+  }
+
+  .footer__network > img {
+    padding-top: 11px;
+  }
+
+  .footer__echo {
+    order: 3;
+  }
+
+  .footer__data div p {
+    line-height: 24px;
+  }
+
+}
