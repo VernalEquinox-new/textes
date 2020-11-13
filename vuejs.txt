@@ -1,0 +1,1525 @@
+Links to code
+https://github.com/gwenf/vue-quiz
+https://github.com/gwenf/vue-adopt-pets
+
+Pt 1
+Vue.JS is a front-end framework. 
+
+
+The Vue instance
+
+Try to make a hello world app
+
+.html:
+
+<div id="#root">
+  <h1>
+    {{ greeting }} //use double moustache syntax to parse as JS what's inside
+  </h1>
+  <input v-model="greeting">
+  <div v-if="1 === 1"> //condition is true, so Vue displays the div and renders it to the page
+    Green
+  </div>
+  <div v-if="count === 1"> //condition is false so the div is not rendered to DOM
+    Green
+  </div>
+  <div v-else-if="count === 2">
+    Red
+  </div>
+  <div v-else>
+    Orange
+  </div>
+  <div v-show="count === 1"> //even if the result is false, the div is rendered to the DOM but not seen
+    Green
+  </div>
+</div> 
+
+.js:
+new Vue({ //create a new instance of Vue
+  el: '#root', //and attach it to the div with id of root
+  data: { //add a data object to the instance with some variables
+    greeting: 'Hello Vue', //like a greeting variable
+    count: 0
+  }
+})
+
+Data-binding is an important concept in Vue. Vue uses two-way data-binding through a directive called v-model. When we add this directive on an input it binds the input to a variable in the data object that I give it. So if we change input, the data live-updates accordingly. There are some directives which can be chained to the v-if: v-else-if and v-else. Combined they work just like an if\else statement. 
+In case v-if statement equals false, the corresponding div is not endered to the DOM. Often this is the expected behaviour but sometimes we need it to be changed. Vue has a v-show directive for such cases. If v-show equals false, the element is rendered to the DOM but with display:none set in the CSS. 
+
+
+Directives
+
+V-model is something called a directive. There are a lot of diffeents directives in Vue to interact with the DOM. Another common directive is v-if. It evaluates an expression to a boolean value, either true or false. Usually v-if is used in combination with data attributes. 
+Let's look at some other directives.
+
+.html:
+
+<div id="#root">
+  <p v-text="email"></p>
+  <p v-html="email"></p>
+  <p v-once>{{ email }}</p>
+  <br>
+  <input v-model="email" :class="{red: email.length < 2}"> //add class via object syntax
+  <br>
+  <input v-model="email" 
+   :class="[email.length < 2 ? "red" : "green" ]"> //add class via array syntax
+  <br>
+  <button onclick="alert('signed up')" 
+   v-bind:disabled="email.length < 2"> //button is disabled if input is shorter than 2 chars
+    Submit
+  </button>
+  <ul>
+    <li v-for="cat in cats">{{ cat }}</li> //array of cats
+  </ul>
+  <ul>
+    <li v-for="cat in catsob">{{ cat.name }}</li> //array of cat objects
+  </ul>
+</div> 
+
+.js:
+app = new Vue({
+  el = "#root",
+  data: {
+    email: '',
+    cats: [ //array of cats
+      'kitkat',
+      'fish',
+      'henry',
+      'bosco',
+      'melanthios'
+    ],
+    catsob: [ //aray of cat objects
+      {name: 'kitkat'},
+      {name: 'fish'},
+      {name: 'henry'},
+    ]
+  }
+})
+
+.css: 
+
+.red {
+  border: 2px solid red;
+}
+.green {
+  border: 2px solid green;
+}
+
+The v-bind directive can take an HTML attribute like "disabled" hat works in vanilla HTML and parse it as JavaScript. it has a shortcut of colon (:) so an attribute with v-bind usually looks like this:
+
+:disabled="email.length < 2"
+
+Another common use for v-bind is to add classes dynamically, in two ways: object syntax or array syntax/. 
+The v-text directive works much like double moustache syntax, double-binding particular data.
+The v-html directive is also alike but it parses the data as HTML. 
+If you want to render something just once as a static HTML, Vue has a v-once directive. It only makes an HTML with data initially put into the variable.
+The v-for directive handles looping in the DOM. 
+
+
+Methods
+
+Let's look at functions now. What if we wanted to add a new item to this array: 
+
+.html:
+
+<div id="#root">
+  {{ kittifyName }} //result of computed function
+  <br>
+  <input v-model="newCat" v-on:keyup.enter="addKitty"> //add a kitty on clicking enter button
+  <button v-on:click="addKitty"> //on click run addKitty function
+    + ADD
+  </button>
+  <ul>
+    <li v-for="cat in cats">{{ cat.name | capitalize | kittify }}</li> //array of cat objects with capitalize filter and kittify filter
+  </ul>
+</div> 
+
+.js:
+app = new Vue({
+  el = "#root",
+  data: { //data object is for variables only
+    cats: [ 
+      {name: 'kitkat'},
+      {name: 'fish'},
+      {name: 'henry'}
+    ],
+    newCat: ''
+  },
+  methods: { //method object is for functions
+    addKitty: function() {
+      this.cats.push({name: this.newCat}); //methods of an instance have acees to data of this instance
+      this.newCat = ''; //after that equal newCat to empty string
+    }
+  },
+  filters: { //filter object is for filters which are also functions
+    capitalize: function(value) {
+      return value.toUpperCase();
+    },
+    kittify: function(value) {
+      return value + 'y';
+    }
+  },
+  computed: {
+    kittifyName: function() {
+      if(this.newCat.length > 1) {
+        return this.newCat + 'y';
+      }
+    }
+  }
+})
+
+Also if we'd like to add a cat without clicking the button, we can add an event handler of keyup.
+The v-on directive has a shortcut of @:
+
+<button @click="addKitty"></button>
+
+Let's say you want to update something that is rendered to the DOM. Vue has something called filters. When we create a filter in the filter object, Vue will parse it as JS with cat.name and it will pipe it to this capitalize function which is a filter. In fact a filter doesn't change the actual value stored in the view state but just its display on the DOM. Let's add a kittifying filter as well which will add an -y to the cat's name. Filters go in a sequence, from first to last.
+Another set of methods for updating what' seen on the DOM are the computed methods. Thoes are useful when you have a lot of logic so everything can be put into computed methods leaving the DOM clean.
+
+
+
+Components
+
+Let's talk about custom components. Vue has a component architecture that lets you re-use bits of code just like most modern SPA frameworks. To illustrate it let's create a new component
+
+.js:
+
+Vue.component('cat-list', { //create a new component, with a name and an object of options
+  props: [ //component accepts variables here
+    'cats'
+  ], 
+  template: <ul><li v-for="cat in cats">{{ cat.name }}</li></ul>
+})
+
+
+app = new Vue({
+  el = "#root",
+  component: [ //pass to the core Vue instance a list of created components
+    'cat-list' //like cat-list
+  ],
+  data: { //data object is for variables only
+    cats: [ 
+      {name: 'kitkat'},
+      {name: 'fish'},
+      {name: 'henry'}
+    ],
+    newCat: ''
+  },
+  methods: { //method object is for functions
+    addKitty: function() {
+      this.cats.push({name: this.newCat}); //methods of an instance have acees to data of this instance
+      this.newCat = ''; //after that equal newCat to empty string
+    }
+  },
+  filters: { //filter object is for filters which are also functions
+    capitalize: function(value) {
+      return value.toUpperCase();
+    },
+    kittify: function(value) {
+      return value + 'y';
+    }
+  },
+  computed: {
+    kittifyName: function() {
+      if(this.newCat.length > 1) {
+        return this.newCat + 'y';
+      }
+    }
+  }
+})
+
+.html:
+
+<div id="#root">
+  {{ kittifyName }} //result of computed function
+  <br>
+  <input v-model="newCat" v-on:keyup.enter="addKitty"> //add a kitty on clicking enter button
+  <button v-on:click="addKitty"> //on click run addKitty function
+    + ADD
+  </button>
+  <ul>
+    <li v-for="cat in cats">{{ cat.name | capitalize | kittify }}</li> //array of cat objects with capitalize filter and kittify filter
+  </ul>
+  <cat-list :cats='cats'/> //add the component to the DOM inside the Vue instance element of root
+</div> 
+
+Making components is useful to divide the code into logical parts and eases refactoring.
+
+
+Component Lifecycle
+
+Vue will trigger certain functions to run which can be very useful when you are developing an application. There are four main lifecycle functions: created, mounted, updated, destroyed. Yet there are any other functions that run including 'before mounted', 'before destroyed', etc., which are in the documentation. 
+
+
+
+Pt 2
+
+Vue-cli
+
+To create a Vue.js application we're going to start with the command line interface (CLI). So if you come to cli.vuejs.org and click on getting started you'll see you have to prompt in cmd:
+
+npm install -g @vue/cli
+
+After installation to create a vue app named quiz we can go to project dir via cmd and type 
+
+vue create quiz
+
+To see how it all works we can choose default settings when asked. Now all modules are installed to the quiz folder where vue project is situated. Move into this folder. To run the app, type
+
+npm run serve
+
+If we open the project in some editor, we'll see some created config files like package.json which keeps reference all of the code you didn't write, any third-party libraries. The meat of the application is in src directory. The app gets rendered to the page from main.js file. It creates by default a new Vue instance, rendering it to the DOM in the #app element. Index.html is in public dir. Vue auto-injects script file to .html so it creates a budle out of main.js and all of these different .vue components in src\components dir. 
+Let's look at the application. From the main.js it's importing the App.vue file which is the entry point of the Vue app. If you look at App.vue you can see that it puts a template inside <template> tag. This isn't created by Vue, this is part of the html5 standard, but it puts it into the same file with a script tag and also a style tag. 
+Vue works this way: when building an app locally, you create many different files each wih their own template tag containing some HTML and then the script tag which contains the JS that interacts with that HTML, and also CSS for that HTML. This way you can divide your app into coponents and then put them all together bundled to main.js surrendered to the page.
+
+The first project we gonna biuld is a quiz application that keeps track of a number of total questions you've answered and the number you got correct. The questions are pulled in from an API and displayed along with the answers. The only user actions are to select an answer, click Submit and you also have an opion of resetting the count of questions to zero. When you choose an incorrect answer the color of the answer will turn red once you hit Submit, and the correct answer goes green. If you get it correct, it will only show the correct answer that you selected.
+
+Back in out quiz app let's start making components. First we will delete the HelloWorld.vue which is not needed and create 2 new components in src\components: Header.vue and QuestionBox.vue which is where we'll display the question answers and the submit button. Inside of components the only required element is to have a template tag for HTML. Script tag and style tag are not necessary. For now let's make a dummy here. 
+
+QuestionBox.vue
+
+<template>
+ <h1>Question Box</h1>
+</template>  
+
+
+Header.vue
+
+<template>
+ <h1>Header</h1>
+</template>    
+
+
+Now make changes in the main component of App.vue:
+
+<template>
+ <div id="app"> //remove default data and add new components inside
+   <Header />
+   <QuestionBox />
+ </div>
+</template>
+
+<script> //same here: remove default HelloWorld component and import new ones
+ import Header from './components/Header.vue'
+ import QuestionBox from './components/QuestionBox.vue'
+
+ export default { //and include these components here to use them in the template section
+  name: 'app',
+  components: {
+    Header,
+    QuestionBox
+  }
+ }
+</script>
+
+<style>
+ #app {
+   /*some default styling here*/
+ }
+</style>
+
+Now before updating components let's install Bootstrap Vue, a library of nicely predefined components and a layout and grid system. To install it, follow the guide in documentation. In cmd type:
+
+npm i bootstrap-vue bootstrap 
+
+After installation, in the main.js file import the plugin:
+
+import BootstrapVue from "bootstrap-vue"
+
+Vue.use(BootstrapVue)
+
+When you create vue apps using the Vue CLI the entry point is main.js file.
+
+main.js:
+
+import Vue from 'vue'
+import App from './App.vue'
+import BootsrapVue from 'bootstrap-vue' // the plugin itself included
+import 'bootstrap/dist/css/bootstrap.css' // css files of bootstrap imported
+import 'bootstrap-vue/dist/bootstrap-vue.css' //same here
+
+Vue.use(BootsrapVue) //and the plugin used
+
+Vue.config.productionTip = false
+
+new Vue({
+  render: h => h(App),
+}).$mount('#app')   
+
+
+Now we can start using the built-in bootstrap components. Let's use vue-bootstrap in our components:
+
+Header.vue:
+
+<template>
+ <div>
+  <b-nav tabs> //put a bootstrap navbar here
+   <b-nav-item disabled><b>Fancy Quiz App</b></b-nav-item> //name
+   <b-nav-item disabled>Counter: 4/10</b-nav-item> //counter
+  </b-nav>
+ </div>
+</template>    
+
+
+QuestionBox.vue:
+
+<template>
+ <div class="question-box-container">
+  <b-jumbotron>
+   <template slot="lead>
+    Some question here?
+   <template>
+
+   <hr class="my-4" />
+
+   <p>
+    List of answers
+   </p>
+
+   <b-button variant="primary" href="#">Submit</b-button>
+   <b-button variant="success" href="#">Next</b-button>
+  </b-jumbotron>
+ </div>
+</template> 
+
+Now we'll use the grid system so that the question box won't go fullscreen. 
+
+App.vue:
+
+<template>
+ <div id="app"> //remove default data and add new components inside
+   <Header />
+
+   <b-container class="bv-example-row">
+    <b-row>
+     <b-col sm="6" offset="3"> //on small screens or bigger the component takes 6 columns (half-screen) with 3 columns left blank on each side
+      <QuestionBox />
+     </b-col>
+    </b-row>
+   </b-container>
+ </div>
+</template>
+
+<script> //same here: remove default HelloWorld component and import new ones
+ import Header from './components/Header.vue'
+ import QuestionBox from './components/QuestionBox.vue'
+
+ export default { //and include these components here to use them in the template section
+  name: 'app',
+  components: {
+    Header,
+    QuestionBox
+  }
+ }
+</script>
+
+<style>
+ #app {
+   /*some default styling here*/
+ }
+</style>
+
+
+Now when the layout is done let's jump into the API for the questions and start pulling some actual data for the application. opentdb.com is a quiz API that we can pull question from. Filling ing the API documentation we can actually generate an API URL to pull questions from. Every time we make a request to this API it pulls ten questions about animals (number and topic have been selected before). Let's put the API in our applications now. In App.vue we will add a function to pull in the questions and answers from the API. We'll use a lifecycle method of mounted here.
+
+App.vue:
+
+<template>
+ <div id="app"> //remove default data and add new components inside
+   <Header />
+
+   <b-container class="bv-example-row">
+    <b-row>
+     <b-col sm="6" offset="3"> //on small screens or bigger the component takes 6 columns (half-screen) with 3 columns left blank on each side
+      <QuestionBox />
+     </b-col>
+    </b-row>
+   </b-container>
+ </div>
+</template>
+
+<script> //same here: remove default HelloWorld component and import new ones
+ import Header from './components/Header.vue'
+ import QuestionBox from './components/QuestionBox.vue'
+
+ export default { //and include these components here to use them in the template section
+  name: 'app',
+  components: {
+    Header,
+    QuestionBox
+  },
+  data() { //when making a SPA with different components, instead of a data object  
+    return { //you return an object from within a data function
+     questions: [] //in this case, an array of questions
+    }
+  },
+  mounted: function() { //when component is mounted, run this function
+    fetch ('https://api-link-here.com', { //fetch API from this link
+     method: 'get' //using GET method
+    })
+     .then((response) => { //when got response
+      return response.json() //return response in JSON format
+     })
+     .then((jsonData) => { //and then 
+       this.questions = jsonData.results //populate the array from data() with json data
+     })
+  }
+ }
+</script>
+
+<style>
+ #app {
+   /*some default styling here*/
+ }
+</style>
+
+
+package.json:
+
+...//
+
+"rules": { //add a rule of no-console to avoid console.log error
+  "no-console": 0
+},
+...
+
+
+For a real app it would be to keep the error as is so there will be no console logs in prod.
+
+
+Vue devtools
+
+To inspect the data on our components we actually need VueJS Devtools which can be retrieved from gitHub page. When installed, we can see it as a separate tab in browser devtools. It shows components and data associated with those components.
+
+As we see via VueJS Devtools, an array of questions in associated with our component. Now we have to display the question to the screen. In the App component we want to be able to display the question from the QuestionBox component so we have to pass it from the App component to QuestionBox. We also want to pass just the question that we're on so as you're clocking Next through questions we just want the QuestionBox.vue to know about the current question. We will keep in the index of the question in our data function. 
+
+
+App.vue:
+
+<template>
+ <div id="app"> //remove default data and add new components inside
+   <Header />
+
+   <b-container class="bv-example-row">
+    <b-row>
+     <b-col sm="6" offset="3"> //on small screens or bigger the component takes 6 columns (half-screen) with 3 columns left blank on each side
+      <QuestionBox 
+        :currentQuestion="question[index]"//passing variables and methods to this child component by v-bind
+      />
+     </b-col>
+    </b-row>
+   </b-container>
+ </div>
+</template>
+
+<script> //same here: remove default HelloWorld component and import new ones
+ import Header from './components/Header.vue'
+ import QuestionBox from './components/QuestionBox.vue'
+
+ export default { //and include these components here to use them in the template section
+  name: 'app',
+  components: {
+    Header,
+    QuestionBox
+  },
+  data() { //when making a SPA with different components, instead of a data object  
+    return { //you return an object from within a data function
+     questions: [], //in this case, an array of questions
+     index: 0 //and the index of the current question, initiated with 0
+    }
+  },
+  mounted: function() { //when component is mounted, run this function
+    fetch ('https://api-link-here.com', { //fetch API from this link
+     method: 'get' //using GET method
+    })
+     .then((response) => { //when got response
+      return response.json() //return response in JSON format
+     })
+     .then((jsonData) => { //and then 
+       this.questions = jsonData.results //populate the array from data() with json data
+     })
+  }
+ }
+</script>
+
+<style>
+ #app {
+   /*some default styling here*/
+ }
+</style>   
+
+
+Now we have to pull out the text of the question to to QuestionBox component.
+
+
+QuestionBox.vue:
+
+<template>
+ <div class="question-box-container">
+  <b-jumbotron>
+   <template slot="lead>
+    {{ currentQuestion.question }}
+   <template>
+
+   <hr class="my-4" />
+
+   <p>
+    List of answers
+   </p>
+
+   <b-button variant="primary" href="#">Submit</b-button>
+   <b-button variant="success" href="#">Next</b-button>
+  </b-jumbotron>
+ </div>
+</template> 
+
+<script> //we also have to pass to object via JS to reference it in component's HTML 
+  export default { //create a regular exported object 
+    props: { //which includes a props object
+     currentQuestion: Object 
+    }
+  }
+</script>
+
+
+Now let's set up the navigation between questions using Next button. Back in App.vue:
+
+
+App.vue:
+
+<template>
+ <div id="app"> //remove default data and add new components inside
+   <Header 
+    :numCorrect="numCorrect" //pass counter data to header
+    :numTotal="numTotal"
+   />
+
+   <b-container class="bv-example-row">
+    <b-row>
+     <b-col sm="6" offset="3"> //on small screens or bigger the component takes 6 columns (half-screen) with 3 columns left blank on each side
+      <QuestionBox
+        v-if="questions.length" //render the component after data is fetched so its length is not 0. 
+        :currentQuestion="question[index]"//passing variables and methods to this child component by v-bind
+        :next="next"
+        :increment="increment"
+      />
+     </b-col>
+    </b-row>
+   </b-container>
+ </div>
+</template>
+
+<script> //same here: remove default HelloWorld component and import new ones
+ import Header from './components/Header.vue'
+ import QuestionBox from './components/QuestionBox.vue'
+
+ export default { //and include these components here to use them in the template section
+  name: 'app',
+  components: {
+    Header,
+    QuestionBox
+  },
+  data() { //when making a SPA with different components, instead of a data object  
+    return { //you return an object from within a data function
+     questions: [], //in this case, an array of questions
+     index: 0, //and the index of the current question, initiated with 0
+     numCorrect: 0, //number of correct answers
+     numTotal: 0
+    }
+  },
+  methods: { //create a new object of methods
+    next() { //make a function using short syntax
+     this.index++ // which increments index value
+    }
+    increment(isCorrect) {
+     if (isCorrect) {
+      this.numCorrect++
+     }
+     this.numTotal++
+    }
+  }
+  mounted: function() { //when component is mounted, run this function
+    fetch ('https://api-link-here.com', { //fetch API from this link
+     method: 'get' //using GET method
+    })
+     .then((response) => { //when got response
+      return response.json() //return response in JSON format
+     })
+     .then((jsonData) => { //and then 
+       this.questions = jsonData.results //populate the array from data() with json data
+     })
+  }
+ }
+</script>
+
+<style>
+ #app {
+   /*some default styling here*/
+ }
+</style>
+
+
+QuestionBox.vue:
+
+<template>
+ <div class="question-box-container">
+  <b-jumbotron>
+   <template slot="lead>
+    {{ currentQuestion.question }}
+   <template>
+
+   <hr class="my-4" />
+
+   <b-list-group> //a deafult list group from Vue Bootstrap
+    <b-list-group-item 
+      v-for="(answer, index) in answers" :key="index" //make a loop of answers using the index as key
+      @click="selectAnswer(index)" //on click run the selectAnswer function
+      :class="answerClass(index)" //bind styling depending on index (if index !null add selected class)  
+    >
+     {{ answer }} 
+    </b-list-group-item>
+   </b-list-group>
+
+
+   <b-button variant="primary" @click="submitAnswer" :disabled="selectedIndex===null || answered"> //on button click call submitAnswer function
+    Submit
+   </b-button>
+   <b-button @click="next" variant="success" href="#">Next</b-button> //on click call next method
+  </b-jumbotron>
+ </div>
+</template> 
+
+<script> //we also have to pass the object via JS to reference it in component's HTML
+  import _ from 'lodash'
+ 
+  export default { //create a regular exported object 
+    props: { //which includes a props object
+     currentQuestion: Object,
+     next: Function,
+     increment: Function, //we'll add the function in App.vue
+    },
+    data() {
+     return {
+      selectedIndex: null, //the default value of selected answer's index is null
+      shuffledAnswers: [], //make an array of shuffled answers
+      correctIndex: null,
+      answered: false //check if question is answered
+     }
+    }
+    mounted() { //to handle the error "cannot find question property of undefined" use mounted
+     console.log(this.currentQuestion)
+     this.shuffleAnswers() //to solve the first question shuffle
+    },
+    computed: { //putting answers together
+     answers() { //make an object of answers
+      let answers = [...this.currentQuestion.inccorect_answers] //made of a copy ("..." syntax) of incorrect_answers array
+      answers.push(this.currentQuestion.correct_answer) //add correct_answer array to it
+      return answers //and return the object
+     },
+     methods: {
+      selectAnswer(index) {
+       this.selectedIndex = index //set selectedIndex equal to selected answer's index 
+       console.log(index)
+      },
+      shuffleAnswers() {
+       let answers = [...this.currentQuestion.inccorect_answers, this.currentQuestion.correct_answer]
+       this.shuffledAnswers = _.shuffle(answers) //conventionally lodash library is referred to as "_"
+
+       this.correctIndex = this.shuffledAnswers.indexOf(this.currectQuestion.correct_answer)
+      },
+      submitAnswer() {
+       let isCorrect = false
+       
+       if(this.selectedIndex === this.correctIndex) {
+        isCorrect = true
+       }
+
+       this.answered = true
+       
+       this.increment(isCorrect) //call the increment function for correct answers
+      },
+      answerClass(index) {
+       let answerClass = ''
+
+       if(!this.answered && this.selectedIndex === index) {
+         answerClass = 'selected'
+       } else if(this.answered && this.correctIndex === index) {
+         answerClass = 'correct'
+       } else if (this.answered && this.selectedIndex === index && this.correctIndex !== index {
+         answerClass = 'incorrect'
+       }
+       
+       return answerClass
+      }
+     },
+     watch: { //create a watch method
+      currentQuestion() {
+        this.selectedIndex = null; //when question changed, set answer's index to default
+        this.shuffleAnswers(); //and run function which shuffles answers
+        this.answered = false;
+      }
+     }
+    }
+  }
+</script>
+   
+<style scoped> //scoped means local scope so styling will affect only this component
+  .list-group {
+   margin-bottom: 15px;
+  }
+  .btn {
+   margin: 0 5px;
+  }
+  .list-group-item:hover {
+   background: #EEE;
+   cursor: pointer;
+  }
+  .selected {
+   background-color: lightblue;
+  }
+  .correct {
+   background-color: lightgreen;
+  }
+  .incorrect {
+   background-color: red;
+  }  
+</style>
+
+
+Header.vue:
+
+<template>
+ <div>
+  <b-nav tabs> //put a bootstrap navbar here
+   <b-nav-item disabled><b>Fancy Quiz App</b></b-nav-item> //name
+   <b-nav-item disabled>Counter: {{ numCorrect }}/{{ numTotal }}</b-nav-item> //counter
+  </b-nav>
+ </div>
+</template>    
+
+<script> 
+ export default { //pass props from App.vue to Header.vue
+   props: [
+    'numCorrect',
+    'numTotal
+   ]
+ }
+</script>
+
+
+The following text is a comment to the code above: 
+Using the lifecycle method we can see that currentQuestion object is passed from the server after the QuestionBox component is mounted, so the object is undefined and caanot be handled properly. The simplest solution is to tell the app to fetch the questions first and then render the QuestionBox component after the questions are defined.
+To display the answers we first need to put them together since the API puts them in a correct and incorrect arrays for each question.
+Next we will make answers look more like a list and become clickable. Go to VueBootstrap again and take the list-group example. When clicked, the index of selected answer is taken and we should pass it to the component.
+We have to make a visual feedback for a user that they have selected an answer or are about to click one. 
+At the moment our answers aren't shuffled, so they come in a strict order where the last one is always correct. Let's fix it using a watch method. It takes an objects of functions and in this object you can watch for changes in props and the watch method will be run when props changes. 
+To make the very shuffle of answers inside the array we'll use the lodash library. Install it following the instructions on the github page using npm:
+
+npm i lodash
+
+We can see that our shuffling works when we click on next button, but the first question is always in order. There are two ways we can fix the problem. The first one is using the lifecycle method of mounted:
+
+mounted() {
+  this.shuffleAnswers()
+}
+
+The second option is to make objects of watch functions and set some options to it.
+
+watch: {
+  currentQuestion: { //for the current question object
+   immediate: true, //do immediately when created
+   handler() { //body of handler function
+    this.selectedIndex = null
+    this.shuffleAnswers()
+   }
+  }
+} 
+
+In Header component we have a counter of correct answers which works using the data from QuestionBox.vue passed to Header.vue via main component of App.vue 
+
+
+Vuex and Vue-router
+
+Now we will build a more complicated project to show how Vue Routing and Vue X which is Vue state management system. It's going to be a basic 4-screen application. It's theme is getting cats and dogs to be adopted and we're going to be performing basic crud operations to get used to state management. There's a home screen, two screens - one for cats and one for dogs - and a screen for a particular animal which can be clicked on. In cmd make a new project in special folder:
+
+vue create adopt-pets
+
+and select features manually, using arrow keys and spacebar. Check Babel, Router, Vuex, CSS Pre-processors, Linter/Formatter.
+History mode for router - y
+Pick a CSS pre-processor - Sass/SCSS (with node-sass)
+Pick a linter/formatter config: ESLint + Standard config
+Pick additional lint features: Lint on save
+Placing config for Babel, PostCSS, ESLint, etc: In dedicated config files
+Save this as a preset for future projects? n
+
+Now in project dir in main.js we have not only render App, but also store for VueX (store) and Vue Router configuration (router). We also have a views subdir and components subdir. In router.js we can see that Home and About which are the two routes are both views. These are the pages of our applications which are connected to the router. Components are imported into the views or into each outher. For example, in Home.vue the HelloWorld component is imported and displayed to the DOM. The idea is that components are reusable pieces and each page stands alone as a distinct view in an application.  
+Back in router.js there's a lot of things you can do such as lay loading or using multiple components like at this line:
+
+component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+
+But for the moment we'll get rid of this and import the About component like other components.
+In store.js we create a new VueX store which is a global object, so all the functions, data and other elements you want to use all over the application can be stored here and then imported to whatever component needed. 
+
+First of all let's create the 4 pages and link them toghether. Having Home and About components at the moment, we'll delete the About one and leave Home. We'll also create in views dir Cats.vue, Dogs.vue and Pet.vue with a template. Also delete the HelloWorld.vue from components dir.
+
+Cats.vue:
+
+<template>
+  <div>
+   <h1>Cats for Adoption</h1>
+   <b-table striped hover :items="cats"> //make a table of items in cats
+    <template slot="name" slot-scope="data">
+     <router-link :to="'/pets/${data.index}'">{{ data.value }}</router-link>
+    </template>
+   </b-table>
+  </div>
+</template>
+
+<script>
+ import cats from '@/data/cats' //@ is a shortcut for src dir
+ export default {
+  data() { //making an array of cats
+   return {
+    cats
+   }
+  }
+ }
+</script>
+
+
+Dogs.vue:
+
+<template>
+  <div>
+   <h1>Dogs for Adoption</h1>
+   <b-table striped hover :items="dogs" /> //make a table of items in dogs
+  </div>
+</template>
+
+<script>
+ import dogs from '@/data/dogs' //@ is a shortcut for src dir
+ export default {
+  data() { //making an array of dogs
+   return {
+    dogs
+   }
+  }
+ }
+</script>
+
+Pet.vue:
+
+<template>
+  <div>
+	Pet
+  </div>
+</template> 
+
+
+Home.vue:
+
+<template>
+ <div class="home">
+  <h1>Adopt a new best friend</h1>
+ </div>
+</template>
+
+<script>
+ export default: {
+  name: 'home'
+ }
+</script>
+
+router.js:
+
+import Vue from 'vue'
+import Router from 'vue-router'
+import Home from './views/Home.vue'
+import Cats from './views/Cats.vue'
+import Dogs from './views/Dogs.vue'
+import Pet from './views/Pet.vue'
+
+Vue.use(Router)
+
+export default new Router ({
+ mode: 'history',
+ base: process.env.BASE_URL.
+ routes: [
+  {
+   path: '/',
+   name: 'home',
+   component: Home
+  },
+  {
+   path: '/',
+   name: 'cats',
+   component: Cats
+  },
+  {
+   path: '/',
+   name: 'dogs',
+   component: Dogs
+  },
+  {
+   path: '/',
+   name: '/pets/:species/:id',
+   component: Pet
+  }
+ ]
+})
+
+
+App.vue:
+
+<template>
+ <div id="app">
+  <div id="nav">
+   <router-link to="/'>Home</router-link> |
+   <router-link to="/cats'>Cats</router-link> |
+   <router-link to="/dogs'>Dogs</router-link> |
+  </div>
+  <b-container>
+   <router-view/>
+  </b-container> 
+ </div>
+</template>
+
+<style>
+ //some styling here
+</style>
+
+To do styling, we will install Vue Bootstrap again and import it to main.js
+
+npm i bootstrap-vue
+
+main.js:
+
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+impot store from './store'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.config.productionTip = false
+Vue.use(BootstrapVue)
+
+new Vue ({
+ router,
+ store,
+ render: h => h(App)
+}).$mount('#app')
+
+
+In src directory create a folder named data. and two files inside: cats.js and dogs.js, which keep arrays of cats and dogs accordingly.
+
+dogs.js:
+export default [
+  {
+   name: 'Sheeba',
+   breed: 'collie',
+   gender: 'female',
+   age: 7,
+   color: 'black/white',
+   weight: 34,
+   location: 'fourside',
+   notes: 'Pure breed. Trained for competitions.'
+  },
+  {
+   ...
+  }
+]
+
+cats.js:
+export default [
+ {
+  name: 'Fish',
+  breed: 'tuxedo',
+  gender: 'male',
+  age: 20,
+  color: 'black/white',
+  weight: 13,
+  location: 'fourside',
+  notes: 'Sweet kitty. He loves getting his belly rubbed.'
+ },
+ ...
+]
+ 
+We have made the pages of Cat and Dog, but Pet page is a deeper state for a particular animal, and the route should like /cats/:id. Let's do it using vue-router. Vue router has Dynamic Route Matching. Instead of hard-coding the while route you have a dynamic route variable as part of the route, this variable is preceded by a colon (:). Then you can access the variable when you go to that route in the commponent associated with the route on the route params object.   
+Since every line in the table is a link, we have to open the documentation of BootstrapVue and see how we can turn every object to a link.
+<slot></slot> is a tag in Vue.
+Bootstrap is basically telling the component where to put things that we pass in to this b-table (see b-table in Cats.vue) so it has different slots inside. If it has multiple slots like in our case it will say 
+ <slot name="name"></slot> where "name" will be dynaic because in our case there are lots of different columns that could vary in the table. So bootstrap will have a slot for each of our cokumns and that's how 
+we can pas it in the template. More on slots can be learnt from Bue docummentation. 
+To pass data to Pet.vue we will put all of the dogs and cats in a state and them pull the put neede from the state (store.js).  Make in src a new folader called store. Inside make three files: state.js, mutations,js and actions.js, and an index.js file to tie those together. Copy store.js to index.js. 
+
+
+store.js:
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store ({
+  state: {
+  },
+  mutations: {
+  },
+  actions: {
+  }
+})
+
+store\index.js:
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import state from './state'
+import mutations from './mutations'
+import actions from './actions'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store ({
+  state, //this is a shortcut writing for the same lines in store.js
+  mutations,
+  actions
+})
+
+actions.js:
+
+export default {
+ 
+}
+
+mutations.js:
+
+export default {
+ 
+}
+
+state.js:
+
+import cats from '../data/cats'
+import dogs from '../data/dogs'
+
+export default { //the default state of the app so data from here can be pulled to any component
+ cats,
+ dogs
+}
+
+And now change import in Cats.vue (same for Dogs.vue):
+
+Cats.vue:
+
+<template>
+  <div>
+   <h1>Cats for Adoption</h1>
+   <b-table striped hover :items="cats"> //make a table of items in cats
+    <template slot="name" slot-scope="data">
+     <router-link :to="'/pets/cats/${data.index}'">{{ data.value }}</router-link>
+    </template>
+   </b-table>
+  </div>
+</template>
+
+<script>
+ import { mapState } from 'vuex'
+ export default {
+  data() {
+   return { }
+  },
+  computed: {
+   ...mapState([ //now we cat array of cats directly from vuex store
+    'cats'
+   ])
+  }
+ }
+</script>
+
+At the moment we got an error "'cats' is undefined". Using the VueX devtools we can see that there's nothing in our base state. The solution is to delete the src\store.js file so that main.js will look for the ./store which is a dir and since there's no file specified it'll look for index.js.
+
+
+Pet.vue:
+
+<template>
+  <div>
+   <h1>{{ animal.name }} {{{ $route.params.species }}}</h1>
+   <p>{{ animal.age }} years old</p>
+   <p>Breed: {{ animal.breed }}</p>
+  </div>
+</template> 
+
+<script>
+ import { mapState } from 'vuex'
+ export default {
+  data() {
+   return {
+    animal: {}
+   }
+  },
+  computed: {
+   ...mapState([ //now we cat array of cats directly from vuex store
+    'cats',
+    'dogs'
+   ])
+  },
+  mounted() {
+     const animal = this[this.$route.params.species][this.$route.params.id]//get species and pass it in as a var
+     this.animal = animal
+    }
+  }
+ }
+</script>
+
+Next step is to make it able to edit animals. That will lead into how to use actions and mutations in the store. Let's jump back into VueX and start adding the functionality. To be able to add a pet, we have to be able to append the new pet to the array in store. The general pattern is definitely not updating the state directly, because this is what mutations are for - to update the state for you. Generally speaking, you call an action that causes a mutation which changes the state. A lot of time the actions that you call wil be where you're also making API calls because they are asynchronous. We will use that pattern of using actions that call mutations that update state.    
+
+actions.js:
+
+export default {
+ addPet: ({ commit }, payload) => { //Vue gives a сontext object here and second is the argument we pass
+  commit('appendPet', payload) //call an appendPet mutation. Payload is an object which we deconstruct in mutations.js
+ }
+  
+}
+
+mutations.js:
+
+export default {
+ appendPet: (state, {species, pet}) => { //make an appendPet mutation with state (required by VueX) and a passing argument
+  state[species].push(pet)
+ }
+
+}
+
+state.js:
+
+import cats from '../data/cats'
+import dogs from '../data/dogs'
+
+export default { //the default state of the app so data from here can be pulled to any component
+ cats,
+ dogs
+}
+
+At Home.vue component we will add a form which allows to add pets to the tables.
+
+Home.vue:
+
+<template>
+ <div class="home">
+  <h1>Adopt a new best friend</h1>
+  <button @click="togglePetForm" class="btn btn-primary">Add New Pet</button> //on click shows add pet form
+  
+  <--!here's the form from VueBootstrap copied-->
+  <b-form @submit.prevent="handleSubmit" v-if="showPetForm"> //we prevent default behavoir
+   <b-form-group id="exampleInputGroup2" label="Pet's Name:" label-for="exampleInput2">
+    <b-form-input id="exampleInput2" type="text" v-model="formData.name" required placeholder="Enter name"/>
+   </b-form-group>
+   <b-form-group id="exampleInputGroup3" label="Species:" label-for="exampleInput3">
+    <b-form-select id="exampleInput3" :options="['cats', 'dogs']" required v-model="formData.species"/>
+   </b-form-group>
+   <b-form-group id="exampleInputGroup2" label="Pet's Age:" label-for="exampleInput2">
+    <b-form-input id="exampleInput2" type="number" v-model="formData.age" required placeholder="Enter age"/>   </b-form-group>
+  </b-form>
+ </div>
+</template>
+
+<script>
+ import { mapActions } from 'vuex' //handling Submit Form button
+
+ export default: {
+  name: 'home',
+  data() {
+   return {
+    showPetForm: false,
+    formData: {
+     name:'',
+     age: 0,
+     species: null
+    }
+   } 
+  },
+  methods: {
+   ...mapActions([
+    'addPet'
+   ]),
+   togglePetForm() {
+    this.showPetForm = !this.showPetForm
+   },
+   handleSubmit() {
+    const { species, age, name } = this.formData //put data from the form to the object
+    const payload = { //and into payload
+     species,
+     pet: {
+      name,
+      age
+     }
+    }
+    this.addPet(payload) //then call action addPet with that payLoad
+    this.formData = { //and reset the form in the end
+     name:'',
+     age: 0,
+     species: null
+    }
+   }
+  }
+ }
+</script>
+
+Now let's see how getters work. There's another object that goes into the store and it's called getters. In index.js let's add a getter. Getters are like computed properties, but for the VueX store. Let's say we want to pull state into a component but you want to modify what the component receives while pulling it. It wonn't actually update the state but it will get back something that you want out of state. For example, we could count how many animals we have in our arrays in a getter and then call that getter from everywhere we want to get the number of animals. A common thing to use getters for is filtering.  
+
+store\index.js:
+
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+import state from './state'
+import mutations from './mutations'
+import actions from './actions'
+import getters from './getters'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store ({
+  state, //this is a shortcut writing for the same lines in store.js
+  mutations,
+  actions,
+  getters
+})
+
+store\getters.js:
+
+export default {
+ animalsCount: (state) => { //the animalsCount function will have access to the state
+  return state.cats.length + state.dogs.length
+ },
+ getAllCats: (state) => {
+  //the filter function take a functions which will give us each pet one at a time and allow us to return just the pets we want in array.
+  return state.pets.filter((pet) => {
+   return pet.species === 'cat'
+ })
+}
+
+import cats from '../data/cats'
+import dogs from '../data/dogs'
+
+export default { //the default state of the app so data from here can be pulled to any component
+ cats,
+ dogs,
+ pets: [...cats, ...dogs]
+}
+
+dogs.js: //adding species to objects in array
+export default [
+  {
+   name: 'Sheeba',
+   breed: 'collie',
+   species: 'dog',
+   gender: 'female',
+   age: 7,
+   color: 'black/white',
+   weight: 34,
+   location: 'fourside',
+   notes: 'Pure breed. Trained for competitions.'
+  },
+  {
+   ...
+  }
+]
+
+cats.js:
+export default [
+ {
+  name: 'Fish',
+  breed: 'tuxedo',
+  species: 'cat',
+  gender: 'male',
+  age: 20,
+  color: 'black/white',
+  weight: 13,
+  location: 'fourside',
+  notes: 'Sweet kitty. He loves getting his belly rubbed.'
+ },
+ ...
+]
+
+
+Home.vue:
+
+<template>
+ <div class="home-view-container">
+  <h1>Adopt a new best friend</h1>
+  {{ getAllCats.length }}
+  {{ animalsCount }}
+  <button @click="togglePetForm" class="btn btn-primary">Add New Pet</button> //on click shows add pet form
+  
+  <--!here's the form from VueBootstrap copied-->
+  <b-form @submit.prevent="handleSubmit" v-if="showPetForm"> //we prevent default behavoir
+   <b-form-group id="exampleInputGroup2" label="Pet's Name:" label-for="exampleInput2">
+    <b-form-input id="exampleInput2" type="text" v-model="formData.name" required placeholder="Enter name"/>
+   </b-form-group>
+   <b-form-group id="exampleInputGroup3" label="Species:" label-for="exampleInput3">
+    <b-form-select id="exampleInput3" :options="['cats', 'dogs']" required v-model="formData.species"/>
+   </b-form-group>
+   <b-form-group id="exampleInputGroup2" label="Pet's Age:" label-for="exampleInput2">
+    <b-form-input id="exampleInput2" type="number" v-model="formData.age" required placeholder="Enter age"/>   </b-form-group>
+  </b-form>
+ </div>
+</template>
+
+<script>
+ import { mapActions, mapGetters } from 'vuex' //handling actions and getters
+
+ export default: {
+  name: 'home',
+  data() {
+   return {
+    showPetForm: false,
+    formData: {
+     name:'',
+     age: 0,
+     species: null
+    }
+   } 
+  },
+  methods: {
+   ...mapActions([
+    'addPet'
+   ]),
+   togglePetForm() {
+    this.showPetForm = !this.showPetForm
+   },
+   handleSubmit() {
+    const { species, age, name } = this.formData //put data from the form to the object
+    const payload = { //and into payload
+     species,
+     pet: {
+      name,
+      age
+     }
+    }
+    this.addPet(payload) //then call action addPet with that payLoad
+    this.formData = { //and reset the form in the end
+     name:'',
+     age: 0,
+     species: null
+    }
+   }
+  },
+  computed: { //computed methods watch changes so we'll use them for our getter
+   ...mapGetters([
+    'animalsCount',
+    'getAllCats'
+   ])
+  }
+ }
+</script>
+
+Setting up SASS inside of a project. Create a folder in src\assets called sass and a file inside called index.sass, and also a dir called components and a dir called libraries and a dir called base for global styles. Inside the base dir create a _variables.sass file where _ means the file is imported to another file and not compiled as an individual file.  This is where we can set a font or anything. In components dir create a _home.sass file which will affect only styles of Home component.
+
+
+_variables.sass:
+
+//fonts
+$main-font: 'Helvetica', sans-serif
+
+//colors
+$blue: #000034
+
+
+_home.sass:
+
+.home-view-container
+   color: $blue
+
+
+index.sass:
+@import 'base/variables'
+@import 'components/home'
+
+In the end just import the index.sass to main.js file:
+
+main.js:
+
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+impot store from './store'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import './assets/sass/index.sass'
+
+
+Vue.config.productionTip = false
+Vue.use(BootstrapVue)
+
+new Vue ({
+ router,
+ store,
+ render: h => h(App)
+}).$mount('#app')  
+
+
+To remove the mess from the project, let's make the table of pets a separate component. In src\components create a PetTable.vue component and take the template away from Cats.vue and Dogs.vue.
+
+PetTable.vue:
+<template>
+  <div>
+   <h1>{{ species }} for Adoption</h1>
+   <b-table striped hover :items="pets"> //make a table of items
+    <template slot="name" slot-scope="data">
+     <router-link :to="'/pets/${species}/${data.index}'">{{ data.value }}</router-link>
+    </template>
+   </b-table>
+  </div>
+</template>
+
+<script>
+ export default {
+  props: {
+   species: String,
+   pets: Array
+  }
+ }
+</script>
+
+
+Cats.vue (same for Dogs):
+
+<template>
+  <div>
+   <PetTable
+    species="cats" //here's the hard-coded value of species
+    :pets="cats" //here's cats array from computed
+   />
+  </div>
+</template>
+
+<script>
+ import { mapState } from 'vuex'
+ import PetTable from '@/components/PetTable.vue'
+
+ export default {
+  components: {
+   PetTable
+  },
+  data() {
+   return { }
+  },
+  computed: {
+   ...mapState([ //now we cat array of cats directly from vuex store
+    'cats'
+   ])
+  }
+ }
+</script> 
+
+
+Unit testing
+Recommended
+
+понедельник 10.00 червишеский тракт 3 на ресепшн спросить Ирину
