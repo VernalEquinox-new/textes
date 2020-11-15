@@ -1,0 +1,184 @@
+https://github.com/craigsdennis/intro-to-apis-course/blob/master/course-notes.md
+
+API - Application Programming Interface. 
+An interface is something that provides a way for us to interact or communicate with an object without understanding how it works under the hood. An API is made for app programmers to use and extend in their applications. 
+
+API is a contract of sorts. It defines how it's expected to be used, and it defines what you can expect to recieve by using it. Think of it as a set of tools designed for software developers. API gives you access to data and by providing you with an abstraction of the implementation. 
+
+Nowadays the term API is almost always used to explain the web-based APIs.  
+
+We need remote control for different reasons, like having not enough space on the local machine to store all the data available. The remote API does the work, sending and receiving information from the server. The current API standard is REST, Representational State Transfer. 
+
+A quick review on how the web works:
+Browser is a client, which referres to server via an URL. URL start with HTTP which is means HyperText Transfer Protocol which comes with a GET request. GET request means the request will only receive data. So the server gets a request, generates an html page and returns it to the client. 
+HTTP was originally designed as a stateless protocol. Once the request recieves a response, it's all done. There are other request verbs, like POST for a submit form. There are two ways to pass some information with a request. The first one is to put the info after a question mark (?). The second is using the key and value pairs, called headers. Both requests and responses have headers. 
+
+Now let's take a look at how REST takes advantage of the web and its tooling to your profit.
+REST - Representational State Transfer. APIs that meet the REST architectural style constraints are considered to be RESTful. 
+
+Much like the web, the client makes a request to a server. The client in this case is a program and probably some sort of library will be used to create a request to the server. The protocol is HTTP and it's stateless, so the server won't remember anything about the client. To maintain the state like login details, they should be sent with each and every request, and we do it using headers. These are also the REST constraints, Client-Server Architecture and Stateless. 
+
+Most of what we want our apps to be able to do to their resources can be expressed through CRUD - Creating, Reading, Updating, Deleting. For example, at a ebook site we click on the author of some book, and we send a GET request to the server, and the server returns a response with body in JSON (JavaScript Object Notation) format which is a great way to structure and nest the data. 
+
+HTTP verbs:
+
+GET - get some data (Like an author of the book) - READ
+POST - post some data (Add another author) - CREATE
+PUT - - UPDATE
+PATCH - update some data (Fix author info?) - UPDATE
+DELETE - delete some data (Remove an author) - DELETE
+
+We can see those are similar to CRUD semantically.
+
+Let's take a look at the Spotify and its RESTful API. We can see that the results are returned very fast, because of cacheability. It is also an example of a Layered System. 
+
+On Twilio, we have made some request. We have arranged some data and got a piece of code. 
+Open cmd and run the url generated when you pass data for the API call.  It has a POST method, since we're creating a new message. Data can be changed right in the generated URL.  The -u flag is setting up the authentication of the account SID (String IDentifier). Press Enter and there will be an answer to it meaning that the API call was successful.
+We can change POST to GET and remove everything but SID at the -u flag, which means we want to read everything sent to that number. The \ symbol means going to nex line so there should be none at the end of URL. 
+
+
+Postman App
+getpostman.com is where the tool can be downloaded. When installed, start the app and choose:
+Create New -> Collection.
+
+Name it Twilio. Click on the window icon in the bottom left corner, choose the Twilio COllection and click on Add Requests. 
+Name a request Message Log.
+Then google and find the twilio docs on read all messages and grab the URL from the URL line, put it to the description. The name of the link goes in [Twilio documentation](link\here).
+Then create a new folder called SMS inside this collection. Click Save.
+Inside teh SMS folder we can see a Message Log. Open it. To the right of the method choice there's an input field where we will put our request from above. 
+
+https://api.twilio.com/2010-04-01/Accounts/{{TWILIO_ACCOUNT_SID}}/Messages.json
+
+Then click Send. 
+There are tabs below, where you can for example put an authorization. The authorization can be inherited from parent which in pur case is Twilio collection. Open the collection and choose Authorization Tab, the Basic Auth option. 
+The variables tab lets us keep some value stored in a var so we don't need to input it every now an then. It's useful to store passwords for example.
+
+In SMS folder create a request and call it Create a message. Make a description in a way described above. Choose POST method and copy the API link from previous request. Since we have to POST something, open the Body tab and send some values. Choose x-www-form-urlencoded and type in the key-value pairs based on documentation of this API.
+In this case the pairs would be
+To +12028402937
+Body Sent from Postman
+MediaUrl https://funnigifs.com/funnygif.gif
+From {{TWILIO_NUMBER}} 
+
+If we look at the json generated we can see that the status of our message is queued, because the GET request for the GIF is not in the collection. Add it and you'll see that the GIF is heavy so client side caching would come in handy. 
+For the GET request of a GIF, open Headers tab. There's a Last-Modified key. We'll copy its value and add a new key If-Modified-Since with this very value. 
+
+Let's use a helper library of twilio. First, install the library via cmd:
+
+npm install twilio
+
+and then create an explore.js file
+
+
+explore.js:
+
+const Twilio = require("twilio")
+
+const client = new Twilio (
+ "siddatathere", "authdatahere"
+);
+
+client.messages //call clients with the sid messages
+ .list() //create a list of messages
+ .then(messages => //when created
+  console.log(`The most recent message is ${messages[0].body} //console.log the latest
+ ).catch(err => console.error(err); //catch errors to show them in console 
+console.log('Gathering your message log'); //because of asynchronous nature of the method, this message will be called right when the messages are called so this log will show first.  
+
+
+Now we'll do the same in Python way.
+
+in cmd: pip install twilio
+
+explore.py:
+
+from twilio.rest import Client
+
+client = Client("accountSIDnumbers", "authTokennumbers")
+
+for msg in client.messages.list(): //show all messages
+ print(msg.body)
+
+msg = client.messages.create( //create a message
+ to="+12340098",
+ from_="9830928",
+ body="Hello from Python",
+)
+
+print(f"Created a new message: {msg.sid}")
+
+Libraries for each programming language are part of Uniform Design of RESTful APIs. 
+
+CLI (Command Line Interface) can be used to make API calls from an executable on your machine. 
+
+Let's make a web app called complimentr which sends compliments to people using a framework called Flask. Flask provides an API that lets you extend the framework to create your application. This example application is going to be doing server side rendering. This means that the pages will only be created on the server side. Any change or navigation will require a full page reload. 
+For our API we will use Glitch.com
+
+In requirements.txt add Twilio library as a requirement. In .env file fill in the SID, token and phone number.
+
+app.py:
+
+...
+from twilio.rest import Client
+
+...
+
+client = Client()
+
+def get_sent_messages():
+ messages = client.messages.list(from_=TWILIO_PHONE_NUMBER)
+ return messages
+
+def send_message(to, body):
+ client.messages.create( //create a message
+  to=to,
+  from_=body,
+  body=TWILIO_PHONE_NUMBER
+ )
+
+...
+
+
+APIs have limits, like for example a client wouldn't send millions of requests in a short period of time. The typical solution for this is the throttle, or limiting the number of requests per second. 
+
+JavaScript based project is usung Vue. Install the Twilio helper library:
+
+npm install twilio --save
+
+Update the .env file with correct data.
+
+index.html:
+
+...
+
+methods: {
+ async refreshCompliments() {
+  const response = await fetch("api/compliments"); //default fetch method is GET
+ }
+}
+
+app.js:
+
+...
+const TwilioClient = require("twilio");
+...
+const client = new TwilioClient();
+const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER
+...
+app.get("/api/compliments", async (req, res) => {
+ const sentMessages = await client.messages.list({from: twilioPhoneNumber});
+ const compliments = sentMessages.map(message => message.body); //return only the body of the message
+ res.json(compliments); //sent compliments as json
+});
+
+app.post("/api/compliments", async (req, res) => {
+ const to = req.body.to;
+ const from = process.env.TWILIO_PHONE_NUMBER;
+ const body = `${req.body.sender} says: ${req.body.receiver} is ${req.body.compliment}. Sent by Complimentr`;
+ try {
+  await client.messages.create ({to, from, body});
+ } catch (err) {
+  res.status(err.status).json({success: false mssage: err.message });
+ }
+ res.json({ success: true});
+}); 
