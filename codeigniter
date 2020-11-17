@@ -1,0 +1,357 @@
+1) install "xampp apache+mariaDB+PHP+Perl" at apachefriend.com
+2) install composer
+3) go to xampp/htdocs, open powershell or cmd and follow the steps from CodeIgnite Documentation\Composer installation with the project name of first ci4
+4) to run theproject, start apache from xampp and mysql server
+5) open in IDE the project folder, in public find index.php. This is where CodeIgniter instantiates all the required system files. The las line says
+ $app->run();
+We don't touch public folder, we don't add PHP files or edit index.php. We only add assets files - like .js, .css and images 
+6) env file is by itself doing nothing. For every new project we have to duplicate it (right-click and duplicate), and rename the double as .env. This is a configuration file for our project. 
+Uncomment the CI_ENVIRONMENT = production line. Uncommenting the line allows us to start the debug mode and see all errors we get during development, and also change the mode to dev:
+ CI_ENVIRONMENT = development.
+Next, uncomment the line 
+ app_baseURL=''
+and set it to
+ app_baseURL = 'http://localhost'
+ 
+The DATABASE section has 2 groups: a default group and testing group. The testing group is used for running PHP unit tests.
+
+7) The writable folder is used by CodeIgniter to store dynamic files like session files or log files or caching files. We don't edit anything manually here and the same goes for tests folder. Vendor folder keeps the libraries needed for CodeIgnite and we don't edit anything there. 
+8) Inside the app folder we have some subdirs. In Config subdir are files which allow to config libraries provided by codeigniter. File Routes.php in Config folder takes care about the routes of the app. For example, the default controller is set to Home, so the homepage of a codeigniter project starts the Home controller:
+$routes->setDefaultController('Home');
+
+And if we go to Controller folder, we'll see Home.php file. If we open it, we'll see a public function index() returning a view:
+public function index() {
+ return view('welcome_message');
+}
+
+And if we open the views folder, we can see the welcome_message.php file.
+So the default controller is Home and its default method is index. It means that http://localhost, http://localhost/home, http://localhost/home/index are pointing at the same view. So for routing you should specify a controller, then specify a method and then specify a view.
+
+A method in controller can also refer to model and get some data from there and apss this data to the view. Models are in Model dir 
+
+9) Let's create a controller. In app\Controllers create a Shop.php file. 
+
+ Shop.php:
+ 
+ <?php namespace App\Controllers;
+
+ class Shop extends BaseController //the naming of class always begins with capitalized letter, others are small.
+ {
+  public function index() { we get to this function via localhost/shop
+   return view('shop');
+  }
+  
+  public function product() { we get to this function via localhost/shop/product
+   return view('product');
+  }
+ }
+ ?>
+ 
+In views folder create a shop.php  and a product.php files.
+
+shop.php:
+
+<h2>This is a shop</h2>
+
+
+product.php:
+
+<h2>This is a product</h2>
+
+
+To get to localhost/product/shop/laptop for example, we have to make our product view dynamic.
+
+ Shop.php:
+ 
+ <?php namespace App\Controllers;
+
+ class Shop extends BaseController //the naming of class always begins with capitalized letter, others are small.
+ {
+  public function index() { we get to this function via localhost/shop
+   return view('shop');
+  }
+  
+  public function product($type, $product_id) { //pass a variable 
+  
+   echo '<h2>This is a product: '.$type.' with id of '.$product_id.'</h2>'; //if we go to localhost/shop/product/laptop/24, $type = 'laptop', $product_id = 24
+   return view('product');
+  }
+  
+  protected function adminChecks() { //protected methods are not allowed by automatic routing of codeigniter so localhost/shop/adminchecks will result in 404.
+   echo 'This is a protected area';
+  }
+ }
+
+
+10) Go to Controllers folder and create a new dir called Admin and cope Shop.php there. If you try to get to localhost/admin/shop.php you'll get an error because of namespace. Fix the namespace and use the BaseController:
+
+ Admin\Shop.php:
+ 
+ <?php namespace App\Controllers\Admin;
+ 
+ use App\Controllers\BaseController;
+
+ class Shop extends BaseController //the naming of class always begins with capitalized letter, others are small.
+ {
+  public function index() { we get to this function via localhost/admin/shop
+   return view('shop');
+  }
+  
+  public function product($type, $product_id) { //pass a variable 
+  
+   echo '<h2>This is a product: '.$type.' with id of '.$product_id.'</h2>'; //if we go to localhost/admin/shop/product/laptop/24, $type = 'laptop', $product_id = 24
+   return view('product');
+  }
+  
+ }
+ 
+ 
+11) Let's try and use a controller inside another controller. In Home.php:
+
+<?php namespace App\Controllers;
+
+use App\Controllers\Admin\Shop as AdminShop; //we tell the controller to look for this special controller at Admin folder with an alias so it will stay unique
+
+class Home extends BaseController {
+ public function index() {
+  return view('welcome_message');
+ }
+ 
+ function validation() {
+  $shop = new Shop(); //we create a new instance of Shop controller
+  echo $shop->product('laptop', 'lenovo') //and call its method product with product parameter = laptop and id = lenovo
+  
+  $adminShop = new AdminShop(); //creatae a new instance of AdminShop controller
+ }
+}
+
+
+11) Let's talk about routes. Go to App\Config\Routes.php. We can see some default prerequisites here. Like, by default, codeigniter takes controller name and then method name, like localhost/shop/product. To shorten the URL to localhost/product, add in Routes.php this line:
+
+$routes->add('products/(:any)/(:any)', 'Shop::product/$1/$2') //first argument is the url address, second is the method calling it. We also pass some dynamic arguments to the URL using regexp so we can just type in localhost/product/pc/dell.
+
+We can also create our own routes in a much alike way.
+
+$routes->add('blog', function() { //same here - the address and the method
+ return "<h2>Blog here</h2>";
+});
+
+12) This is how we make groups of routes for subdirectories. In Admin dir let's create a Users.php file. 
+
+Admin\Users.php:
+ 
+ <?php namespace App\Controllers\Admin;
+ 
+ use App\Controllers\BaseController;
+
+ class Users extends BaseController 
+ {
+  public function index() { 
+   echo '<h2>Admin\Users here!</h2>'
+  }
+  
+  public function getAllUsers() {  
+  
+   echo '<h2>Show all users</h2>'; 
+  }
+  
+ }
+ 
+ In Routes.php:
+ 
+ $routes->group('admin', function($routes) { //group stands for the admin prefix, so all routes here will have /admin/in front of them
+  $routes->add('users', 'Admin\Users::getAllUsers');
+  $routes->add('user', 'Admin\Users::index');
+  $routes->add('product/(:any)/(:any)', 'Admin\Shop::product/$1/$2s');
+ })
+
+ 13) Let's make a route for POST or PUT/PATCH/DELETE. In Admin create a Blog.php file
+ 
+ Admin\Blog.php:
+ 
+ <?php namespace App\Controllers\Admin;
+ 
+ use App\Controllers\BaseController;
+
+ class Blog extends BaseController 
+ {
+  public function index() { 
+   echo '<h2>A list of blog posts</h2>'
+  }
+  
+  public function createNew() {  
+   return view('blog_form');
+  }
+  
+  public function saveBlog() {  
+   echo '<pre>'
+    print_r($_POST);
+   echo '</pre>
+  }
+  
+ }
+
+ In views folder create a blog_form.php file.
+ 
+ blog_form.php:
+ 
+ <form action="admin/blog/new" method="post">
+  <input type="text" name="title">
+  <textarea name="content></textarea>
+  <input type="submit" value="Create>
+ </form>
+ 
+ 
+Routes.php:
+
+ $routes->group('admin', function($routes) { //group stands for the admin prefix, so all routes here will have /admin/in front of them
+  $routes->add('users', 'Admin\Users::getAllUsers');
+  $routes->add('user', 'Admin\Users::index');
+  $routes->add('product/(:any)/(:any)', 'Admin\Shop::product/$1/$2s');
+  
+  //blog routes
+  $routes->add('blog', Admin\Blog::index);
+  $routes->get('blog/new', Admin\Blog::createNew); 
+  $routes->post('blog/new', Admin\Blog::saveBlog);
+ })
+ 
+ 
+14) Let's stick to views now. At the moment, create a Blog.php in Controllers folder.
+
+Blog.php:
+ 
+ <?php namespace App\Controllers;
+
+ class Blog extends BaseController 
+ {
+  public function index() { 
+   return view('blog');
+  }
+  
+  public function post() {
+   return view('single_post');
+  }
+ }
+
+In views, create a blog.php, single_post.php file.
+
+blog.php, single_post.php:
+
+<!DOCTYPE html>
+<--!default html dummy here-->
+
+In Routes.php remove the blog route so it will act in a default way and return the blog.php view.
+
+15) In case we would like to have some menu for our blog, it would be wise to setup the routing in a way we don't have to put the menu to all pages of the blog. In views folder. let's split the files in three:
+
+header.php:
+<!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= (isset($meta_title) : $meta_title ? 'Codeigniter default title') ?></title> //dynamic data from Blog.php
+ </head>
+ <body>
+  <nav>
+   <ul>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/blog/post">Post</a></li>
+   </ul>
+  </nav>
+
+  
+blog.php:
+
+<h1><?= $title ?></h1>
+
+<div>
+ <?php foreach ($posts as $post) : ?>
+    <div>
+     <h3><?= $post ?></h3>
+     <img src="/assets/images/avatar.jpg">
+     <p>Lorem ipsum</p>
+    </div>
+ <?php endforeach; ?>
+</div>
+
+footer.php:
+</body>
+</html>
+
+single_post.php:
+
+<h1>This is a single post page</h1>
+
+Controllers\Blog.php:
+
+ <?php namespace App\Controllers;
+
+ class Blog extends BaseController 
+ {
+  public function index() {
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is a Blog Page'
+   ]
+   
+   $posts = ['Title1', 'Title2', 'Title3'];
+   $data['posts'] = $posts;
+   
+   echo view('header', $data);
+   echo view('blog');
+   echo view('footer');
+  }
+  
+  public function post() {
+  
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is an Awesome Blog'
+   ]
+  
+   echo view('header', $data);
+   echo view('single_post');
+   echo view('footer');
+  }
+ }
+ 
+
+16) In views folder create a template dir and put header.php and footer.php there. Now in Blog.php controller we have to specify the path to header and footer:
+
+Controllers\Blog.php:
+
+ <?php namespace App\Controllers;
+
+ class Blog extends BaseController 
+ {
+  public function index() {
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is a Blog Page'
+   ]
+   
+   $posts = ['Title1', 'Title2', 'Title3'];
+   $data['posts'] = $posts;
+   
+   echo view('template/header', $data);
+   echo view('blog');
+   echo view('template/footer');
+  }
+  
+  public function post() {
+  
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is an Awesome Blog'
+   ]
+  
+   echo view('template/header', $data);
+   echo view('single_post');
+   echo view('template/footer');
+  }
+ }
+
+ 
+17) To brush the views up we'll use bootstrap. Install it as described in documentation page, 
+ 
