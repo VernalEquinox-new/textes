@@ -353,5 +353,124 @@ Controllers\Blog.php:
  }
 
  
-17) To brush the views up we'll use bootstrap. Install it as described in documentation page, 
+17) To brush the views up we'll use bootstrap. Install it as described in documentation page, add the css file to header.php, and js file to footer.php, and set the navbar up. In views, create a components folder and a post_item.php file inside. Remove some markup from post.php:
+
+views\components\post_item.php:
+    <div>
+     <h3><?= $title ?></h3>
+     <img src="/assets/images/avatar.jpg">
+     <p>Lorem ipsum</p>
+    </div>
+
+
+views\blog.php:
+
+<h1><?= $title ?></h1>
+
+<div>
+ <?php foreach ($posts as $post) : ?>
+	<?php view_cell('\App\Libraries\Blog::postItem', ['title' => $post]) ?> \\the path to library which will render this cell
+ <?php endforeach; ?>
+</div>
  
+Let's create the libary file. Go to App\Libraries and create a file named Blog.php
+
+App\Libraries\Blog.php:
+
+<?php namespace App\Libraries;
+
+class Blog() {
+ public function postItem($params) {
+  return view('components/post_item.php', $params);
+ }
+}
+
+18) At the moment we are echoing template files for each view in our controller. But the better way to do it is using view layouts. In Views, create a Layouts folder and main.php file in it. Copy and paste the contents of header.php and footer.php to main.php. 
+
+Views\Layouts\main.php:
+
+
+ <!DOCTYPE html>
+<html>
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><?= (isset($meta_title) : $meta_title ? 'Codeigniter default title') ?></title> //dynamic data from Blog.php
+ </head>
+ <body>
+  <nav>
+   <ul>
+    <li><a href="/blog">Blog</a></li>
+    <li><a href="/blog/post">Post</a></li>
+   </ul>
+  </nav>
+  
+   <div class="container">
+    <?= $this->renderSection('content') ?> //the content section renders here
+   </div>
+ 
+ </body>
+</html>
+
+
+App\Controllers\Blog.php:
+
+ <?php namespace App\Controllers;
+
+ class Blog extends BaseController 
+ {
+  public function index() {
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is a Blog Page'
+   ]
+   
+   $posts = ['Title1', 'Title2', 'Title3'];
+   $data['posts'] = $posts;
+   
+   return view('blog', $data);
+  }
+  
+  public function post() {
+  
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is an Awesome Blog'
+   ]
+  
+   return view('single_post, $data');
+  }
+ }
+ 
+
+Views\blog.php:
+
+<?= $this->extend('Layouts/main') ?>
+
+<?= $this->section('content') ?> //section begins. The name in parentheses should match the one in the layout which is 'content' in this case.
+
+<h1><?= $title ?></h1>
+
+<div class="row">
+  <?= $this->include('partials/sidebar') ?>
+ <div class="col-12 col-sm-9">
+  <div class="row>
+	<?php foreach ($posts as $post) : ?>
+		<?php view_cell('\App\Libraries\Blog::postItem', ['title' => $post]) ?> //the path to library which will render this cell
+	<?php endforeach; ?>
+  </div>
+ </div>
+</div>
+
+<?= $this->endSection() ?> //section rendered to layout ends
+
+19) Another moment regarding layout. Let's say the blog has a sidebar. Create in Views a folder named partials, and a file sidebar.php. 
+
+Views\partials\sidebar.php:
+<div class="col-12 col-sm-3">
+<ul>
+ <li>One</li>
+ <li>One</li>
+ <li>One</li> 
+</ul> 
+</div>s
