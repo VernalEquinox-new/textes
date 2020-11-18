@@ -485,13 +485,13 @@ App\Models\BlogModel.php:
 use CodeIgniter\Model;
 
 class BlogModel extends Model {
- protected $table = 'posts'; \\required field for extending class
+ protected $table = 'posts'; \\required parameter for the model to function
  protected $primaryKey = 'post_id'; \\required
  
  protected $returnType = 'array';
  protected $useSoftDeletes = true;
  
- protected $allowedFields = ['name', 'email'];
+ protected $allowedFields = ['post_title', 'post_content']; \\required. These fields can be updated from the users form
  
  protected $useTimestamps = false;
  protected $createdField = 'created_at';
@@ -503,3 +503,559 @@ class BlogModel extends Model {
  protected $skipValidation = false;
  
 }
+
+Some fields are generated automatically, like primary key, others are put in manually, the are in the $allowedFields array.
+
+
+Now in App\Controllers\Blog.php:
+
+<?php namespace App\Controllers;
+
+ use App\Models\BlogModel;
+
+ class Blog extends BaseController 
+ {
+  public function index() {
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is a Blog Page'
+   ]
+   
+   $posts = ['Title1', 'Title2', 'Title3'];
+   $data['posts'] = $posts;
+   
+   return view('blog', $data);
+  }
+  
+  public function post($id) {
+   
+   $model = new BlogModel(); \\creta a new instance of model
+   $post = $model->find($id); 
+   if($post) {
+       $data = [
+        'meta_title' => $post['post_title'],
+        'title' => $post['post_title'],
+        'post' => $post
+       ];
+   } else {
+       $data = [
+        'meta_title' => 'Post not found',
+        'title' => 'Post not found',
+       ];
+   }
+ 
+
+  
+   return view('single_post, $data');
+  }
+
+  public function new() {
+
+   $data = [
+    'meta_title' => 'New Post',
+    'title' => 'Create New Post'
+   ]
+
+   if($this->request->getMethod() == 'post') { \\if the form in new_post.php is submitted
+     $model = new BlogModel(); \\call a new instance of BlogModel
+     $model->save($_POST); \\and save data from the post to this instance
+   } 
+   return view('new_post', $data);
+  }
+
+  public function delete($id) {
+      
+   $model = new BlogModel(); \\creta a new instance of model
+   $post = $model->find($id); 
+   
+   if($post) {
+     $model->delete($id);
+     return redirect()->to('/blog');
+   }
+  }
+
+  public function edit($id) {
+   
+   $model = new BlogModel(); \\creta a new instance of model
+   $post = $model->find($id); 
+
+   $data = [
+    'meta_title' => $post['post_title'],
+    'title' => $post['post_title'],
+   ]
+
+   if($this->request->getMethod() == 'post') { \\if the form in new_post.php is submitted
+     $model = new BlogModel(); \\call a new instance of BlogModel
+     $_POST['post_id'] = $id;
+     $model->save($_POST); \\using save method for editing data you must pass primary key
+     $post = $model->find($id);  
+   }
+
+   $data['post'] = $post; 
+   return view('edit_post', $data);
+  }
+ }
+
+In Views, create a file new_post.php
+
+new_post.php:
+
+
+<?= $this->extend('Layouts/main') ?>
+
+<?= $this->section('content') ?> //section begins. The name in parentheses should match the one in the layout which is 'content' in this case.
+
+<h1><?= $title ?></h1>
+
+<div class="row">
+ <div class="col-12 col-md-8 offset-md-2">
+  <form method="post" action="/blog/new">
+   <div class="form-group">
+    <label for="">Title</label>
+    <input id="" class="form-control" type="text" name="post_title">
+   </div>
+   <div class="form-group">
+    <label for="">Content</label>
+    <textarea id="" class="form-control" name="post_content" rows="3"></textarea>
+   </div>
+   <div class="form-group">
+    <button class="btn btn-success btn-sm">Create</button>
+   </div>
+  </form>
+ </div>
+</div>
+
+<?= $this->endSection() ?> //section rendered to layout ends
+
+21) Before managing the database we must create a database first. <SOLVE TH PROBLEM> and its structure. When created, make changes to the .env file. Uncomment the default database group and set the values as they should be.
+Fix the singe_post.php in View:
+
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+<h1><?= title ?></h1>
+<a href="/blog/delete/<?= $post['post_id']" class="btn btn-danger">Delete</a>
+<a href="/blog/edit/<?= $post['post_id']" class="btn btn-danger">Edit</a>
+<?= $this->endSection() ?>
+
+22) In views, create an edit_post.php
+
+edit_post.php:
+
+
+<?= $this->extend('Layouts/main') ?>
+
+<?= $this->section('content') ?> //section begins. The name in parentheses should match the one in the layout which is 'content' in this case.
+
+<h1><?= $title ?></h1>
+
+<div class="row">
+ <div class="col-12 col-md-8 offset-md-2">
+  <form method="post"> \\the form will submit to itself
+   <div class="form-group">
+    <label for="">Title</label>
+    <input id="" class="form-control" type="text" name="<?= $post['post_title'] ?>" value="post_title">
+   </div>
+   <div class="form-group">
+    <label for="">Content</label>
+    <textarea id="" class="form-control" name="post_content" rows="3"><?= $post['post_title'] ?></textarea>
+   </div>
+   <div class="form-group">
+    <button class="btn btn-success btn-sm">Create</button>
+   </div>
+  </form>
+ </div>
+</div>
+
+<?= $this->endSection() ?> //section rendered to layout ends
+
+23) Another useful feature of CodeIgniter model is model events. 
+
+
+App\Models\BlogModel.php:
+
+<?php namespace App\Models;
+
+use CodeIgniter\Model;
+
+class BlogModel extends Model {
+ protected $table = 'posts'; \\required parameter for the model to function
+ protected $primaryKey = 'post_id'; \\required
+ 
+ protected $returnType = 'array';
+ protected $useSoftDeletes = true;
+ 
+ protected $allowedFields = ['post_title', 'post_content']; \\required. These fields can be updated from the users form
+ 
+ protected $useTimestamps = false;
+ protected $createdField = 'created_at';
+ protected $updatedField = 'updated_at';
+ protected $deletedField = 'deleted_at';
+ 
+ protected $validationRules = [];
+ protected $validationMessages = [];
+ protected $skipValidation = false;
+ 
+ protected $beforeInsert = ['checkName']; \\event calling checkname function
+
+ public function checkName(array $data) { \\available data
+   $newTitle = $data['data']['post_title'].' Extra features';
+   $data['data']['post_title'] = $newTitle;
+
+   return $data;
+ }
+}
+
+Other events are: afterInsert, beforeInsert, beforeUpdate, afterUpdate, afterFind, afterDelete.
+
+24) Let's create a custom model. In App\Models create a file named CustomModel.php:
+
+<?php namespace App\Models;
+
+use CodeIgniter\Database\ConnectionInterface;
+
+class CustomModel {
+
+  protected $db;
+  
+  public function __construct(ConnectionInterface &$db){
+   $this->db =& $db;
+  }
+
+  function getPosts(){
+   $builder = $this->db->table('posts');
+   $builder->join('users', 'posts.post_author_id = users.user_id')
+   $posts = $builder->get()->getResult();
+   return $posts;
+  }
+}
+
+
+App\Controllers\Blog.php:
+
+<?php namespace App\Controllers;
+
+ use App\Models\BlogModel;
+ use App\Models\CustomModel;
+
+ class Blog extends BaseController 
+ {
+  public function index() {
+
+   $db = db_connect();
+
+   $model = new CustomModel();
+   echo '<pre>';
+     print_r($model->getPosts());
+   echo '</pre>;
+   $data = [
+    'meta_title' => 'Codeigniter 4 Blog',
+    'title' => 'This is a Blog Page'
+   ]
+   
+   $posts = ['Title1', 'Title2', 'Title3'];
+   $data['posts'] = $posts;
+   
+   return view('blog', $data);
+  }
+  
+  public function post($id) {
+   
+   $model = new BlogModel(); \\creta a new instance of model
+   $post = $model->find($id); 
+   if($post) {
+       $data = [
+        'meta_title' => $post['post_title'],
+        'title' => $post['post_title'],
+        'post' => $post
+       ];
+   } else {
+       $data = [
+        'meta_title' => 'Post not found',
+        'title' => 'Post not found',
+       ];
+   }
+ 
+
+  
+   return view('single_post, $data');
+  }
+
+  public function new() {
+
+   $data = [
+    'meta_title' => 'New Post',
+    'title' => 'Create New Post'
+   ]
+
+   if($this->request->getMethod() == 'post') { \\if the form in new_post.php is submitted
+     $model = new BlogModel(); \\call a new instance of BlogModel
+     $model->save($_POST); \\and save data from the post to this instance
+   } 
+   return view('new_post', $data);
+  }
+
+  public function delete($id) {
+      
+   $model = new BlogModel(); \\creta a new instance of model
+   $post = $model->find($id); 
+   
+   if($post) {
+     $model->delete($id);
+     return redirect()->to('/blog');
+   }
+  }
+
+  public function edit($id) {
+   
+   $model = new BlogModel(); \\creta a new instance of model
+   $post = $model->find($id); 
+
+   $data = [
+    'meta_title' => $post['post_title'],
+    'title' => $post['post_title'],
+   ]
+
+   if($this->request->getMethod() == 'post') { \\if the form in new_post.php is submitted
+     $model = new BlogModel(); \\call a new instance of BlogModel
+     $_POST['post_id'] = $id;
+     $model->save($_POST); \\using save method for editing data you must pass primary key
+     $post = $model->find($id);  
+   }
+
+   $data['post'] = $post; 
+   return view('edit_post', $data);
+  }
+ }
+
+25) Query Builder. While extending models supportt only few CRUD features, custom models let us use query builder class.
+Let's fill in some data using dummySQL  and export our db. In the resulting .sql file remove the INSERT query. 
+...
+When the database is filled, fo to App\Controllers\Posts.php:
+
+<?php namespace App\Controllers;
+
+use App\Models\CustomModel;
+
+class Posts extends BaseController
+{
+ public function index()
+ {
+   $db = db_connect();
+   $model = new CustomModel($db);
+   $result = $model->all(); \\call specific method
+
+   echo '<pre>';
+    print_r($result);
+   echo '</pre>'; \\call the array
+ }
+
+ public function where()
+ {
+   $db = db_connect();
+   $model = new CustomModel($db);
+   $result = $model->where(); \\call specific method
+
+   echo '<pre>';
+    print_r($result);
+   echo '</pre>'; \\call the array
+ }
+
+ public function join()
+ {
+   $db = db_connect();
+   $model = new CustomModel($db);
+   $result = $model->join(); \\call specific method
+
+   echo '<pre>';
+    print_r($result);
+   echo '</pre>'; \\call the array
+ }
+
+ public function like()
+ {
+   $db = db_connect();
+   $model = new CustomModel($db);
+   $result = $model->like(); \\call specific method
+
+   echo '<pre>';
+    print_r($result);
+   echo '</pre>'; \\call the array
+ }
+
+ public function grouping()
+ {
+   $db = db_connect();
+   $model = new CustomModel($db);
+   $result = $model->grouping(); \\call specific method
+
+   echo '<pre>';
+    print_r($result);
+   echo '</pre>'; \\call the array
+ }
+} 
+
+
+App\Models\CustomModel.php:
+
+<?php namespace App\Models;
+
+use CodeIgniter\Database\ConnectionInterface;
+
+class CustomModel {
+
+  protected $db;
+  
+  public function __construct(ConnectionInterface &$db){
+   $this->db =& $db;
+  }
+
+  function all(){ //get all data
+   //we get "SELECT * FROM posts" this way
+   
+   return $this->db->table('posts')->get()->getResult(); \\get all the data from posts table
+   
+  }
+
+  function where(){ //get some data
+   //we get "SELECT * FROM posts" this way
+   
+   return $this->db->table('posts')->where(['post_id' => 100])->get()->getResult(); \\get all the data from posts table
+ 
+ \\if we use getRow instead of getResult, we'll get back a class object, not an array of objects
+
+   return $this->db->table('posts')->where(['post_id > ' => 90])->where(['post_id <' => 95])->orderBy(['post_id', 'DESC'])->get()->getRow(); \\get biggest post_id where post_id > 90 and < 95
+   
+  }
+
+  function join(){ //get some data
+    return $this->$db->table('posts')->where('post_id >', 50 )->where('post_id >', 60 )->join('users', 'posts.post_author = users.user_id' )->get()->getResult();
+   
+  }
+
+  function like(){ //get some data
+    return $this->$db->table('posts')->like('post_content >', 'new', 'both' )->join('users', 'posts.post_author = users.user_id' )->get()->getResult();
+   
+  }
+
+  function grouping(){ //get some data
+    //SELECT * FROM posts WHERE (post_id = 25 AND post_date < '1990-01-01 00:00:00') OR (post_author = 10);
+    return $this->$db->table('posts')->groupStart()->where(['post_id' => '25', 'post_created_at <' => '1990-01-01 00:00:00'])->groupEnd()->orWhere('post_author', 10)->like('post_content >', 'new', 'both' )->join('users', 'posts.post_author = users.user_id' )->get()->getResult();
+   
+  }
+
+  function wherein(){ //get some data
+    //SELECT * FROM posts WHERE (post_id = 25 AND post_date < '1990-01-01 00:00:00') OR (post_author = 10);
+    $emails = ['1@email.com', '2@email.com']; \\an array od emails passed to the query
+    
+    return $this->$db->table('posts')->groupStart()->where(['post_id' => '25', 'post_created_at <' => '1990-01-01 00:00:00'])->groupEnd()->orWhereIn('email', $emails)->like('post_content >', 'new', 'both' )->join('users', 'posts.post_author = users.user_id' )->limit(5)->get()->getResult();
+   
+  }
+
+
+
+  function getPosts(){
+   $builder = $this->db->table('posts');
+   $builder->join('users', 'posts.post_author_id = users.user_id')
+   $posts = $builder->get()->getResult();
+   return $posts;
+  }
+}
+
+When building a query, if you make a query without ending with get and start another query, these two will unite!
+
+
+26) Form validation
+Create in App\Controllers a Form.php file:
+
+Form.php:
+
+<?php namespace App\Controllers;
+
+class Form extends BaseController
+{
+ public function index()
+ {
+   helper(['form']); \\load validation library form helper 
+   
+   $data = [];
+   $data['categories'] = [
+    'Student',
+    'Teacher',
+    'Principle'
+   ];
+
+
+
+   if($this->request->getMethod() == 'post') { \\when we submit a form we have a post request
+    
+   $rules = [ \\create a set of preset rules
+     'email' => 'required|valid_email',
+     'password' => 'required|min_length[8]',
+     'category' => 'in_list[Student, Teacher]' \\is in category
+     'date' => [ \\custom validation rule
+       'rules' => 'required|check_date',
+       'label' => 'Date', \\name for the set of rules
+       'errors' => [
+         'required' => 'This field is required!' \\the error text for a rule
+       ]
+     ]
+   ];
+
+
+    if($this->validate($rules)) {
+     //then do database insertion and login user
+     return redirect()->to('/form/success');
+    } else {
+     $data['validation'] = $this->validator; \\provides a list of errors
+    }
+   }
+
+   return view('form', $data);
+ }
+
+ function success(){
+  return "You've passed";
+ }
+}
+
+Create in Views form.php using bootstrap. Include Bootstrap in this file and copy default form from the documentation.
+
+Imagine we have a form of three fields: email, password and a category that the user will be assigned to.
+
+form.php:
+
+...
+
+<h1>Form Validation</h1>
+<?php if(isset($validation)) : ?>
+  <div class="text-danger">
+   <?= $validation->listErrors() ?>
+  </div>
+<?php endif; ?>
+
+...form here...
+
+For custom validation rules create in App a folder called Validations
+
+App\Validations\CustomRules.php:
+
+<?php 
+
+ namespace App\Validations;
+
+ class CustomRules{ \\rules always return boolean value
+  function check_date(string $str, string &$error = null) : bool
+  {
+    if($str < date('Y-m-d')) {
+      return false;
+    }
+ 
+    return true;
+  }
+ }
+
+App\Config\Validation.php:
+
+...
+\App\Validations\CustomRules::class \\add custom rule in config
