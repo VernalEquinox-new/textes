@@ -452,7 +452,7 @@ Views\blog.php:
 <h1><?= $title ?></h1>
 
 <div class="row">
-  <?= $this->include('partials/sidebar') ?>
+  <?= $this->include('partials/sidebar') ?> //include sidebar
  <div class="col-12 col-sm-9">
   <div class="row>
 	<?php foreach ($posts as $post) : ?>
@@ -473,4 +473,33 @@ Views\partials\sidebar.php:
  <li>One</li>
  <li>One</li> 
 </ul> 
-</div>s
+</div>
+
+
+20) CodeIgniter provides us with 2 types of models. The first type is model type which extends an existing model class, and the second type is independent model created by ourselves and it can be structured in any way we like. Go to App\Models and create a new file called BlogModel.php. Paste the code from documentation of CodeIgniter.
+
+App\Models\BlogModel.php:
+
+<?php namespace App\Models;
+
+use CodeIgniter\Model;
+
+class BlogModel extends Model {
+ protected $table = 'posts'; \\required field for extending class
+ protected $primaryKey = 'post_id'; \\required
+ 
+ protected $returnType = 'array';
+ protected $useSoftDeletes = true;
+ 
+ protected $allowedFields = ['name', 'email'];
+ 
+ protected $useTimestamps = false;
+ protected $createdField = 'created_at';
+ protected $updatedField = 'updated_at';
+ protected $deletedField = 'deleted_at';
+ 
+ protected $validationRules = [];
+ protected $validationMessages = [];
+ protected $skipValidation = false;
+ 
+}
