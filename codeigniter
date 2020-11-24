@@ -1059,3 +1059,228 @@ App\Config\Validation.php:
 
 ...
 \App\Validations\CustomRules::class \\add custom rule in config
+
+
+27) File Validation and File Upload
+Go to App\Views\form.php and paste a file upload form from Bootstrap docs
+In <form enctype="multipart/form-data">. Also in the input of file upload form enter the name:
+<input name="theFile">
+
+
+App\Controllers\Form.php:
+
+<?php namespace App\Controllers;
+
+class Form extends BaseController
+{
+ public function index()
+ {
+   helper(['form']); \\load validation library form helper 
+   
+   $data = [];
+   $data['categories'] = [
+    'Student',
+    'Teacher',
+    'Principle'
+   ];
+
+
+
+   if($this->request->getMethod() == 'post') { \\when we submit a form we have a post request
+    
+   $rules = [ \\create a set of preset rules
+     'email' => 'required|valid_email',
+     'password' => 'required|min_length[8]',
+     'category' => 'in_list[Student, Teacher]' \\is in category
+     'date' => [ \\custom validation rule
+       'rules' => 'required|check_date',
+       'label' => 'Date', \\name for the set of rules
+       'errors' => [
+         'required' => 'This field is required!' \\the error text for a rule
+       ]
+     ],
+     'theFile' => [ \\rules for theFile input
+       'rules' => 'uploaded[theFile]|max_size[theFile, 50]|ext_in[theFile,jpg]|is_image|max_dims[theFile,100,50]', \\upload required, size in Kb, jpg extension only (without space after comma), is_image allows only upload images, max_dims limits the width and height of image. The first parameter is always the name of the form.
+       'label' => 'The File'
+     ]
+   ];
+
+
+    if($this->validate($rules)) {
+     
+     $file = $this->request->getFile('theFile'); \\get file uploaded from the form
+     if($file->isValid() && !$file->hasMoved()) {
+      $file->move('./uploads/images', 'testName'.$file->getExtension()); \\upload the file to this folder on server, the second parameter renames the file
+     }
+
+     echo $file->getName(); \\return the name of uploaded file
+     exit();
+    
+     //then do database insertion and login user
+     return redirect()->to('/form/success');
+    } else {
+     $data['validation'] = $this->validator; \\provides a list of errors
+    }
+   }
+
+   return view('form', $data);
+ }
+
+ function success(){
+  return "You've passed";
+ }
+}
+
+Before uploading a file to the server, CodeIgniter suggests us to run an if statement to check if the file is valid.
+To create a random name for files, use $file->getRandomName()
+
+For multiple file validation rules make the input form name an array:
+<input name="theFile[]">. Then in rules we have to fix the uploaded rule:
+
+'rules' => 'uploaded[theFile.0]'
+
+For multiple files upload, if rules are validated,
+
+$files = $this->request->getFiles();
+foreach($files['theFile'] as $file){
+       if($file->isValid() && !$file->hasMoved()) {
+      $file->move('./uploads/images', '$file->getRandomName());
+     }
+}
+ 
+28) Image Manipulation
+Go to App\Views and duplicate form.php. Call it image.php and remove all the data but image uploader. In Controllers, do the same and create App\Controllers\Image.php file. 
+
+App\Controllers\Image.php:
+
+<?php namespace App\Controllers;
+
+class Image extends BaseController
+{
+ public function index()
+ {
+   helper(['form', 'image']); \\load validation library form helper 
+   
+   $data = [];
+
+
+   if($this->request->getMethod() == 'post') { \\when we submit a form we have a post request
+    
+   $rules = [ \\create a set of preset rules
+     'theFile' => [ \\rules for theFile input
+       'rules' => 'uploaded[theFile]|is_image|max_dims[theFile,100,50]',
+       'label' => 'The File'
+     ]
+   ];
+
+
+    if($this->validate($rules)) {
+
+     $path = './uploads/images/manipulated/';      
+     
+     $files = $this->request->getFile('theFile'); \\get file uploaded from the form
+     
+     $imageService = service('image'); \\load image manipulation library
+
+    foreach($files['theFile'] as $file) {
+     if($file->isValid() && !$file->hasMoved()) {
+      $file->move($path); \\upload the file to this folder on server
+      $fileName = $file->getName(); \\get the name that the file was stored with
+      $data['image'] = $fileName;
+
+      $this->imageManipulation($path, 'thumbs', $fileName, $imageService);
+      $data['images']['folders'][] = 'thumbs';
+
+      $this->imageManipulation($path, 'flip', $fileName, $imageService);  
+      $data['images']['folders'][] = 'flip';
+
+     }
+    }
+
+     echo $file->getName(); \\return the name of uploaded file
+     exit();
+    
+     //then do database insertion and login user
+     return redirect()->to('/form/success');
+    } else {
+     $data['validation'] = $this->validator; \\provides a list of errors
+    }
+   }
+
+   return view('form', $data);
+ }
+
+ private function imageManipulation($path, $folder, $fileName, $imageService) {
+    $savePath = $path. '/' . $folder;
+ 
+    if(!file_exists($savePath)) {
+      mkdir($savePath, 755); \\ 755 is a default parameter for an uploaded data file
+    }
+
+    $imageService->withFile(src($fileName)); \\specifying the initial content we will start with
+
+    switch($folder) {
+      case 'thumbs':
+        $imageService->fit(150, 150);
+        break;
+      case 'flip':
+        $imageService->flip('horizontal');
+        break;
+    }
+
+    return $image->save($savePath.'/'.$fileName);
+ }
+}
+
+Let's create a helper. Fo to App\Helpers and create a file image_helper.php
+
+App\Helpers\image_helper.php:
+
+<?php
+
+ function src($fileName, $type="full") {
+   $path = './uploads/images/manipulated'  //path to images
+
+   if($type != 'full')
+     $path .= $type.'/';
+
+   return $path . $fileName
+ }
+
+<img src="<?= src('fileName.jpg', 'thumbs') ?>"> \\how to call an image
+
+ 
+?>
+
+App\Views\image.php:
+
+<body>
+    <div class="container">
+     <h1>Image Manipulation</h1>
+     <?php if (isset($validation)) : ?>
+       <div class="text-danger">
+        <?= $validation=>listErrors() ?>
+       </div>
+     <?php endif; ?>
+     <form method="post" enctype="multipart/form-data">
+       <div class="form-group">
+        <label for="exampleFormControlFile1">Upload File</label>
+        <input type="file" multiple name="theFile[]" class="form-control-file" id="exampleInput">
+       </div>
+       <button type="submit" class="btn btn-primary">Submit</button>
+     </form>
+
+     <?php if(isset($image)) : ?>
+        <div class="row">
+         <?php foreach($folders as $folder) : ?>
+          <div class="col-md-4">
+           <img src="<?= src($image, $folder) ?>" class="img-fluid">
+          </div>
+         <?php endforeach; ?>
+        </div>
+     <?php endif; ?>
+    </div>
+</body>
+
+
+
