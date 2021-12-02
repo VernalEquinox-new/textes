@@ -1,0 +1,354 @@
+TYPESCRIPT INSTALLATION
+
+1 Install NodeJS. Для проверки текущей версии в консоли пишем команду node -v
+2. npm install -g typescript 
+3. tsc -v проверяет текущую версию Тайпскрипт на компьютере
+4. В редакторе подключить плагин для интерпретации синтаксиса Тайпскрипт
+
+TRANSPILIING TYPESCRIPT
+Т.к. файлы тайпскрипт не интерпретируются браузером, необходимо транспилить его в джаваскрипт с помощью cli:
+tsc main.ts
+Транспиляция тайпскрипт-файла выдаст либо ошибки, либо ничего в случае успеха. После транспиляции в папке с файлом main.ts появляется файл main.js. Транспиляция перевод тайпскрипт-файл в джаваскрипт-файл версии ES3.
+
+TYPESCRIPT OPTIONS
+Файл tsconfig.json хранит все настройки, подробно описанные в официальной документации.
+Пример такого файла:
+{
+	"compilerOptions": {
+		"rootDir": "./src", //dir to store the .ts files
+		"outDir": "./dist" //dir to store the transpiled .js files (will be auto-created on transiplation)
+	}
+}
+
+Перенесем .ts-файлы в папку rootDir и запустим в cli команду tsc -w. Транспиляция произойдет с учетом параметров tsconfig.js
+
+TYPE DEFINITIONS
+1. Переменные объявляются, как и в js, с помощью var, const, let.
+const hello="world";
+эта запись интрпретируется как const hello: "world", а не const hello: "string", т.к. это переменная const-типа и она не может быть перезадана. Поэтому следующий код выдаст ошибку:
+	const hello="world";
+	hello="foo";
+В случае записи 
+let hello="world";
+интерпретация будет let hello: string;, и переменная hello может получить любое строковое значение (но никакого другого типа!)
+Оптимальной практикой будет явное задание типа переменной:
+let hello: string = "world";
+
+2. Функции
+В TS задавать функции можно так же, как и в JS ES6, в том числе и стрелочно:
+const getFullName = (name, surname) => {
+	return name+' '+surname;
+};
+console.log(getFullName());
+В данном случае в качестве аргументов функция принимает параметры любого типа. Чтобы задать определенный тип данных, явно укажем его для каждого аргумента:
+const getFullName = (name: string, surname: string) => {
+	return name+' '+surname;
+};
+console.log(getFullName());
+Теперь рассмотрим тип самой функции. Интерпретируя выражение под return, TS считает функцию getFullName() типа string, однако всегда следует задавать тип данных явно!
+const getFullName = (name: string, surname: string): string => {
+	return name+' '+surname;
+};
+console.log(getFullName());
+
+INTERFACES
+1. Создание объектов
+const user: {name: string, age: number} = {
+	name: 'Name',
+	age: 30,
+}
+
+const user2: {name: string, age: number} = {
+	name: 'Name2',
+}
+
+Объект user2 вызовет ошибку, т.к. в нем нет свойсва age. 
+Каждый раз прописывать свойства для одинаковых объектов избыточно. Для решения этой задачи в TS существуют интерфейсы, которые при задании интерпретируются как тип данных. 
+interface User {
+	name: string;
+	age?: number; //символ ? означает, что данное свойство не является обязательным в объектах с этим интерфейсом
+} 
+
+const user: User = {
+	name: 'Name',
+	age: 30,
+}
+
+const user2: User = {
+	name: 'Name2',
+}
+Кроме того, интерфейсы позволяют автозавершение ввода, например, если необходимо вывести какое-то конкретное свойство интерфейса, и автоматическую проверку свойств.
+
+2. Функции в интерфейсах
+interface IUser {
+	name: string;
+	age?: number; //символ ? означает, что данное свойство не является обязательным в объектах с этим интерфейсом
+	getMessage(): string; //функция возвращает данные типа string
+} 
+
+const user: IUser = {
+	name: 'Name',
+	age: 30,
+	getMessage() {
+		return 'Hello ' + name;
+	}
+}
+
+const user2: IUser = {
+	name: 'Name2',
+		getMessage() {
+		return 'Hello ' + name;
+	}
+}
+При создании интерфейса и класса с одним и тем же именем может возникнуть конфликт, поэтому считается хорошим тоном явно указывать, что название интерфейса относится к интерфейсу - например, с помощью префикса I (см. выше IUser) или постфикса Interface, или как-то иначе.
+
+TYPES AND UNIONS
+1. Union Operator
+let username: string = "alex";
+let pageName: string | number = "1"; //тип переменной - строка или число, | - тот самый union operator, оператор объединения
+let errorMesage: string | null = null;//null как тип данных означает неизвестный тип данных, например, до получения данных с бэка, для последующего присвоения им нужного типа. Если не присвоить переменной по умолчанию значение null, она будет интерпретирована как undefined.
+
+interface IUser {
+	name: string;
+	surname: string;
+}
+
+let user: IUser | null = null;
+
+2. Type Aliases
+type ID = string; //создаем новый тип данных ID, совпадающий с типом string. Алиасы облегчают чтение кода
+type PopularTag = string;
+type MaybePopularTag = PopularTag | null;
+
+interface IUser {
+	id: ID,
+	name: string;
+	surname: string;
+}
+
+let user: IUser | null = null;
+
+const PopularTags: PopularTag[] = ['dragon', 'coffee']; //тип данных - массив строковых значений
+const DragonTag: MaybePopularTag = "dragon";
+
+ANY/VOID/NEVER/UNKNOWN
+1. Void 
+const doSomething = ():void => {
+	console.log("DoSmth");
+}
+TS присвоит этой функции тип данных void, т.к. она ничего не возвращает (и не должна ничего возвращать, когда этот тип задан явно). Void - это сумма типов данных undefined и null. Поэтому его нет смысла присваивать переменным - только функциям, которые ничего не возвращают.
+
+2. Any
+Этот тип данных позволяет переменнной или функции принимать или возвращать любое значение. Считается плохим тоном применение any, т.к. он, фактически, отключает все проверки TypeScript.
+
+3. Never
+Функции типа never не могут иметь точки завершения, где производится выход из функции.
+const doSomething = ():never => {
+	throw "never";
+}
+Эта функция не выдаст ошибку, в отличие от предыдущего варианта (см. void)
+
+4. Unknown 
+Аналог типа any, введенный в TS3. Сравнительный пример:
+let vAny:any = 10;
+let vUnknown:unknown = 10;
+
+let s1: string = vAny; //все ок
+let s2: string = vUnknown; //ошибка! vUnknown не может быть присвоена переменной типа string, т.к. она неизвестного типа
+
+Чтобы конвертировать тип данных (type assertion), используется оператор as
+let s2: string = vUnknown as string;
+Для того, чтобы перевести любой конкретный тип данных в другой тип (number to string), сначала необходимо привести number к unknown, а затем unknown к string. Пример:
+let pageNumber: string = "1";
+let numericPageNumber: number = (pageNumber as unknown) as number;
+
+WORKING WITH DOM
+const someElement = document.querySelector('.foo') as HTMLInputElement; //предположим, что данный элемент - инпут
+
+TS не видит разметку. По умолчанию someElement имеет тип Element, и это ограничивает в работе с переменной (например, Element не имеет свойства value). Необходимо конвертировать тип данных соответственно его html типу.
+
+2.Слушатели событий
+const someElement = document.querySelector('.foo');
+someElement.addEventListener('blur', (event) => {
+	const target = event.target as HTMLInputElement;
+	console.log('event', target.value);
+})
+
+event - экземпляр класса Event, наивысшего в иерархии дженерик-классов. event.target, таким образом, не существует для типа Event, необходимо провести приведение типов.
+
+CLASSES IN TYPESCRIPT
+interface IUser {
+	getFullName(): string;
+}
+class User iplements IUser{
+	protectedfirstName: string;
+	private lastName: string;
+	readonly unchangeableName: string;
+	static readonly maxAge = 50;
+	
+	constructor(firstName: string, lastName: string) => {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.unchangeableName - firstName;
+	}
+	
+	getFullName(): string {
+		return this.firstName + " " + this.lastName;
+	}
+}
+
+const User = new User('Name', 'Surname');
+
+По умолчанию все свойства и методы класса имеют свойство public. Явно необходимо задавать только private и protected. (!Protected видит класс и его наследники). Тем не менее, после транспиляции в JS все эти свойства не интерпретируются.
+
+2. Выполнение интерфейсов
+Если включить в класс User выполнение интерфейса IUser, наличие в классе метода getFullName() будет обязательным. 
+
+3. Свойство static
+Статические свойства доступны только внутри класса, но не его экземпляров.
+
+4. Наследование в TS
+
+class Admin extends User { //Admin наследует все свойства, методы и выполнения User, за исключением private
+	private editor: string;
+	
+	setEditor(edtor: string): void {
+		this.editor = editor
+	}
+	
+	getEditor(): string {
+		this.editor
+	}
+}
+
+GENERICS IN TS
+const addId = (obj) => { //стрелочная ф-я принимает объект
+	const id = Math.random().toString(16) //создает id
+	return { //возвращает расширенный объект с добавленным св-вом id
+		...obj,
+		id
+	};
+};
+
+const user = {
+	name: "Jack,
+};
+
+const result = addId(user);
+console.log("result", result);
+
+В данном примере параметр obj имеет тип any, т.к. тип передаваемого объекта заранее не известен. Поскольку тип any является плохой практикой, используем дженерик:
+
+const addId = <T>(obj: T) => { //T - дефолтное имя для дженерика
+	const id = Math.random().toString(16) //создает id
+	return { //возвращает расширенный объект с добавленным св-вом id
+		...obj,
+		id
+	};
+};
+
+const user = {
+	name: "Jack,
+};
+
+const result = addId(user);
+console.log("result", result);
+
+Более наглядно, с помощью интерфейса
+const addId = <T>(obj: T) => { //T - дефолтное имя для дженерика
+	const id = Math.random().toString(16) //создает id
+	return { //возвращает расширенный объект с добавленным св-вом id
+		...obj,
+		id
+	};
+};
+
+interface UserInterface {
+	name: string;
+}
+
+const user: UserInterface = {
+	name: "Jack",
+};
+
+const result = addId<UserInterface>(user); //явное задание дженерика
+console.log("result", result);
+
+Теперь при интерпретации кода TS заменяет дженерик Т на тип UserInterface
+При этом не проводится проверка типа данных, на который будет заменятся дженерик. Запись вида
+const result = addId<string>("foo");
+будет корректна, однако оператор ... внутри самой функции применим к объекту, а не к строке. Уточним правила для дженерика:
+const addId = <T extends object>(obj: T) => { //дженерик - расширение типа объект
+	const id = Math.random().toString(16) //создает id
+	return { //возвращает расширенный объект с добавленным св-вом id
+		...obj,
+		id
+	};
+};
+
+interface UserInterface {
+	name: string;
+}
+
+const user: UserInterface = {
+	name: "Jack",
+};
+
+2. Дженерики в интерфейсах
+interface UserInterface<T> {
+	name: string;
+	data: T;
+}
+Все объекты с данным интерфейсом должны иметь явно заданное свойство типа дженерик, если оно не задано по умолчанию.
+const user: UserInterface<{meta: string}> = { //Т - объект со свойством meta типа string
+	name: "Jack",
+	data: {
+		meta: "None",
+	}
+};
+const user2: UserInterface<string[]> = { 
+	name: "Jack",
+	data: ['foo', 'bar],
+};
+
+3. Передача нескольких типов данных
+interface UserInterface<T, V> {
+	name: string;
+	data: T;
+	meta: V;
+}
+
+const user: UserInterface<{meta: string}, string> = {
+	name: "Jack",
+	data: {
+		meta: "None",
+	},
+	meta: "foo",
+};
+
+ENUMS IN TS
+enums (enumerables) - тип данных "объект с перечисляемыми свойствами"
+
+enum Status {
+	NotStarted = 'notStarted', //присвоение значения в enum через =, не через :
+	InProgress,
+	Done
+}
+
+console.log(Status.InProgress)// выведет 1
+
+let notStartedStatus: Status = Status.NotStarted //может получить другое значение только типа Status
+
+enum Status {
+	NotStarted = 'notStarted', //присвоение значения в enum через =, не через :
+	InProgress = 'inProgress',
+	Done = "done",
+}
+console.log(Status.InProgress);//выведет inProgress
+
+2. enums в интерфейсах
+
+interface ITask {
+	id: string;
+	status: StatusEnum; //хорошая практика указывать в названии enum, что это enum
+}
