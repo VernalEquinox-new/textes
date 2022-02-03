@@ -1,0 +1,5 @@
+Получить через JS и вывести PDF
+Запрос с параметром { responseType: 'arraybuffer' }
+------------ обработка и вывод ------------------
+const url = window.URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'}));        
+window.open(url, "response", "resizable=yes").focus();
