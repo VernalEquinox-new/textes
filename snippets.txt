@@ -3,3 +3,9 @@
 ------------ обработка и вывод ------------------
 const url = window.URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'}));        
 window.open(url, "response", "resizable=yes").focus();
+
+
+--------MYSQL sum() for distinct rows with left join--------
+SELECT sum(course.fee)*count(DISTINCT course.student_id)/count(*) as TOTAL
+FROM `student_details` AS student LEFT JOIN course_details AS course ON course.student_id = student.id
+LEFT JOIN college_details AS college ON college.student_id = student.id WHERE student.id=1;
