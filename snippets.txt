@@ -9,3 +9,7 @@ window.open(url, "response", "resizable=yes").focus();
 SELECT sum(course.fee)*count(DISTINCT course.student_id)/count(*) as TOTAL
 FROM `student_details` AS student LEFT JOIN course_details AS course ON course.student_id = student.id
 LEFT JOIN college_details AS college ON college.student_id = student.id WHERE student.id=1;
+
+
+--------скролл прокручен до конца--------
+el.scrollHeight - el.scrollTop === el.clientHeight
