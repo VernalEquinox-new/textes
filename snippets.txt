@@ -13,3 +13,23 @@ LEFT JOIN college_details AS college ON college.student_id = student.id WHERE st
 
 --------скролл прокручен до конца--------
 el.scrollHeight - el.scrollTop === el.clientHeight
+
+
+-------формДата с файлом и текстовыми данными формы---------
+      //do a formdata with text and file
+      let formData = new FormData()
+      if(this.file) {
+        formData.append('file', this.file)
+      }
+      formData.append('position', JSON.stringify(this.position))
+/*
+      this.$axios
+        .post('/users/add_feedback_test', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(res => {
+          this.isAdded = true
+          console.log(res.data)
+        })*/
