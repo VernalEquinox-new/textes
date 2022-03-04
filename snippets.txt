@@ -33,3 +33,6 @@ el.scrollHeight - el.scrollTop === el.clientHeight
           this.isAdded = true
           console.log(res.data)
         })*/
+
+--------where db-----------
+https://185.185.71.182/phpmyadmin/index.php
