@@ -1,0 +1,914 @@
+---INSTALLATION & SETUP---
+
+1. download and install Visual Studio. It's an IDE (intergated development environment)
+2. choose a dev type (.NET desktop development or ASP.NET web development or whatever). For this course we choose first one. 
+3. then launch Visual Studio. After the first options setting, cloise the start page and then choose in upper menu New->Project->console App and give it a name of Giraffe
+4. Here we have a basic program (the class name is the same as the file name, like Program.cs will be class Program, and the namespace name is same as project - Giraffe)
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{
+				Console.WriteLine("Hello World"); //print hello world to the console
+				Console.ReadLine(); //wait for some input so the console won't close in a second
+			}
+		}
+	}
+
+5. Now click Start button in the upper menu to run the program
+
+
+---VARIABLES---
+
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				//two ways of assigining a var
+				string characterName = "John";
+				int characterAge;
+				characterAge = 35;
+				
+				Console.WriteLine("There once was a man named " + characterName); 
+				Console.WriteLine("He was "+ characterAge +" years old);
+				Console.ReadLine();
+			}
+		}
+	}
+	
+	
+---DATA TYPES---
+
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				string phrase = "Giraffe Academy";
+				char grade = 'A';
+				int age = 30;
+				double gpa = 3.2; //float, double, decimal from least accurate to most accurate
+				bool isMale = true;
+				
+				Console.ReadLine();
+			}
+		}
+	}
+	
+---WORKING WITH STRINGS---
+
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				string phrase = "Giraffe\nAcademy" // \n is a new line symbol
+				Console.WriteLine(phrase + "is cool" + phrase.Length); //concat strings
+				
+				Console.ReadLine();
+			}
+		}
+	}
+	
+---GETTING USER INPUT---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				Console.Write("Enter your name: ");	
+				string name = Console.ReadLine();		
+				Console.WriteLine("Hello, " + name);				
+				Console.ReadLine();
+				
+				
+			}
+		}
+	}
+	
+	
+---BUILD A CALC---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				Console.Write("Enter a number: ");
+				double num1 = Convert.ToDouble(Console.ReadLine());
+				Console.Write("Enter another number: ");
+				double num2 = Convert.ToDouble(Console.ReadLine());
+				Console.WriteLine(num1 + num2);
+				
+				Console.ReadLine();
+				
+				
+			}
+		}
+	}	
+	
+	
+---BUILD A MAD LIBS GAME---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				string color, pluralNoun, celebrity;
+				
+				Console.Write("Enter a color: ");
+				color = Console.ReadLine();
+				
+				Console.Write("Enter a plural noun: ");
+				pluralNoun = Console.ReadLine();
+				
+				Console.Write("Enter a celebrity: ");
+				celebrity = Console.ReadLine();
+				
+				Console.WriteLine("Roses are " + color);
+				Console.WriteLine(pluralNoun + " are blue");
+				Console.WriteLine("I love " + celebrity);
+
+				Console.ReadLine();				
+			}
+		}
+	}
+	
+	
+---Arrays---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				int[] luckyNumbers = { 4, 8, 15, 16, 23, 42};
+				luckyNumbers[1] = 908;
+				
+				string[] friends = new string[5];
+				friends[0] = "Jim";
+				
+				Console.WriteLine(luckyNumbers[0]);
+
+				Console.ReadLine();				
+			}
+		}
+	}
+	
+---Methods---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				SayHi("Mike", 33);
+				Console.ReadLine();				
+			}
+			
+			static  void SayHi(string name, int age) //void means it returns nothing
+			{
+				Console.WriteLine("Hello " + name + " you are " + age + " yo");
+			}
+		}
+	}
+	
+	
+---Return Statement---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				int cubedNumber = Cube(5);
+				Console.WriteLine(cubedNumber);
+				Console.ReadLine();				
+			}
+			
+			static int Cube(int num) //int means it returns int
+			{
+				int result = num * num * num;
+				return result;
+			}
+		}
+	}
+	
+	
+---If Statement---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				bool isMale = true;
+				bool isTall = true;
+				
+				if(isMale || isTall) 
+				{
+					Console.WriteLine("You are a tall male");
+				} else if (isMale && !isTall) 
+				{
+					Console.WriteLine("You are a short male");
+				} else
+				{
+					Console.WriteLine("You are not a tall male");
+				}
+				
+				Console.WriteLine(GetMax(2, 10));
+				Console.ReadLine();				
+			}
+			
+			static int GetMax (int num1, int num2)
+			{
+				int result;
+				
+				if(num1 > num2)
+				{
+					result = num1;
+				} else 
+				{
+					result = num2;
+				}
+				
+				return result;
+			}
+		}
+	}
+	
+---Building a better Calculator---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				Console.Write("Enter a number: ");
+				double num1 = Convert.ToDouble(Console.ReadLine());
+				
+				Console.Write("Enter operator: ");
+				string op = Console.ReadLine();
+				
+				Console.Write("Enter a number: ");
+				double num2 = Convert.ToDouble(Console.ReadLine());
+				
+				if(op == "+")
+				{
+					Console.Write(num1 + num2);
+				} else if(op == "-")
+				{
+					Console.Write(num1 - num2);
+				} else if (op == "*")
+				{
+					Console.Write(num1 * num2);
+				} else if(op == "/")
+				{
+					Console.Write(num1 / num2);
+				} else 
+				{
+					Console.WriteLine("Invalid Operator");
+				}
+				
+				Console.ReadLine();				
+			}
+			
+		}
+	}
+	
+	
+---Switch Statement---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				int dayNum = Convert.ToInt32(Console.ReadLine());
+				string dayName;
+				
+				switch(dayNum)
+				{
+					case 0:
+						dayName = "Sunday";
+						break;
+					case 1:
+						dayName = "Monday";
+						break;
+					case 2:
+						dayName = "Tuesday";
+						break;
+					default: 
+						dayName = "Invalid day number";
+						break;
+				}
+				
+				Console.ReadLine();				
+			}
+			
+		}
+	}
+	
+	
+
+---While Loops---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				int index = 1;
+				while (index <= 5) 
+				{	
+					Console.WriteLine(index);
+					index++;
+				}
+				do
+				{
+					Console.WriteLine(index);
+					index++;
+				} while(index <= 5);
+				
+				Console.ReadLine();				
+			}
+			
+		}
+	}
+	
+	
+---Build a Guessing Game---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				string secretWord = "giraffe";
+				string guess = "";
+				int guessCount = 0;
+				int guessLimit = 3;
+				bool outOfGuesses = false;
+				
+				while( guess != secretWord && !outOfGuesses)
+				{
+					if(guessCount < guessLimit) 
+					{
+						Console.Write("Enter guess: ");
+						guess = Console.ReadLine();
+						guessCount++;
+					}
+					else
+					{
+						outOfGuesses = true;
+					}
+				}
+				if(outOfGuesses)
+				{
+					Console.Write("You lose");
+				} else
+				{
+					Console.Write("You win!");
+				}
+				Console.ReadLine();
+			}
+			
+		}
+	}
+	
+	
+---For Loops---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				for(int i = 1; i <= 5; i++)
+				{
+					Console.WriteLine(i);
+				}
+				Console.ReadLine();				
+			}
+			
+		}
+	}
+	
+---Building an exponent method---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				Console.WriteLine(getPow(2, 5));
+				Console.ReadLine();				
+			}
+			
+			static int GetPow(int baseNum, int powNum)
+			{
+				int result = 1;
+				
+				for (int i = 0; i < powNum; i++)
+				{
+					result *= baseNum;
+				}
+				return result;
+			}
+			
+		}
+	}
+	
+
+---2d arrays---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				int[,] numberGrid = {
+					{1, 2},
+					{3, 4},
+					{5, 6}
+				};
+				int[,] myArray = new int[2,3]; //in case we have no initial data we must create a template
+				
+				Console.WriteLine(numberGrid[1, 0]); //shows 3
+				Console.ReadLine();				
+			}
+			
+		}
+	}
+	
+	
+---Exception Handling---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe;
+	{ //here starts Giraffe execution
+		class Program //essentially a containter to write some code
+		{
+			static void Main(string[] args) //code to be run must be called inside the Main method
+			{	
+				try 
+				{
+					Console.Write("Enter a number: ");
+					int num1 = Convert.ToInt32(Console.ReadLine());
+					Console.Write("Enter another number: ");
+					int num2 = Convert.ToInt32(Console.ReadLine());
+					
+					Console.WriteLine(num1 / num2);
+				}
+				catch(Exception e) //in case we specify the exception like "catch(DivideByZeroExpection e)" only this type will be caught
+				{
+					Console.WriteLine(e.Message);
+				}
+				catch (FormatException e) //we can catch lots of exceptions
+				{
+					Console.WriteLine(e.Message);
+				}
+				finally //this optional block will be executed in any case
+				{
+					Console.WriteLIne("finally block!");
+				}
+
+				
+				Console.ReadLine();
+			}
+			
+		}
+	}
+	
+	
+---Classes & Objects---
+
+In the IDE, create new Class and give it a name (Book.cs)
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 
+		class Book
+		{
+			public string title;
+			public string author;
+			public int pages;
+			
+		}
+		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				Book book1 = new Book();
+				book1.title = "Harry Potter";
+				book1.author = "JK Rowling";
+				book1.pages = 400;
+				
+				Console.WriteLine(book1.title); //prints "Harry Potter"
+				
+				Console.ReadLine();
+			}
+		}
+	}
+	
+	
+---Constructors---
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 
+		class Book
+		{
+			public string title;
+			public string author;
+			public int pages;
+			
+			//class constructor 
+			public Book(string aTitle, string aAuthor, int aPages)
+			{
+				title = aTitle;
+				author = aAuthor;
+				pages = aPages;
+			}
+		}
+		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				Book book1 = new Book("Harry Potter", "JK Rowling", 400); //calling a constructor method actually
+
+				//we can change object params after we constructed it, like book1.title = "The hobbit"
+				Console.WriteLine(book1.title); //prints "Harry Potter"
+				
+				Console.ReadLine();
+			}
+		}
+	}
+	
+	
+---Object methods---
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 
+		class Student
+		{
+			public string name;
+			public string major;
+			public double gpa;
+			
+			//class constructor 
+			public Book(string aName, string aMajor, double aGpa)
+			{
+				name = aName;
+				major = aMajor;
+				gpa = aGpa;
+			}
+			
+			public bool HasHonors()
+			{
+				if(gpa > 3.5)
+				{
+					return true;
+				}
+				return false;
+			}
+		}
+		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				Student student1 = new Student("Jim", "Business", 2.8);
+				Student student2 = new Student("Pam", "Art", 3.6);
+				
+				Console.WriteLine(student1.HasHonors());
+				Console.WriteLine(student2.HasHonors());
+				
+				Console.ReadLine();
+			}
+		}
+	}
+	
+	
+---Getters & Setters---
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 
+		class Movie
+		{
+			public string title;
+			public string director;
+			private string rating; //accessed only from Movie class itself, not object of class
+			
+			//class constructor 
+			public Movie(string aTitle, string aDirector, string aRating)
+			{
+				title = aTitle;
+				director = aDirector;
+				Rating = aRating; //set rating using setter
+			}
+			
+			//access to a private string
+			public string Rating
+			{
+				get { return rating; } //return the value of private var rating
+				set { //set the private var rating
+					if(value == "G" || value == "PG") //value is what setter gets
+					{
+						rating = value;
+					}
+					else
+					{
+						rating = "NR";
+					}
+				}
+			}
+		}
+		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				Movie avengers = new Movie("The Avengers", "Joss Whedon", "PG-13");
+				Movie shrek = new Movie("Shrek", "Adam Adamson", "PG");
+				
+				Console.WriteLine(shrek.Rating); //get value of private var rating
+				
+				Console.ReadLine();
+			}
+		}
+	}
+	
+---Static class attributes---
+static attribute is shared by all objects of that class
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 
+		class Song
+		{
+			public string title;
+			public string artist;
+			public int duration;
+			public static int songCount = 0;
+			
+			//class constructor 
+			public Song(string aTitle, string aArtist, int aDuration)
+			{
+				title = aTitle;
+				artist = aArtist;
+				duration = aDuration; //set rating using setter
+				songCount++;
+			}
+			
+			//static value getter
+			public int getSongCount()
+			{
+				return songCount;
+			}
+			
+
+		}
+		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				Song holiday = new Song("Holiday", "Green Day", 200);
+				Song kashmir = new Song("Kashmir", "Led Zeppelin", 150);
+				
+				//values differ
+				Console.WriteLine(holiday.title);
+				Console.WriteLine(kasmir.title);				
+				
+				//static value is called from a class itself
+				Console.WriteLine(Song.songCount);
+				
+				//acces static value from an object via getter
+				Console.WriteLine(kashmir.getSongCount());
+				Console.ReadLine();
+			}
+		}
+	}
+	
+	
+---Static methods and classes---
+Static method belongs to a class itself. Static classes can't have an object of itself and it contains only static methods.
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				//Sqrt is static method of class Math so we don't have to initialize Math myMath = new Math();
+				Console.WriteLine(Math.Sqrt(144));
+				
+				UsefulTools.SayHi("Mike");
+				Console.ReadLine();
+			}
+		}
+		
+		static class UsefulTools
+		{
+			public static SayHi(string name)
+			{
+				Console.WriteLine("Hello, " + name);
+			}			
+		}
+	}
+	
+---Inheritance---
+
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	
+	namespace Giraffe
+	{ 		
+		class Program //main executing class
+		{
+			static void Main(string[] args)
+			{
+				Chef chef = new Chef();
+				chef.MakeChicken();
+				
+				Console.ReadLine();
+			}
+		}
+		
+		class Chef
+		{
+			public void MakeChicken()
+			{
+				Console.WriteLine("The Chef makes chicken");
+			}
+			public void MakeSalad()
+			{
+				Console.WriteLine("The Chef makes salad");
+			}
+			public virtual void MakeSpecialDish() //"virtual" keyword allows to override the method
+			{
+				Console.WriteLine("The Chef makes bbq ribs");
+			}
+		}
+		
+		class ItalianChef : Chef //ItalianChef (subclass) inherits Chef (superclass) class methods and attrs
+		{
+			public void MakePasta //added new method to the inherited ones
+			{
+				Console.WriteLine("Italian Chef makes pasta");
+			}
+			
+			public override MakeSpecialDish() //override keyword marks that the virtual inherited method is changed
+			{
+				Console.WriteLine("Italian Chef makes chicken parm");
+			}
+		}
+	}
