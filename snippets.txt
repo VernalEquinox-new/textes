@@ -36,3 +36,6 @@ el.scrollHeight - el.scrollTop === el.clientHeight
 
 --------where db-----------
 https://185.185.71.182/phpmyadmin/index.php
+
+--------дата загрузки файла на фтп-----------
+console.log(document.lastModified) 
